@@ -376,7 +376,7 @@ Chunks are retrieved individually for precision, then expanded using section hie
 Expanded chunks + query + chat history
         │
         ↓
-PROMPT BUILDER
+PROMPT BUILDER (LangChain ChatPromptTemplate)
   System: "You are a legal document assistant.
            Answer ONLY from the provided context.
            If the answer is not in the context, say:
@@ -385,13 +385,14 @@ PROMPT BUILDER
            If the question is clearly general knowledge, answer directly."
 
   Context: expanded chunks labeled by source and section
-  History: last N conversation turns (multi-turn memory)
+  History: last N turns via LangChain ConversationBufferWindowMemory
   Query:   rewritten user question
         │
         ↓
-LLM CLIENT
-  Primary:  GPT-4o
-  Fallback: Llama-3 via Groq (70% cheaper, used for non-critical queries)
+LLM CLIENT (LangChain ChatOpenAI + ChatGroq)
+  Primary:  GPT-4o via ChatOpenAI
+  Fallback: Llama-3 via ChatGroq (70% cheaper, used for non-critical queries)
+  Swapping between models requires only changing the LangChain client — no prompt changes
         │
         ↓
 STREAMER
@@ -694,12 +695,43 @@ DELETE /chat/conversations/{id}
 | PDF Parser | pdfplumber | Self-hosted |
 | DOCX Parser | python-docx | Self-hosted |
 | EML Parser | Python email stdlib | Self-hosted |
-| Orchestration | LlamaIndex | Self-hosted |
+| Prompt Templates | LangChain (ChatPromptTemplate) | Self-hosted |
+| Conversation Memory | LangChain (ConversationBufferWindowMemory) | Self-hosted |
+| LLM Client | LangChain (ChatOpenAI + ChatGroq) | Self-hosted |
 | Observability | Langfuse | Self-hosted |
 | Evaluation | RAGAS + DeepEval | Self-hosted |
 | CI/CD | GitHub Actions | GitHub |
 | Containerization | Docker Compose | Self-hosted |
 | Package Manager | uv | Self-hosted |
+
+### LangChain Usage
+
+LangChain is used deliberately and minimally — only where it genuinely reduces boilerplate without conflicting with custom logic. All retrieval, chunking, and expansion logic is pure Python.
+
+```python
+# Prompt templating
+from langchain.prompts import ChatPromptTemplate
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", SYSTEM_PROMPT),
+    ("placeholder", "{history}"),
+    ("human", "{query}")
+])
+
+# Conversation memory
+from langchain.memory import ConversationBufferWindowMemory
+
+memory = ConversationBufferWindowMemory(k=10, return_messages=True)
+
+# LLM client — swap GPT-4o and Groq with no prompt changes
+from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
+
+llm = ChatOpenAI(model="gpt-4o")       # primary
+llm = ChatGroq(model="llama3-8b-8192") # fallback
+```
+
+Everything else in the pipeline — retrieval, context expansion, caching, indexing — is pure Python with direct client libraries.
 
 ### Privacy Architecture
 
