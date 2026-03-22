@@ -1,12 +1,16 @@
 from pydantic import BaseModel, Field
 from typing import Literal
 
+
+# STRUCTURES
 class PDFPage(BaseModel):
     page: int
     text: str
 
+
 class PDFStructure(BaseModel):
     pages: list[PDFPage]
+
 
 class EmailReply(BaseModel):
     from_: str
@@ -20,22 +24,50 @@ class EmailReply(BaseModel):
     in_reply_to: str | None = None
     references: list[str] | None = None
 
+
 class EmailStructure(BaseModel):
     replies: list[EmailReply]
 
 
+# METADATA -
+StructureType = Literal[
+    "sectioned",
+    "narrative",
+    "conversational",
+    "unstructured"
+]
+
+DocumentCategory = Literal[
+    "email",
+    "contract",
+    "brief",
+    "note",
+    "invoice",
+    "deposition",
+    "court_filing",
+    "settlement",
+    "legal_notice",
+    "evidence",
+]
+
+
 class Metadata(BaseModel):
+    # general
     document_name: str | None = None
+    file_type: Literal["pdf", "docx", "eml", "txt"] | None = None
+
+    structure_type: StructureType | None = None
+    document_category: DocumentCategory | None = None
+
+    # optional signals
     page_count: int | None = None
     subject: str | None = None
     participants: set[str] | None = None
     attachment_names: list[str] | None = None
     reply_count: int | None = None
 
-    file_type: Literal["pdf", "docx", "eml", "txt"] | None = None
-    document_type: Literal["contract", "legal_brief", "email", "note"] | None = None
 
-
+# MAIN
 class ParsedDocument(BaseModel):
     text: str
     metadata: Metadata = Field(default_factory=Metadata)
