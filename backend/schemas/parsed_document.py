@@ -11,9 +11,14 @@ class PDFStructure(BaseModel):
 class EmailReply(BaseModel):
     from_: str
     to: str
-    subject: str
-    date: str
+    subject: str | None = None
+    date: str | None = None
     body: str
+    cc: list[str] | None = None
+    bcc: list[str] | None = None
+    message_id: str | None = None
+    in_reply_to: str | None = None
+    references: list[str] | None = None
 
 class EmailStructure(BaseModel):
     replies: list[EmailReply]
@@ -25,6 +30,8 @@ class Metadata(BaseModel):
     page_count: int | None = None
     subject: str | None = None
     participants: set[str] | None = None
+    attachment_names: list[str] | None = None
+    reply_count: int | None = None
 
 
 class ParsedDocument(BaseModel):
