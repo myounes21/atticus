@@ -54,6 +54,7 @@ class PDFParser(BaseParser):
             text=full_text,
             metadata=Metadata(
                 document_name=file_path.name,
+                file_type="pdf",
                 page_count=len(pages),
             ),
             structure=PDFStructure(pages=pages),

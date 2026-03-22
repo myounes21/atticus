@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-
+from typing import Literal
 
 class PDFPage(BaseModel):
     page: int
@@ -26,12 +26,14 @@ class EmailStructure(BaseModel):
 
 class Metadata(BaseModel):
     document_name: str | None = None
-    document_type: str | None = None
     page_count: int | None = None
     subject: str | None = None
     participants: set[str] | None = None
     attachment_names: list[str] | None = None
     reply_count: int | None = None
+
+    file_type: Literal["pdf", "docx", "eml", "txt"] | None = None
+    document_type: Literal["contract", "legal_brief", "email", "note"] | None = None
 
 
 class ParsedDocument(BaseModel):

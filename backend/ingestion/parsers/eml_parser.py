@@ -248,7 +248,7 @@ class EmlParser(BaseParser):
                 text=body,
                 metadata=Metadata(
                     document_name=file_path.name,
-                    document_type="email",
+                    file_type="eml",
                     subject=subject or None,
                     participants=participants or None,
                     attachment_names=attachment_names or None,
