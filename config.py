@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     groq_api_key: str
     groq_llm_model: str = "llama-3.3-70b-versatile"
 
+    # document detector configs
+    detection_snippet_length: int = 1000
+
     # Embedder
     embedder_model: str = "BAAI/bge-m3"
     embedding_dimension: int = 1024
@@ -38,9 +41,6 @@ class Settings(BaseSettings):
     langfuse_secret_key: str
     langfuse_host: str
     langfuse_port: int
-
-    # chunker configs
-
 
     # retrieve pipline
     retrieval_top_k : int = 12
