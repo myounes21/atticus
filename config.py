@@ -12,6 +12,11 @@ class Settings(BaseSettings):
     # document detector configs
     detection_snippet_length: int = 1000
 
+    # Chunking configs
+    CHUNK_SIZE_MIN = 300
+    CHUNK_SIZE_MAX = 500
+    CHUNK_OVERLAP = 50
+
     # Embedder
     embedder_model: str = "BAAI/bge-m3"
     embedding_dimension: int = 1024
