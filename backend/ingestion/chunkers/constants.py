@@ -1,0 +1,4 @@
+
+
+CONTRACT_SECTION_PATTERNS = ()
+
