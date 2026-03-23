@@ -1,4 +1,4 @@
-DOCUMENT_TYPES = ("pdf", "docx", "eml", "txt")
+FILE_TYPE = ("pdf", "docx", "eml", "txt")
 
 STRUCTURE_MAP = {
     "email": "conversational",

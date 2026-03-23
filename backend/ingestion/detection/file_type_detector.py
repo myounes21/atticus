@@ -1,7 +1,7 @@
 from pathlib import Path
-from backend.core.constants import DOCUMENT_TYPES
+from backend.core.constants import FILE_TYPE
 
-_SUPPORTED_EXTENSIONS = set(DOCUMENT_TYPES)
+_SUPPORTED_EXTENSIONS = set(FILE_TYPE)
 
 def get_file_extension(file_path: str | Path) -> str:
     extension = Path(file_path).suffix.lower().lstrip(".")
