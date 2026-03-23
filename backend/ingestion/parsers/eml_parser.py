@@ -6,6 +6,16 @@ from html.parser import HTMLParser
 from pathlib import Path
 import re
 
+from backend.ingestion.parsers.constants import (
+    BODY_PREFERENCES_HTML,
+    BODY_PREFERENCES_PLAIN,
+    EMBEDDED_HEADER_KEYS,
+    EMAIL_ADDRESS_HEADERS,
+    EMAIL_SPLIT_MARKERS,
+    HTML_BLOCK_TAGS_END_BREAK,
+    HTML_BLOCK_TAGS_WITH_BREAK,
+    TEXT_PLAIN_MIME,
+)
 from backend.ingestion.parsers.base import BaseParser
 from backend.schemas.parsed_document import (
     EmailReply,
@@ -16,10 +26,7 @@ from backend.schemas.parsed_document import (
 
 
 class EmlParser(BaseParser):
-    _THREAD_MARKERS = (
-        r"^\s*-{2,}\s*Original Message\s*-{2,}\s*$",
-        r"^\s*On\s+.+?wrote:\s*$",
-    )
+    _THREAD_MARKERS = EMAIL_SPLIT_MARKERS
 
     class _HtmlToTextParser(HTMLParser):
         def __init__(self) -> None:
@@ -31,14 +38,14 @@ class EmlParser(BaseParser):
             if tag == "a":
                 href = dict(attrs).get("href")
                 self.current_link = href.strip() if isinstance(href, str) else None
-            elif tag in {"p", "div", "br", "li", "tr"}:
+            elif tag in HTML_BLOCK_TAGS_WITH_BREAK:
                 self.parts.append("\n")
 
         def handle_endtag(self, tag: str) -> None:  # type: ignore[override]
             if tag == "a" and self.current_link:
                 self.parts.append(f" ({self.current_link})")
                 self.current_link = None
-            elif tag in {"p", "div", "li", "tr"}:
+            elif tag in HTML_BLOCK_TAGS_END_BREAK:
                 self.parts.append("\n")
 
         def handle_data(self, data: str) -> None:  # type: ignore[override]
@@ -58,7 +65,7 @@ class EmlParser(BaseParser):
         return parser.render()
 
     def _extract_body(self, message: EmailMessage) -> str:
-        preferred = message.get_body(preferencelist=("plain",))
+        preferred = message.get_body(preferencelist=BODY_PREFERENCES_PLAIN)
         if preferred is not None:
             return (preferred.get_content() or "").strip()
 
@@ -66,7 +73,7 @@ class EmlParser(BaseParser):
         parts: list[str] = []
         if message.is_multipart():
             for part in message.walk():
-                if part.get_content_type() == "text/plain":
+                if part.get_content_type() == TEXT_PLAIN_MIME:
                     content = part.get_content()
                     if content:
                         parts.append(content.strip())
@@ -80,7 +87,7 @@ class EmlParser(BaseParser):
             return body
 
         # Last fallback: parse html while preserving link targets
-        html_part = message.get_body(preferencelist=("html",))
+        html_part = message.get_body(preferencelist=BODY_PREFERENCES_HTML)
         if html_part is not None:
             html = html_part.get_content() or ""
             return self._html_to_text(html)
@@ -89,7 +96,7 @@ class EmlParser(BaseParser):
 
     def _extract_participants(self, message: EmailMessage) -> set[str]:
         headers = []
-        for header_name in ("from", "to", "cc", "bcc"):
+        for header_name in EMAIL_ADDRESS_HEADERS:
             values = message.get_all(header_name, [])
             headers.extend(values)
 
@@ -125,17 +132,7 @@ class EmlParser(BaseParser):
 
     def _extract_embedded_headers(self, block: str) -> tuple[dict[str, str], str]:
         lines = block.splitlines()
-        headers = {
-            "from": "",
-            "to": "",
-            "subject": "",
-            "date": "",
-            "cc": "",
-            "bcc": "",
-            "message-id": "",
-            "in-reply-to": "",
-            "references": "",
-        }
+        headers = {key: "" for key in EMBEDDED_HEADER_KEYS}
 
         idx = 0
         while idx < len(lines):
