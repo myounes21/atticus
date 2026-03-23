@@ -2,68 +2,15 @@ from groq import Groq
 from config import settings
 from groq.types.chat import ChatCompletionUserMessageParam
 from dataclasses import dataclass
+from backend.core.constants import STRUCTURE_MAP
+from backend.ingestion.detection.constants import (
+    ALIASES,
+    ALL_CATEGORIES,
+    DETECTION_PROMPT,
+    VALID_CATEGORIES,
+)
 
 client = Groq(api_key=settings.groq_api_key)
-
-VALID_CATEGORIES = {
-    "email",
-    "contract",
-    "brief",
-    "note",
-    "invoice",
-    "deposition",
-    "court_filing",
-    "settlement",
-    "legal_notice",
-    "evidence",
-}
-
-ALL_CATEGORIES = VALID_CATEGORIES | {"unknown"}
-
-ALIASES = {
-    "legal_brief": "brief",
-    "court filing": "court_filing",
-    "court-filing": "court_filing",
-    "legal notice": "legal_notice",
-    "legal-notice": "legal_notice",
-}
-
-STRUCTURE_MAP = {
-    "email": "conversational",
-    "deposition": "conversational",
-    "contract": "sectioned",
-    "settlement": "sectioned",
-    "legal_notice": "sectioned",
-    "brief": "narrative",
-    "court_filing": "narrative",
-    "note": "unstructured",
-    "invoice": "unstructured",
-    "evidence": "unstructured",
-}
-
-PROMPT = """
-You are a legal document classifier.
-
-Classify the document into exactly one category from this list:
-- email
-- contract
-- brief
-- note
-- invoice
-- deposition
-- court_filing
-- settlement
-- legal_notice
-- evidence
-- unknown
-
-If the content is unclear, too short, or does not fit any category, return "unknown".
-
-Return exactly one category name. Nothing else.
-
-Document:
-{content}
-"""
 
 
 @dataclass
@@ -97,7 +44,7 @@ def _get_llm_response(content: str) -> str:
         messages=[
             ChatCompletionUserMessageParam(
                 role="user",
-                content=PROMPT.format(content=snippet)
+                content=DETECTION_PROMPT.format(content=snippet)
             )
         ]
     )
