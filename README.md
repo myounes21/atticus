@@ -1,10 +1,32 @@
 "Atticus Finch won his cases by reading every document carefully and finding the truth others missed. That's exactly what this platform does for your firm."
 
+## Ideas
+
+- Private, self-hosted legal intelligence pipeline for case documents.
+- Domain-based organization across ingestion, retrieval, generation, and safety.
+- Safety-first behavior with case isolation, RBAC enforcement, and citation checks.
+- Constant organization split by scope:
+  - shared domain constants in `backend/core/constants.py`
+  - detection constants in `backend/ingestion/detection/constants.py`
+  - parser/chunker constants in their domain folders
+
+## Tools
+
+- Python `>=3.12`
+- FastAPI backend + Next.js frontend
+- `groq` for LLM integration
+- `pdfplumber`, `python-docx`, stdlib email parser
+- Qdrant + Elasticsearch + Redis + Postgres integrations
+- `pytest` test suites (`unit`, `legal_safety`, `evaluation`)
+- Docker and docker compose for local stack
+
 ## File Structure
 
 ```
 Atticus/
 │
+├── pyproject.toml
+├── uv.lock
 ├── docker-compose.yml
 ├── .env
 ├── .env.example
@@ -13,9 +35,8 @@ Atticus/
 ├── config.py
 │
 ├── backend/
+│   ├── __init__.py
 │   ├── Dockerfile
-│   ├── pyproject.toml
-│   ├── uv.lock
 │   │
 │   ├── api/
 │   │   ├── __init__.py
@@ -33,6 +54,7 @@ Atticus/
 │   │
 │   ├── core/
 │   │   ├── __init__.py
+│   │   ├── constants.py
 │   │   ├── security.py
 │   │   └── dependencies.py
 │   │
@@ -45,21 +67,26 @@ Atticus/
 │   │
 │   ├── ingestion/
 │   │   ├── __init__.py
-│   │   ├── pipeline.py
 │   │   ├── parsers/
 │   │   │   ├── __init__.py
 │   │   │   ├── base.py
+│   │   │   ├── constants.py
 │   │   │   ├── pdf_parser.py
 │   │   │   ├── docx_parser.py
 │   │   │   ├── eml_parser.py
-│   │   │   └── txt_parser.py
+│   │   │   ├── txt_parser.py
+│   │   │   ├── parser_factory.py
+│   │   │   └── pipeline.py
 │   │   ├── detection/
 │   │   │   ├── __init__.py
+│   │   │   ├── constants.py
+│   │   │   ├── detector.py
 │   │   │   ├── file_type_detector.py
 │   │   │   └── doc_type_detector.py
 │   │   ├── chunkers/
 │   │   │   ├── __init__.py
 │   │   │   ├── base.py
+│   │   │   ├── constants.py
 │   │   │   ├── contract_chunker.py
 │   │   │   ├── brief_chunker.py
 │   │   │   ├── email_chunker.py
@@ -80,7 +107,6 @@ Atticus/
 │   │   ├── sparse_search.py
 │   │   ├── rrf.py
 │   │   ├── reranker.py
-│   │   ├── context_expander.py
 │   │   └── cache/
 │   │       ├── __init__.py
 │   │       ├── semantic_cache.py
@@ -145,9 +171,23 @@ Atticus/
 │   └── unit/
 │       ├── test_parsers.py
 │       ├── test_detectors.py
-│       └── test_chunkers.py
+│       ├── test_chunkers.py
+│       ├── test_eml_parser.py
+│       └── test_doc_type_detector_unknown.py
 │
+├── playground/
+│   ├── email_test.ipynb
+│   ├── pdf_test.ipynb
+│   ├── test_doc_det.ipynb
+│   └── txt.ipynb
+│
+├── test_files/
+    ├── Dead Poets Society.pdf
+    ├── test_email.eml
+    └── test_txtparser.txt
+
 └── .github/
     └── workflows/
         └── eval_gate.yml
 ```
+
