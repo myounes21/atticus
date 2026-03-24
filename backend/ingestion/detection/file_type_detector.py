@@ -1,5 +1,5 @@
 from pathlib import Path
-from backend.core.constants import FILE_TYPE
+from backend.ingestion.constants import FILE_TYPE
 
 _SUPPORTED_EXTENSIONS = set(FILE_TYPE)
 

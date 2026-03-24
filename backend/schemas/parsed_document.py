@@ -30,14 +30,14 @@ class EmailStructure(BaseModel):
 
 
 # METADATA -
-StructureType = Literal[
+STRUCTURE_TYPE = Literal[
     "sectioned",
     "narrative",
     "conversational",
     "unstructured"
 ]
 
-DocumentCategory = Literal[
+DOCUMENT_CATEGORY = Literal[
     "email",
     "contract",
     "brief",
@@ -56,8 +56,8 @@ class Metadata(BaseModel):
     document_name: str | None = None
     file_type: Literal["pdf", "docx", "eml", "txt"] | None = None
 
-    structure_type: StructureType | None = None
-    document_category: DocumentCategory | None = None
+    structure_type: STRUCTURE_TYPE | None = None
+    document_category: DOCUMENT_CATEGORY | None = None
 
     # optional signals
     page_count: int | None = None

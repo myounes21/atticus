@@ -2,11 +2,11 @@ from groq import Groq
 from config import settings
 from groq.types.chat import ChatCompletionUserMessageParam
 from dataclasses import dataclass
-from backend.core.constants import STRUCTURE_MAP
-from backend.ingestion.detection.constants import (
+from backend.ingestion.constants import (
     ALIASES,
     ALL_CATEGORIES,
     DETECTION_PROMPT,
+    STRUCTURE_MAP,
     VALID_CATEGORIES,
 )
 

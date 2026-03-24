@@ -6,15 +6,12 @@ from html.parser import HTMLParser
 from pathlib import Path
 import re
 
-from backend.ingestion.parsers.constants import (
-    BODY_PREFERENCES_HTML,
-    BODY_PREFERENCES_PLAIN,
+from backend.ingestion.constants import (
     EMBEDDED_HEADER_KEYS,
     EMAIL_ADDRESS_HEADERS,
     EMAIL_SPLIT_MARKERS,
     HTML_BLOCK_TAGS_END_BREAK,
     HTML_BLOCK_TAGS_WITH_BREAK,
-    TEXT_PLAIN_MIME,
 )
 from backend.ingestion.parsers.base import BaseParser
 from backend.schemas.parsed_document import (
@@ -65,7 +62,7 @@ class EmlParser(BaseParser):
         return parser.render()
 
     def _extract_body(self, message: EmailMessage) -> str:
-        preferred = message.get_body(preferencelist=BODY_PREFERENCES_PLAIN)
+        preferred = message.get_body(preferencelist='plain')
         if preferred is not None:
             return (preferred.get_content() or "").strip()
 
@@ -73,7 +70,7 @@ class EmlParser(BaseParser):
         parts: list[str] = []
         if message.is_multipart():
             for part in message.walk():
-                if part.get_content_type() == TEXT_PLAIN_MIME:
+                if part.get_content_type() == "text/plain":
                     content = part.get_content()
                     if content:
                         parts.append(content.strip())
@@ -87,7 +84,7 @@ class EmlParser(BaseParser):
             return body
 
         # Last fallback: parse html while preserving link targets
-        html_part = message.get_body(preferencelist=BODY_PREFERENCES_HTML)
+        html_part = message.get_body(preferencelist='html')
         if html_part is not None:
             html = html_part.get_content() or ""
             return self._html_to_text(html)
