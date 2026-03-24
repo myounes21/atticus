@@ -23,7 +23,7 @@ class Chunk(BaseModel):
 
     # core metadata
     document_type: DOCUMENT_CATEGORY
-    document_name: str | None = None
+    document_name: str
     version: int | None = None
 
     # location
