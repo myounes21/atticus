@@ -1,3 +1,6 @@
+import logging
+import time
+from functools import lru_cache
 from groq import Groq
 from config import settings
 from groq.types.chat import ChatCompletionUserMessageParam
@@ -7,10 +10,15 @@ from backend.ingestion.constants import (
     ALL_CATEGORIES,
     DETECTION_PROMPT,
     STRUCTURE_MAP,
+    TXT_NOTE_SHORTCUT_MAX_CHARS,
     VALID_CATEGORIES,
 )
 
-client = Groq(api_key=settings.groq_api_key)
+logger = logging.getLogger(__name__)
+
+@lru_cache(maxsize=1)
+def _get_client() -> Groq:
+    return Groq(api_key=settings.groq_api_key)
 
 
 @dataclass
@@ -39,31 +47,59 @@ def _get_llm_response(content: str) -> str:
 
     snippet = content[:settings.detection_snippet_length]
 
-    response = client.chat.completions.create(
-        model=settings.groq_llm_model,
-        messages=[
-            ChatCompletionUserMessageParam(
-                role="user",
-                content=DETECTION_PROMPT.format(content=snippet)
+    max_attempts = 2
+    last_error: Exception | None = None
+    for attempt in range(1, max_attempts + 1):
+        try:
+            response = _get_client().chat.completions.create(
+                model=settings.groq_llm_model,
+                messages=[
+                    ChatCompletionUserMessageParam(
+                        role="user",
+                        content=DETECTION_PROMPT.format(content=snippet),
+                    )
+                ],
             )
-        ]
+            return _normalize_llm_result(response.choices[0].message.content)
+        except Exception as exc:
+            last_error = exc
+            if attempt < max_attempts:
+                time.sleep(0.2 * attempt)
+
+    logger.warning("Document type detection failed after retries: %s", last_error)
+    return "unknown"
+
+
+def _normalize_detector_output(result: str | None) -> str:
+    """Backward-compatible alias used by older tests/callers."""
+    return _normalize_llm_result(result)
+
+
+def _classify_with_groq(content: str) -> str:
+    """Backward-compatible alias used by older tests/callers."""
+    return _get_llm_response(content)
+
+
+def _unknown_result() -> DetectionResult:
+    return DetectionResult(
+        category="unknown",
+        structure_type="unstructured",
+        needs_review=True,
     )
 
-    return _normalize_llm_result(response.choices[0].message.content)
 
 
-
-def detect(content: str, file_type: str) -> DetectionResult:
+def detect(content: str, file_type: str | None = None) -> DetectionResult:
     if file_type == "eml":
         return DetectionResult("email", STRUCTURE_MAP["email"], False)
 
-    if file_type == "txt":
+    if file_type == "txt" and len(content.strip()) <= TXT_NOTE_SHORTCUT_MAX_CHARS:
         return DetectionResult("note", STRUCTURE_MAP["note"], False)
 
-    result = _get_llm_response(content)
+    result = _classify_with_groq(content)
 
     if result == "unknown":
-        return DetectionResult(needs_review=True)
+        return _unknown_result()
 
     if result in VALID_CATEGORIES:
         return DetectionResult(
@@ -72,5 +108,4 @@ def detect(content: str, file_type: str) -> DetectionResult:
             needs_review=False
         )
 
-    # 5. Fallback (safety)
-    return DetectionResult(needs_review=True)
+    return _unknown_result()
