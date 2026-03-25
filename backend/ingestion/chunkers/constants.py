@@ -1,5 +1,2 @@
-import tiktoken
-
-MAX_TOKENS = 500
-ENCODER = tiktoken.get_encoding("cl100k_base")
-
+# Re-export from the centralized constants module for backward compatibility
+from backend.ingestion.constants import MAX_TOKENS, ENCODER, OVERLAP_TOKENS
