@@ -55,6 +55,7 @@ class PDFParser(BaseParser):
             metadata=Metadata(
                 document_name=file_path.name,
                 file_type="pdf",
+                structure_type="sectioned",
                 page_count=len(pages),
             ),
             structure=PDFStructure(pages=pages),

@@ -67,6 +67,7 @@ class DocxParser(BaseParser):
                 metadata=Metadata(
                     document_name=file_path.name,
                     file_type="docx",
+                    structure_type="narrative",
                 ),
             )
 

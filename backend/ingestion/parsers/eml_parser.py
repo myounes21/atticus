@@ -104,7 +104,7 @@ class EmlParser(BaseParser):
 
         return ""
 
-    def _extract_participants(self, message: EmailMessage) -> set[str]:
+    def _extract_participants(self, message: EmailMessage) -> list[str]:
         headers = []
         for header_name in EMAIL_ADDRESS_HEADERS:
             values = message.get_all(header_name, [])
@@ -112,7 +112,7 @@ class EmlParser(BaseParser):
 
         addresses = getaddresses(headers)
         participants = {addr.lower() for _, addr in addresses if addr}
-        return participants
+        return sorted(participants)
 
     def _extract_header_addresses(self, message: EmailMessage, header_name: str) -> list[str]:
         values = message.get_all(header_name, [])
@@ -257,6 +257,8 @@ class EmlParser(BaseParser):
                 metadata=Metadata(
                     document_name=file_path.name,
                     file_type="eml",
+                    structure_type="conversational",
+                    document_category="email",
                     subject=subject or None,
                     participants=participants or None,
                     attachment_names=attachment_names or None,

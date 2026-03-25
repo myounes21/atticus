@@ -13,7 +13,8 @@ class TxtParser(BaseParser):
                 text=file_content,
                 metadata=Metadata(
                     document_name=file_path.name,
-                    file_type="txt"
+                    file_type="txt",
+                    structure_type="unstructured",
                 )
             )
         except Exception as e:
