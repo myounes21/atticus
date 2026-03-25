@@ -6,20 +6,20 @@ from backend.ingestion.parsers.txt_parser import TxtParser
 
 
 _PARSER_BY_TYPE: dict[str, type[BaseParser]] = {
-	"pdf": PDFParser,
-	"docx": DocxParser,
-	"eml": EmlParser,
-	"txt": TxtParser,
+    "pdf": PDFParser,
+    "docx": DocxParser,
+    "eml": EmlParser,
+    "txt": TxtParser,
 }
 
 
 def get_parser(file_type: str) -> BaseParser:
-	parser_cls = _PARSER_BY_TYPE.get(file_type)
-	if parser_cls is None:
-		supported = ", ".join(sorted(_PARSER_BY_TYPE))
-		raise ValueError(
-			f"Unsupported parser file type '{file_type}'. Supported: {supported}"
-		)
+    parser_cls = _PARSER_BY_TYPE.get(file_type)
+    if parser_cls is None:
+        supported = ", ".join(sorted(_PARSER_BY_TYPE))
+        raise ValueError(
+            f"Unsupported parser file type '{file_type}'. Supported: {supported}"
+        )
 
-	return parser_cls()
+    return parser_cls()
 

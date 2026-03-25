@@ -6,8 +6,7 @@ from .base import BaseParser
 class TxtParser(BaseParser):
     def parse(self, file_path: Path) -> ParsedDocument:
         try:
-            with open(file_path, 'r', encoding='utf-8') as file:
-                file_content = file.read()
+            file_content = file_path.read_text(encoding="utf-8")
 
             return ParsedDocument(
                 text=file_content,
@@ -18,4 +17,4 @@ class TxtParser(BaseParser):
                 )
             )
         except Exception as e:
-            raise ValueError(f"Failed to read file {file_path}: {e}")
+            raise ValueError(f"Failed to read file {file_path}: {e}") from e
