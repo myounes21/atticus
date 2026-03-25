@@ -3,14 +3,19 @@ from pydantic import BaseModel, Field
 from typing import Literal
 
 
-# STRUCTURES
+
+class BaseStructure(BaseModel):
+    ...
+
+
 class PDFPage(BaseModel):
     page: int
     text: str
 
 
-class PDFStructure(BaseModel):
+class PDFStructure(BaseStructure):
     pages: list[PDFPage]
+
 
 
 class EmailReply(BaseModel):
@@ -26,11 +31,21 @@ class EmailReply(BaseModel):
     references: list[str] | None = None
 
 
-class EmailStructure(BaseModel):
+class EmailStructure(BaseStructure):
     replies: list[EmailReply]
 
+class DepositionTurn(BaseModel):
+    speaker: Literal["Q", "A", "Lawyer", "Other"]
+    text: str
 
-# METADATA -
+
+class DepositionStructure(BaseStructure):
+    turns: list[DepositionTurn]
+
+
+StructureType = PDFStructure | EmailStructure | DepositionStructure
+
+
 STRUCTURE_TYPE = Literal[
     "sectioned",
     "narrative",
@@ -63,13 +78,13 @@ class Metadata(BaseModel):
     # optional signals
     page_count: int | None = None
     subject: str | None = None
-    participants: set[str] | None = None
+    participants: list[str] | None = None
     attachment_names: list[str] | None = None
     reply_count: int | None = None
 
 
-# MAIN
+
 class ParsedDocument(BaseModel):
     text: str
     metadata: Metadata = Field(default_factory=Metadata)
-    structure: PDFStructure | EmailStructure | None = None
+    structure: StructureType | None = None
