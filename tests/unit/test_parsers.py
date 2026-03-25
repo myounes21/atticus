@@ -21,7 +21,7 @@ def test_docx_parser_extracts_paragraphs_and_tables(tmp_path: Path) -> None:
     parsed = DocxParser().parse(file_path)
 
     assert parsed.metadata.document_name == "sample.docx"
-    assert parsed.metadata.document_type == "docx"
+    assert parsed.metadata.file_type == "docx"
     assert "Contract summary" in parsed.text
     assert "Clause | Status" in parsed.text
 

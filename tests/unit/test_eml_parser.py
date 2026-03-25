@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import datetime
 
 from backend.ingestion.parsers.eml_parser import EmlParser
 
@@ -32,14 +33,14 @@ Previous reply body.
 
     parsed = EmlParser().parse(file_path)
 
-    assert parsed.metadata.document_type == "email"
+    assert parsed.metadata.document_category == "email"
     assert parsed.metadata.subject == "Thread Example"
     assert parsed.metadata.reply_count == 2
-    assert parsed.metadata.participants == {
+    assert parsed.metadata.participants == [
         "alice@example.com",
         "bob@example.com",
         "carol@example.com",
-    }
+    ]
 
     assert parsed.structure is not None
     assert len(parsed.structure.replies) == 2
@@ -47,6 +48,7 @@ Previous reply body.
     assert parsed.structure.replies[0].in_reply_to == "<m0@example.com>"
     assert parsed.structure.replies[0].references == ["<m0@example.com>", "<m00@example.com>"]
     assert parsed.structure.replies[0].cc == ["carol@example.com"]
+    assert isinstance(parsed.structure.replies[0].date, datetime)
     assert parsed.structure.replies[0].body.startswith("Hello Bob")
     assert "Previous reply body." in parsed.structure.replies[1].body
 
