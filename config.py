@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import ClassVar
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ENV_PATH = Path(__file__).resolve().parent / ".env"
@@ -13,9 +14,9 @@ class Settings(BaseSettings):
     detection_snippet_length: int = 1000
 
     # Chunking configs
-    CHUNK_SIZE_MIN = 300
-    CHUNK_SIZE_MAX = 500
-    CHUNK_OVERLAP = 50
+    CHUNK_SIZE_MIN: ClassVar[int] = 300
+    CHUNK_SIZE_MAX: ClassVar[int] = 500
+    CHUNK_OVERLAP: ClassVar[int] = 50
 
     # Embedder
     embedder_model: str = "BAAI/bge-m3"
