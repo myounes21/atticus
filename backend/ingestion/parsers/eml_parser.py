@@ -1,7 +1,8 @@
+from datetime import datetime, timezone
 from email import policy
 from email.message import EmailMessage
 from email.parser import BytesParser
-from email.utils import getaddresses
+from email.utils import getaddresses, parsedate_to_datetime
 from html.parser import HTMLParser
 from pathlib import Path
 import re
@@ -24,6 +25,18 @@ from backend.schemas.parsed_document import (
 
 class EmlParser(BaseParser):
     _THREAD_MARKERS = EMAIL_SPLIT_MARKERS
+
+    def _parse_email_date(self, value: str | None) -> datetime | None:
+        if not value:
+            return None
+        try:
+            parsed = parsedate_to_datetime(value)
+        except (TypeError, ValueError, IndexError):
+            return None
+
+        if parsed.tzinfo is None:
+            return parsed.replace(tzinfo=timezone.utc)
+        return parsed
 
     class _HtmlToTextParser(HTMLParser):
         def __init__(self) -> None:
@@ -160,7 +173,7 @@ class EmlParser(BaseParser):
         from_value: str,
         to_value: str,
         subject: str | None,
-        date: str | None,
+        date: datetime | None,
         cc_list: list[str] | None,
         bcc_list: list[str] | None,
         message_id: str | None,
@@ -195,7 +208,7 @@ class EmlParser(BaseParser):
                     from_=headers["from"] or from_value,
                     to=headers["to"] or to_value,
                     subject=(headers["subject"] or subject) or None,
-                    date=(headers["date"] or date) or None,
+                    date=self._parse_email_date(headers["date"]) or date,
                     body=embedded_body,
                     cc=self._extract_addresses_from_header_value(headers["cc"]) or cc_list,
                     bcc=self._extract_addresses_from_header_value(headers["bcc"]) or bcc_list,
@@ -215,7 +228,8 @@ class EmlParser(BaseParser):
             from_value = (message.get("from") or "").strip()
             to_value = (message.get("to") or "").strip()
             subject = (message.get("subject") or "").strip() or None
-            date = (message.get("date") or "").strip() or None
+            raw_date = (message.get("date") or "").strip() or None
+            date = self._parse_email_date(raw_date)
             body = self._extract_body(message)
             participants = self._extract_participants(message)
             cc_list = self._extract_header_addresses(message, "cc")

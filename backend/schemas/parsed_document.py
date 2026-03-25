@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel, Field
 from typing import Literal
 
@@ -16,7 +17,7 @@ class EmailReply(BaseModel):
     from_: str
     to: str
     subject: str | None = None
-    date: str | None = None
+    date: datetime | None = None
     body: str
     cc: list[str] | None = None
     bcc: list[str] | None = None
