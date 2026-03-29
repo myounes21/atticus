@@ -6,11 +6,21 @@ def test_normalize_llm_result_returns_unknown_for_garbage() -> None:
 
 
 def test_detect_marks_unknown_as_needing_review(monkeypatch) -> None:
-    monkeypatch.setattr(doc_type_detector, "_get_llm_response", lambda content: "unknown")
+    monkeypatch.setattr(
+        doc_type_detector,
+        "_get_llm_response",
+        lambda content: doc_type_detector._LLMOutcome(
+            raw_label="???",
+            normalized_label="unknown",
+            attempts=1,
+            error=None,
+        ),
+    )
 
     detected = doc_type_detector.detect("garbage content", "pdf")
 
     assert detected.category == "unknown"
     assert detected.structure_type == "unstructured"
     assert detected.needs_review is True
+    assert detected.normalized_label == "unknown"
 

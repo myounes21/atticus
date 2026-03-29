@@ -1,12 +1,22 @@
 from backend.ingestion.detection import doc_type_detector
 
 
+def _outcome(label: str | None, normalized: str, attempts: int = 1, error: str | None = None):
+    return doc_type_detector._LLMOutcome(
+        raw_label=label,
+        normalized_label=normalized,
+        attempts=attempts,
+        error=error,
+    )
+
+
 def test_detect_normalizes_noncompliant_llm_output(monkeypatch) -> None:
     monkeypatch.setattr(
         doc_type_detector,
-        "_classify_with_groq",
-        lambda content: doc_type_detector._normalize_detector_output(
-            "This document appears to be a contract."
+        "_get_llm_response",
+        lambda content: _outcome(
+            "This document appears to be a contract.",
+            doc_type_detector._normalize_detector_output("This document appears to be a contract."),
         ),
     )
 
@@ -20,8 +30,8 @@ def test_detect_normalizes_noncompliant_llm_output(monkeypatch) -> None:
 def test_detect_maps_legacy_alias(monkeypatch) -> None:
     monkeypatch.setattr(
         doc_type_detector,
-        "_classify_with_groq",
-        lambda content: doc_type_detector._normalize_detector_output("legal_brief"),
+        "_get_llm_response",
+        lambda content: _outcome("legal_brief", doc_type_detector._normalize_detector_output("legal_brief")),
     )
 
     detected = doc_type_detector.detect("Legal argument")
@@ -34,8 +44,8 @@ def test_detect_maps_legacy_alias(monkeypatch) -> None:
 def test_detect_uses_llm_result_directly(monkeypatch) -> None:
     monkeypatch.setattr(
         doc_type_detector,
-        "_classify_with_groq",
-        lambda content: "contract",
+        "_get_llm_response",
+        lambda content: _outcome("contract", "contract"),
     )
 
     detected = doc_type_detector.detect("Hi team")
@@ -43,16 +53,23 @@ def test_detect_uses_llm_result_directly(monkeypatch) -> None:
     assert detected.category == "contract"
     assert detected.structure_type == "sectioned"
     assert detected.needs_review is False
+    assert detected.source == "llm"
+    assert detected.normalized_label == "contract"
 
 
 def test_detect_marks_unknown_when_no_signal(monkeypatch) -> None:
-    monkeypatch.setattr(doc_type_detector, "_classify_with_groq", lambda content: None)
+    monkeypatch.setattr(
+        doc_type_detector,
+        "_get_llm_response",
+        lambda content: _outcome(None, "unknown", attempts=2, error="timeout"),
+    )
 
     detected = doc_type_detector.detect("Random text without legal markers")
 
     assert detected.category == "unknown"
     assert detected.structure_type == "unstructured"
     assert detected.needs_review is True
+    assert detected.error == "timeout"
 
 
 def test_detect_txt_shortcut_keeps_note_for_short_content() -> None:
@@ -64,7 +81,11 @@ def test_detect_txt_shortcut_keeps_note_for_short_content() -> None:
 
 
 def test_detect_txt_long_content_uses_classifier(monkeypatch) -> None:
-    monkeypatch.setattr(doc_type_detector, "_classify_with_groq", lambda content: "deposition")
+    monkeypatch.setattr(
+        doc_type_detector,
+        "_get_llm_response",
+        lambda content: _outcome("deposition", "deposition"),
+    )
 
     detected = doc_type_detector.detect("x" * 1000, "txt")
 

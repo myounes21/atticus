@@ -1,6 +1,7 @@
 import logging
 import time
 from functools import lru_cache
+from typing import NamedTuple
 from groq import Groq
 from config import settings
 from groq.types.chat import ChatCompletionUserMessageParam
@@ -26,6 +27,19 @@ class DetectionResult:
     category: str | None = None
     structure_type: str | None = None
     needs_review: bool = False
+    source: str = "llm"
+    raw_label: str | None = None
+    normalized_label: str | None = None
+    model: str | None = None
+    attempts: int = 0
+    error: str | None = None
+
+
+class _LLMOutcome(NamedTuple):
+    raw_label: str | None
+    normalized_label: str
+    attempts: int
+    error: str | None
 
 
 
@@ -41,9 +55,14 @@ def _normalize_llm_result(result: str | None) -> str:
     return normalized
 
 
-def _get_llm_response(content: str) -> str:
+def _get_llm_response(content: str) -> _LLMOutcome:
     if not content.strip():
-        return "unknown"
+        return _LLMOutcome(
+            raw_label=None,
+            normalized_label="unknown",
+            attempts=0,
+            error="empty_content",
+        )
 
     snippet = content[:settings.detection_snippet_length]
 
@@ -60,14 +79,25 @@ def _get_llm_response(content: str) -> str:
                     )
                 ],
             )
-            return _normalize_llm_result(response.choices[0].message.content)
+            raw_label = response.choices[0].message.content
+            return _LLMOutcome(
+                raw_label=raw_label,
+                normalized_label=_normalize_llm_result(raw_label),
+                attempts=attempt,
+                error=None,
+            )
         except Exception as exc:
             last_error = exc
             if attempt < max_attempts:
                 time.sleep(0.2 * attempt)
 
     logger.warning("Document type detection failed after retries: %s", last_error)
-    return "unknown"
+    return _LLMOutcome(
+        raw_label=None,
+        normalized_label="unknown",
+        attempts=max_attempts,
+        error=str(last_error) if last_error else "unknown_error",
+    )
 
 
 def _normalize_detector_output(result: str | None) -> str:
@@ -77,35 +107,78 @@ def _normalize_detector_output(result: str | None) -> str:
 
 def _classify_with_groq(content: str) -> str:
     """Backward-compatible alias used by older tests/callers."""
-    return _get_llm_response(content)
+    return _get_llm_response(content).normalized_label
 
 
-def _unknown_result() -> DetectionResult:
+def _unknown_result(
+    source: str = "llm",
+    raw_label: str | None = None,
+    normalized_label: str | None = "unknown",
+    attempts: int = 0,
+    error: str | None = None,
+) -> DetectionResult:
     return DetectionResult(
         category="unknown",
         structure_type="unstructured",
         needs_review=True,
+        source=source,
+        raw_label=raw_label,
+        normalized_label=normalized_label,
+        model=settings.groq_llm_model,
+        attempts=attempts,
+        error=error,
     )
 
 
 
 def detect(content: str, file_type: str | None = None) -> DetectionResult:
     if file_type == "eml":
-        return DetectionResult("email", STRUCTURE_MAP["email"], False)
+        return DetectionResult(
+            "email",
+            STRUCTURE_MAP["email"],
+            False,
+            source="deterministic:file_type",
+            model=settings.groq_llm_model,
+        )
 
     if file_type == "txt" and len(content.strip()) <= TXT_NOTE_SHORTCUT_MAX_CHARS:
-        return DetectionResult("note", STRUCTURE_MAP["note"], False)
+        return DetectionResult(
+            "note",
+            STRUCTURE_MAP["note"],
+            False,
+            source="deterministic:txt_shortcut",
+            model=settings.groq_llm_model,
+        )
 
-    result = _classify_with_groq(content)
+    outcome = _get_llm_response(content)
+    result = outcome.normalized_label
 
     if result == "unknown":
-        return _unknown_result()
+        return _unknown_result(
+            source="llm",
+            raw_label=outcome.raw_label,
+            normalized_label=outcome.normalized_label,
+            attempts=outcome.attempts,
+            error=outcome.error,
+        )
 
     if result in VALID_CATEGORIES:
         return DetectionResult(
             category=result,
             structure_type=STRUCTURE_MAP[result],
-            needs_review=False
+            needs_review=False,
+            source="llm",
+            raw_label=outcome.raw_label,
+            normalized_label=outcome.normalized_label,
+            model=settings.groq_llm_model,
+            attempts=outcome.attempts,
+            error=outcome.error,
         )
 
-    return _unknown_result()
+    return _unknown_result(
+        source="llm",
+        raw_label=outcome.raw_label,
+        normalized_label=outcome.normalized_label,
+        attempts=outcome.attempts,
+        error=outcome.error,
+    )
