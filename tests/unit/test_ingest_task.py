@@ -1,4 +1,5 @@
 import uuid
+from typing import Any, cast
 
 from backend.ingestion.detection.doc_type_detector import DetectionResult
 from backend.ingestion.errors import IngestionStage, IngestionStageError
@@ -8,8 +9,32 @@ from backend.schemas.parsed_document import ParsedDocument
 from backend.tasks.ingest_task import IngestionJobStatus, ingest_document
 
 
+class _FakeJobStore:
+    def __init__(self) -> None:
+        self.status_history: list[str] = []
+        self.rows: dict[str, object] = {}
+
+    def create_job(self, *, file_id: uuid.UUID, file_path: str, status: str = "queued"):
+        self.status_history = [status]
+        self.rows = {
+            "file_id": file_id,
+            "file_path": file_path,
+            "status": status,
+            "needs_review": False,
+            "indexed": False,
+            "failed_stage": None,
+            "error": None,
+        }
+
+    def update_job(self, *, file_id: uuid.UUID, status: str, **kwargs):
+        self.status_history.append(status)
+        self.rows.update(kwargs)
+        self.rows["status"] = status
+
+
 def test_ingest_document_returns_completed(monkeypatch) -> None:
     file_id = uuid.uuid4()
+    store = _FakeJobStore()
     chunk = Chunk(
         text="hello world",
         chunk_index=0,
@@ -43,7 +68,7 @@ def test_ingest_document_returns_completed(monkeypatch) -> None:
         lambda chunks, vectors: qdrant_calls.__setitem__("count", qdrant_calls["count"] + 1),
     )
 
-    result = ingest_document(file_path="/tmp/doc.txt", file_id=file_id)
+    result = ingest_document(file_path="/tmp/doc.txt", file_id=file_id, job_store=cast(Any, store))
 
     assert result.file_id == file_id
     assert result.status == IngestionJobStatus.COMPLETED
@@ -53,10 +78,13 @@ def test_ingest_document_returns_completed(monkeypatch) -> None:
     assert result.status_history == ["queued", "running", "indexing", "completed"]
     assert elastic_calls["count"] == 1
     assert qdrant_calls["count"] == 1
+    assert store.rows["status"] == "completed"
+    assert store.rows["indexed"] is True
 
 
 def test_ingest_document_returns_review_required(monkeypatch) -> None:
     file_id = uuid.uuid4()
+    store = _FakeJobStore()
 
     monkeypatch.setattr(
         "backend.tasks.ingest_task.run_pipeline",
@@ -71,15 +99,19 @@ def test_ingest_document_returns_review_required(monkeypatch) -> None:
         ),
     )
 
-    result = ingest_document(file_path="/tmp/doc.txt", file_id=file_id)
+    result = ingest_document(file_path="/tmp/doc.txt", file_id=file_id, job_store=cast(Any, store))
 
     assert result.status == IngestionJobStatus.REVIEW_REQUIRED
     assert result.needs_review is True
     assert result.indexed is False
     assert result.status_history == ["queued", "running", "review_required"]
+    assert store.rows["status"] == "review_required"
+    assert store.rows["needs_review"] is True
 
 
 def test_ingest_document_returns_failed_on_stage_error(monkeypatch) -> None:
+    store = _FakeJobStore()
+
     def _raise_stage_error(**kwargs):
         raise IngestionStageError(
             stage=IngestionStage.DETECT,
@@ -89,16 +121,19 @@ def test_ingest_document_returns_failed_on_stage_error(monkeypatch) -> None:
 
     monkeypatch.setattr("backend.tasks.ingest_task.run_pipeline", _raise_stage_error)
 
-    result = ingest_document(file_path="/tmp/doc.txt")
+    result = ingest_document(file_path="/tmp/doc.txt", job_store=cast(Any, store))
 
     assert result.status == IngestionJobStatus.FAILED
     assert result.failed_stage == "detect"
     assert result.error is not None
     assert result.status_history == ["queued", "running", "failed"]
+    assert store.rows["status"] == "failed"
+    assert store.rows["failed_stage"] == "detect"
 
 
 def test_ingest_document_returns_failed_when_indexing_fails(monkeypatch) -> None:
     file_id = uuid.uuid4()
+    store = _FakeJobStore()
     chunk = Chunk(
         text="hello world",
         chunk_index=0,
@@ -126,10 +161,12 @@ def test_ingest_document_returns_failed_when_indexing_fails(monkeypatch) -> None
         lambda chunks, vectors: (_ for _ in ()).throw(RuntimeError("qdrant down")),
     )
 
-    result = ingest_document(file_path="/tmp/doc.txt", file_id=file_id)
+    result = ingest_document(file_path="/tmp/doc.txt", file_id=file_id, job_store=cast(Any, store))
 
     assert result.status == IngestionJobStatus.FAILED
     assert result.failed_stage == "index"
     assert "qdrant down" in (result.error or "")
     assert result.status_history == ["queued", "running", "indexing", "failed"]
+    assert store.rows["status"] == "failed"
+    assert store.rows["failed_stage"] == "index"
 
