@@ -9,6 +9,7 @@ from backend.schemas.ingestion import (
     IngestionTriggerRequest,
     IngestionTriggerResponse,
 )
+from backend.tasks.celery_app import enqueue_ingestion_task
 from backend.tasks.ingest_task import ingest_document
 
 
@@ -40,9 +41,23 @@ def trigger_ingestion(
     store = get_ingestion_job_store()
     store.create_job(file_id=file_id, file_path=payload.file_path, status="queued")
 
-    background_tasks.add_task(_run_ingestion_job, file_id, payload)
+    enqueued = enqueue_ingestion_task(
+        file_id=str(file_id),
+        file_path=payload.file_path,
+        case_id=str(payload.case_id) if payload.case_id else None,
+        case_name=payload.case_name,
+        assigned_lawyers=[str(value) for value in payload.assigned_lawyers],
+        version=payload.version,
+    )
+    if not enqueued:
+        background_tasks.add_task(_run_ingestion_job, file_id, payload)
 
-    logger.info("Queued ingestion job '%s' for '%s'", file_id, payload.file_path)
+    logger.info(
+        "Queued ingestion job '%s' for '%s' via %s",
+        file_id,
+        payload.file_path,
+        "celery" if enqueued else "background_fallback",
+    )
     return IngestionTriggerResponse(file_id=file_id, status="queued")
 
 
