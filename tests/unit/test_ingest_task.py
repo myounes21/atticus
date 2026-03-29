@@ -1,12 +1,13 @@
 import uuid
 from typing import Any, cast
+from types import SimpleNamespace
 
 from backend.ingestion.detection.doc_type_detector import DetectionResult
 from backend.ingestion.errors import IngestionStage, IngestionStageError
 from backend.ingestion.pipeline import IngestionResult
 from backend.schemas.chunkers_schema import Chunk
 from backend.schemas.parsed_document import ParsedDocument
-from backend.tasks.ingest_task import IngestionJobStatus, ingest_document
+from backend.tasks.ingest_task import IngestionJobStatus, ingest_document, ingest_document_task
 
 
 class _FakeJobStore:
@@ -169,4 +170,32 @@ def test_ingest_document_returns_failed_when_indexing_fails(monkeypatch) -> None
     assert result.status_history == ["queued", "running", "indexing", "failed"]
     assert store.rows["status"] == "failed"
     assert store.rows["failed_stage"] == "index"
+
+
+def test_ingest_document_task_uses_precreated_job_mode(monkeypatch) -> None:
+    file_id = uuid.uuid4()
+    case_id = uuid.uuid4()
+    lawyer_id = uuid.uuid4()
+    captured: dict[str, object] = {}
+
+    def _fake_ingest_document(**kwargs):
+        captured.update(kwargs)
+        return SimpleNamespace(file_id=kwargs["file_id"], status=IngestionJobStatus.COMPLETED)
+
+    monkeypatch.setattr("backend.tasks.ingest_task.ingest_document", _fake_ingest_document)
+
+    result = ingest_document_task(
+        file_id=str(file_id),
+        file_path="/tmp/test.txt",
+        case_id=str(case_id),
+        case_name="Case A",
+        assigned_lawyers=[str(lawyer_id)],
+        version=2,
+    )
+
+    assert result == {"file_id": str(file_id), "status": "completed"}
+    assert captured["create_job_if_missing"] is False
+    assert captured["case_id"] == case_id
+    assert captured["assigned_lawyers"] == [lawyer_id]
+
 
