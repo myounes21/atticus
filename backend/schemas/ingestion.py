@@ -4,11 +4,7 @@ from pydantic import BaseModel, Field
 
 
 class IngestionTriggerRequest(BaseModel):
-    file_path: str
-    case_id: uuid.UUID | None = None
-    case_name: str | None = None
-    assigned_lawyers: list[uuid.UUID] = Field(default_factory=list)
-    version: int | None = None
+    file_id: uuid.UUID
 
 
 class IngestionTriggerResponse(BaseModel):
