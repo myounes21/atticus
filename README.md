@@ -1,193 +1,114 @@
-"Atticus Finch won his cases by reading every document carefully and finding the truth others missed. That's exactly what this platform does for your firm."
+# Atticus
 
-## Ideas
+Atticus is a private legal intelligence workspace with strict case scoping, role-based access, and cited answers over uploaded documents.
 
-- Private, self-hosted legal intelligence pipeline for case documents.
-- Domain-based organization across ingestion, retrieval, generation, and safety.
-- Safety-first behavior with case isolation, RBAC enforcement, and citation checks.
-- Constant organization split by scope:
-  - shared domain constants in `backend/core/constants.py`
-  - detection constants in `backend/ingestion/detection/constants.py`
-  - parser/chunker constants in their domain folders
+## Live Demo (CV Ready)
 
-## Tools
+- Roles are intentionally simple: `admin` and `lawyer`.
+- Default demo credentials (after seeding):
+  - Admin: `demo.admin@atticus.local` / `DemoPass!123`
+  - Lawyer: `demo.lawyer@atticus.local` / `DemoPass!123`
+- Demo flow (about 60 seconds):
+  1. Sign in as admin and confirm cases/documents exist.
+  2. Sign in as lawyer and open a seeded case.
+  3. Ask a question and verify response includes source context.
 
-- Python `>=3.12`
-- FastAPI backend + Next.js frontend
-- `groq` for LLM integration
-- `pdfplumber`, `python-docx`, stdlib email parser
-- Qdrant + Elasticsearch + Redis + Postgres integrations
-- `pytest` test suites (`unit`, `legal_safety`, `evaluation`)
-- Docker and docker compose for local stack
+## Architecture
 
-## File Structure
+- Frontend: Next.js 15 (App Router), TypeScript.
+- Backend: FastAPI + PostgreSQL.
+- Retrieval: Qdrant (dense) + Elasticsearch (sparse) + RRF + reranking.
+- Cache/async: Redis + Celery ingestion queue.
+- Security: JWT auth, role checks, case-level access control, request rate limits.
 
-```
-Atticus/
-│
-├── pyproject.toml
-├── uv.lock
-├── docker-compose.yml
-├── .env
-├── .env.example
-├── .gitignore
-├── README.md
-├── config.py
-│
-├── backend/
-│   ├── __init__.py
-│   ├── Dockerfile
-│   │
-│   ├── api/
-│   │   ├── __init__.py
-│   │   ├── main.py
-│   │   ├── routes/
-│   │   │   ├── __init__.py
-│   │   │   ├── auth.py
-│   │   │   ├── cases.py
-│   │   │   ├── documents.py
-│   │   │   └── chat.py
-│   │   └── middleware/
-│   │       ├── __init__.py
-│   │       ├── auth_middleware.py
-│   │       └── rbac_middleware.py
-│   │
-│   ├── core/
-│   │   ├── __init__.py
-│   │   ├── constants.py
-│   │   ├── security.py
-│   │   └── dependencies.py
-│   │
-│   ├── schemas/
-│   │   ├── __init__.py
-│   │   ├── case.py
-│   │   ├── document.py
-│   │   ├── user.py
-│   │   └── chat.py
-│   │
-│   ├── ingestion/
-│   │   ├── __init__.py
-│   │   ├── parsers/
-│   │   │   ├── __init__.py
-│   │   │   ├── base.py
-│   │   │   ├── constants.py
-│   │   │   ├── pdf_parser.py
-│   │   │   ├── docx_parser.py
-│   │   │   ├── eml_parser.py
-│   │   │   ├── txt_parser.py
-│   │   │   ├── parser_factory.py
-│   │   │   └── pipeline.py
-│   │   ├── detection/
-│   │   │   ├── __init__.py
-│   │   │   ├── constants.py
-│   │   │   ├── detector.py
-│   │   │   ├── file_type_detector.py
-│   │   │   └── doc_type_detector.py
-│   │   ├── chunkers/
-│   │   │   ├── __init__.py
-│   │   │   ├── base.py
-│   │   │   ├── constants.py
-│   │   │   ├── contract_chunker.py
-│   │   │   ├── brief_chunker.py
-│   │   │   ├── email_chunker.py
-│   │   │   └── note_chunker.py
-│   │   ├── enrichment/
-│   │   │   ├── __init__.py
-│   │   │   └── prefix_enricher.py
-│   │   └── indexers/
-│   │       ├── __init__.py
-│   │       ├── qdrant_indexer.py
-│   │       └── elastic_indexer.py
-│   │
-│   ├── retrieval/
-│   │   ├── __init__.py
-│   │   ├── pipeline.py
-│   │   ├── query_rewriter.py
-│   │   ├── dense_search.py
-│   │   ├── sparse_search.py
-│   │   ├── rrf.py
-│   │   ├── reranker.py
-│   │   └── cache/
-│   │       ├── __init__.py
-│   │       ├── semantic_cache.py
-│   │       └── cache_invalidator.py
-│   │
-│   ├── generation/
-│   │   ├── __init__.py
-│   │   ├── pipeline.py
-│   │   ├── prompt_builder.py
-│   │   ├── chat_history.py
-│   │   ├── llm_client.py
-│   │   └── streamer.py
-│   │
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── embedder.py
-│   │   └── reranker.py
-│   │
-│   ├── db/
-│   │   ├── __init__.py
-│   │   ├── postgres.py
-│   │   ├── qdrant.py
-│   │   ├── elastic.py
-│   │   └── redis.py
-│   │
-│   ├── storage/
-│   │   ├── __init__.py
-│   │   └── s3.py
-│   │
-│   ├── tasks/
-│   │   ├── __init__.py
-│   │   ├── celery_app.py
-│   │   └── ingest_task.py
-│   │
-│   └── migrations/
-│       └── 001_initial.sql
-│
-├── frontend/
-│   ├── Dockerfile
-│   ├── package.json
-│   └── src/
-│       ├── app/
-│       │   ├── admin/
-│       │   └── lawyer/
-│       ├── components/
-│       │   ├── chat/
-│       │   ├── cases/
-│       │   └── documents/
-│       └── lib/
-│           ├── api.ts
-│           └── auth.ts
-│
-├── tests/
-│   ├── evaluation/
-│   │   ├── golden_dataset.json
-│   │   └── test_ragas.py
-│   ├── legal_safety/
-│   │   ├── test_rbac.py
-│   │   ├── test_case_isolation.py
-│   │   ├── test_versioning.py
-│   │   └── test_citations.py
-│   └── unit/
-│       ├── test_parsers.py
-│       ├── test_detectors.py
-│       ├── test_chunkers.py
-│       ├── test_eml_parser.py
-│       └── test_doc_type_detector_unknown.py
-│
-├── playground/
-│   ├── email_test.ipynb
-│   ├── pdf_test.ipynb
-│   ├── test_doc_det.ipynb
-│   └── txt.ipynb
-│
-├── test_files/
-    ├── Dead Poets Society.pdf
-    ├── test_email.eml
-    └── test_txtparser.txt
+## Run Locally
 
-└── .github/
-    └── workflows/
-        └── eval_gate.yml
-```
+1. Create env file:
+   - `cp .env.example .env`
+2. Start stack:
+   - `docker compose up --build -d`
+3. Apply demo seed data:
+   - `docker compose --profile demo run --rm demo-seed`
+4. Open app:
+   - `http://localhost:3000`
 
+Useful checks:
+- `docker compose ps`
+- `docker compose logs -f backend`
+- Backend readiness: `http://localhost:8000/ready`
+
+## Deployment (HTTPS)
+
+This repo includes Caddy reverse proxy config for TLS termination.
+
+1. Set production values in `.env`:
+   - `APP_ENV=production`
+   - `APP_DOMAIN=<your-domain>`
+   - `ALLOWED_ORIGINS=["https://<your-domain>"]`
+   - strong `JWT_SECRET_KEY`
+   - strong `POSTGRES_PASSWORD`
+   - `DEMO_AUTH=false`
+   - `ENABLE_SELF_REGISTER=false`
+   - `NEXT_PUBLIC_DEMO_AUTH=false`
+   - `NEXT_PUBLIC_ENABLE_SELF_REGISTER=false`
+2. Start services:
+   - `docker compose up --build -d`
+3. Start HTTPS proxy:
+   - `docker compose --profile prod up -d caddy`
+
+## Demo Dataset Management
+
+- Seed deterministic demo data:
+  - `docker compose --profile demo run --rm demo-seed`
+- Reset and reseed manually from backend container:
+  - `uv run python backend/scripts/reset_and_seed_demo_data.py`
+- Individual scripts:
+  - `uv run python backend/scripts/reset_demo_data.py`
+  - `uv run python backend/scripts/seed_demo_data.py`
+
+Seeded synthetic docs are in `backend/demo_data`.
+
+## Safety and Hardening Included
+
+- Role model reduced to `admin` and `lawyer` only.
+- Registration toggle enforced server-side (`ENABLE_SELF_REGISTER`).
+- Production validator rejects unsafe config (`demo_auth`/self-register enabled, weak JWT, wildcard origins).
+- Rate limits:
+  - login
+  - chat
+  - uploads
+- Upload safeguards:
+  - max size configured by `UPLOAD_MAX_MB`
+  - extension allow-list via `UPLOAD_ALLOWED_EXTENSIONS`
+- Input limits for case names and chat query size.
+
+## Langfuse Observability (Metadata-Only)
+
+- Optional Langfuse Cloud tracing is supported for chat/retrieval/generation/ingestion.
+- Default mode is metadata-only (no prompt or document text content).
+- Enable via env:
+  - `LANGFUSE_ENABLED=true`
+  - `LANGFUSE_PUBLIC_KEY=<key>`
+  - `LANGFUSE_SECRET_KEY=<key>`
+  - `LANGFUSE_BASE_URL=https://cloud.langfuse.com`
+  - `LANGFUSE_CAPTURE_CONTENT=false`
+
+## Migrations
+
+- SQL migrations are in `backend/migrations`.
+- Containers run migration bootstrap automatically via:
+  - `backend/scripts/apply_migrations.py`
+- Migration `002_roles_and_hardening.sql` converts legacy `paralegal` users to `lawyer` and tightens role constraints.
+
+## Validation Commands
+
+- Frontend:
+  - `cd frontend && npm run lint && npm run build`
+- Backend tests:
+  - `uv run pytest`
+
+## Known Tradeoffs
+
+- Demo seed uses deterministic synthetic text files for reliability, not real legal records.
+- Full pipeline quality depends on external model/API availability and infra resources.
+- Local Docker composition prioritizes reproducibility over minimal memory footprint.
