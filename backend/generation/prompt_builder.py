@@ -1,0 +1,65 @@
+"""Prompt builder — constructs the legal-aware system + context prompt.
+
+Rules encoded in the system prompt:
+  • Answer ONLY from the provided context.
+  • Cite every claim: [Source: {doc_name}, v{version}, p{page}].
+  • If the answer is not found: say "I don't have that information."
+"""
+
+from __future__ import annotations
+
+from backend.retrieval.reranker import RerankedChunk
+
+_SYSTEM_PROMPT = """\
+You are Atticus, a legal research assistant for a law firm. You answer questions \
+based ONLY on the provided document context. Follow these rules strictly:
+
+1. Answer ONLY from the context below. Do NOT use external knowledge.
+2. Cite every factual claim with the format: [Source: {document_name}, p{page}]
+3. If the context does not contain enough information to answer, respond with: \
+"I don't have enough information in the available documents to answer this question."
+4. Be precise with legal terminology.
+5. If multiple documents support the same point, cite all of them.
+6. Structure longer answers with clear paragraphs or bullet points.
+"""
+
+
+def build_prompt(
+    query: str,
+    chunks: list[RerankedChunk],
+    chat_history: list[dict[str, str]] | None = None,
+) -> list[dict[str, str]]:
+    """Build the full message list for the LLM.
+
+    Returns:
+        List of messages in OpenAI-compatible format:
+        ``[{"role": "system"|"user"|"assistant", "content": "..."}]``
+    """
+    messages: list[dict[str, str]] = [
+        {"role": "system", "content": _SYSTEM_PROMPT},
+    ]
+
+    # Append chat history for multi-turn context
+    if chat_history:
+        for msg in chat_history[-10:]:  # last 5 turns max
+            messages.append(msg)
+
+    # Build context block from retrieved chunks
+    context_parts: list[str] = []
+    for i, chunk in enumerate(chunks, start=1):
+        doc_name = chunk.payload.get("document_name", "Unknown Document")
+        doc_type = chunk.payload.get("document_type", "document")
+        chunk_index = chunk.payload.get("chunk_index", "?")
+
+        header = f"[Context {i}] {doc_type.title()}: {doc_name}"
+        context_parts.append(f"{header}\n{chunk.text}")
+
+    context_block = "\n\n---\n\n".join(context_parts) if context_parts else "(No relevant context found)"
+
+    user_message = (
+        f"## Context Documents\n\n{context_block}\n\n"
+        f"## Question\n\n{query}"
+    )
+
+    messages.append({"role": "user", "content": user_message})
+    return messages
