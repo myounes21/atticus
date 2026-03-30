@@ -1,0 +1,5 @@
+Incident timeline summary for Acme Logistics breach response:
+- 2024-02-02 09:15 UTC: Monitoring alert triggered for unusual admin activity.
+- 2024-02-02 10:40 UTC: Security team isolated affected credentials.
+- 2024-02-03 14:20 UTC: Client notified and outside counsel engaged.
+- 2024-02-05 11:00 UTC: Internal remediation plan approved.
