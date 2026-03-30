@@ -1,19 +1,29 @@
 [project]
 name = "atticus"
 version = "0.1.0"
-description = "Add your description here"
+description = "Legal Intelligence Platform — private, self-hosted RAG for law firms"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.116.1",
-    "ipykernel>=7.2.0",
+    "uvicorn>=0.34.0",
     "pdfplumber>=0.11.9",
     "python-docx>=1.2.0",
     "pydantic-settings>=2.13.1",
     "groq>=1.1.1",
     "tiktoken>=0.12.0",
     "qdrant-client>=1.17.1",
-    "elasticsearch>=9.3.0",
+    "elasticsearch>=8.15.0,<9.0.0",
+    "redis>=5.0.0",
+    "boto3>=1.35.0",
+    "PyJWT>=2.9.0",
+    "passlib[bcrypt]>=1.7.4",
+    "bcrypt>=3.2.2,<4.0.0",
+    "websockets>=14.0",
+    "celery>=5.4.0",
+    "python-multipart>=0.0.18",
+    "psycopg[binary]>=3.2.9",
+    "langfuse>=2.60.7",
 ]
 
 [dependency-groups]
@@ -21,4 +31,9 @@ dev = [
     "httpx>=0.28.1",
     "ipykernel>=7.2.0",
     "pytest>=8.4.2",
+    "pytest-asyncio>=0.25.0",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
