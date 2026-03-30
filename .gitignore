@@ -15,4 +15,9 @@ atticus_documentaion.md
 playground
 test_files
 
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+.npm/
+
 /.idea/
