@@ -137,7 +137,7 @@ export default function HomePage() {
           </p>
           <div className="demo-quick-actions">
             <button type="button" onClick={() => void startGuidedDemo("lawyer")} disabled={busy}>
-              {demoBusy === "lawyer" ? "Starting demo..." : "Start 60-second demo"}
+              {demoBusy === "lawyer" ? "Opening lawyer portal..." : "Start 60-second demo"}
             </button>
             <button
               type="button"
@@ -145,7 +145,7 @@ export default function HomePage() {
               onClick={() => void startGuidedDemo("admin")}
               disabled={busy}
             >
-              {demoBusy === "admin" ? "Opening admin..." : "Open admin view"}
+              {demoBusy === "admin" ? "Opening admin portal..." : "Open admin view"}
             </button>
             <button type="button" className="secondary" onClick={() => void startFreshDemo()} disabled={busy}>
               {demoBusy !== null ? "Resetting demo..." : "Start fresh demo (resets data)"}

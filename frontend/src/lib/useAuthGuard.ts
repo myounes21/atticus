@@ -12,8 +12,19 @@ type UseAuthGuardOptions = {
 
 export function useAuthGuard({ allowedRoles, redirectPath = "/" }: UseAuthGuardOptions) {
   const router = useRouter();
-  const [user, setUser] = useState<AuthUser | null>(() => getStoredUser());
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<AuthUser | null>(() => {
+    const token = getToken();
+    const stored = getStoredUser();
+    if (!token || !stored) {
+      return null;
+    }
+    return allowedRoles.includes(stored.role) ? stored : null;
+  });
+  const [loading, setLoading] = useState(() => {
+    const token = getToken();
+    const stored = getStoredUser();
+    return !(token && stored && allowedRoles.includes(stored.role));
+  });
   const allowedRolesKey = allowedRoles.join("|");
 
   useEffect(() => {
@@ -21,11 +32,23 @@ export function useAuthGuard({ allowedRoles, redirectPath = "/" }: UseAuthGuardO
     const allowed = new Set(allowedRolesKey.split("|") as Role[]);
 
     async function verifyRole() {
-      if (!getToken()) {
+      const token = getToken();
+      const storedUser = getStoredUser();
+
+      if (!token) {
         clearSession();
         router.replace(redirectPath);
         if (active) setLoading(false);
         return;
+      }
+
+      if (storedUser && allowed.has(storedUser.role)) {
+        if (active) {
+          setUser(storedUser);
+          setLoading(false);
+        }
+      } else if (active) {
+        setLoading(true);
       }
 
       try {

@@ -152,16 +152,17 @@ export default function ChatPanel({ caseId }: { caseId: string | null }) {
           <p className="muted">Start with one of these prompts, then continue naturally.</p>
           <div className="prompt-chip-row">
             {suggestedPrompts.map((prompt) => (
-              <button
-                key={prompt}
-                type="button"
-                className="secondary prompt-chip"
-                onClick={() => {
-                  setQuery(prompt);
-                  composerRef.current?.focus();
-                }}
-                disabled={loading}
-              >
+            <button
+              key={prompt}
+              type="button"
+              className="secondary prompt-chip"
+              onClick={() => {
+                setQuery(prompt);
+                composerRef.current?.focus();
+                composerRef.current?.setSelectionRange(prompt.length, prompt.length);
+              }}
+              disabled={loading}
+            >
                 {prompt}
               </button>
             ))}
@@ -169,16 +170,16 @@ export default function ChatPanel({ caseId }: { caseId: string | null }) {
         </div>
       )}
 
-      <div ref={threadRef} className="chat-thread">
+      <div ref={threadRef} className="chat-thread modern-thread">
         {messages.length === 0 && caseId && <p className="muted">No messages yet. Send your first message.</p>}
         {messages.map((message) => (
           <div key={message.id} className="chat-turn">
-            <div className="chat-bubble user">
+            <div className="chat-bubble user glass-bubble">
               <p className="chat-meta">You</p>
               <p className="chat-user-text">{message.query}</p>
             </div>
 
-            <div className="chat-bubble assistant">
+            <div className="chat-bubble assistant elevated-bubble">
               <p className="chat-meta">Atticus</p>
               <MarkdownText text={message.answer || (message.pending ? "" : "No response")} />
               {message.pending && (
@@ -190,6 +191,7 @@ export default function ChatPanel({ caseId }: { caseId: string | null }) {
               )}
               {message.citations.length > 0 && (
                 <div className="source-tags">
+                  <span className="source-label">Sources</span>
                   {message.citations.map((item) => (
                     <span key={`${message.id}-${item.chunk_id}`} className="source-tag">
                       {item.document_name ?? item.chunk_id}
@@ -217,7 +219,7 @@ export default function ChatPanel({ caseId }: { caseId: string | null }) {
           }}
         />
         <div className="row composer-actions">
-          <p className="muted">Enter to send, Shift+Enter for new line</p>
+          <p className="muted composer-tip">Enter to send, Shift+Enter for new line</p>
           <button
             type="button"
             className="send-btn"
