@@ -1,0 +1,115 @@
+name: deploy-cd
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Deployment target"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - production
+      seed_demo_data:
+        description: "Run demo reset+seed after deploy"
+        required: true
+        default: false
+        type: boolean
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy-staging:
+    name: Deploy Staging
+    runs-on: ubuntu-latest
+    environment: staging
+    if: >-
+      ((github.event_name == 'push') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.target == 'staging')) &&
+      secrets.STAGING_SSH_HOST != '' &&
+      secrets.STAGING_SSH_USER != '' &&
+      secrets.STAGING_SSH_KEY != '' &&
+      secrets.STAGING_DEPLOY_PATH != ''
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          DEPLOY_PATH: ${{ secrets.STAGING_DEPLOY_PATH }}
+          ENABLE_CADDY: ${{ secrets.STAGING_ENABLE_CADDY || 'false' }}
+          SEED_DEMO_DATA: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.seed_demo_data || 'false' }}
+        with:
+          host: ${{ secrets.STAGING_SSH_HOST }}
+          username: ${{ secrets.STAGING_SSH_USER }}
+          key: ${{ secrets.STAGING_SSH_KEY }}
+          port: ${{ secrets.STAGING_SSH_PORT || 22 }}
+          envs: DEPLOY_PATH,ENABLE_CADDY,SEED_DEMO_DATA
+          script_stop: true
+          script: |
+            set -euo pipefail
+            if [ ! -d "$DEPLOY_PATH/.git" ]; then
+              echo "Deploy path not initialized: $DEPLOY_PATH"
+              exit 1
+            fi
+            cd "$DEPLOY_PATH"
+            git fetch origin main
+            git checkout main
+            git reset --hard origin/main
+            docker compose up --build -d
+            if [ "$ENABLE_CADDY" = "true" ]; then
+              docker compose --profile prod up -d caddy
+            fi
+            if [ "$SEED_DEMO_DATA" = "true" ]; then
+              docker compose --profile demo run --rm demo-seed
+            fi
+            docker compose ps
+            curl -fsS http://localhost:8000/ready >/dev/null
+
+  deploy-production:
+    name: Deploy Production
+    runs-on: ubuntu-latest
+    environment: production
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.target == 'production' &&
+      secrets.PRODUCTION_SSH_HOST != '' &&
+      secrets.PRODUCTION_SSH_USER != '' &&
+      secrets.PRODUCTION_SSH_KEY != '' &&
+      secrets.PRODUCTION_DEPLOY_PATH != ''
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          DEPLOY_PATH: ${{ secrets.PRODUCTION_DEPLOY_PATH }}
+          ENABLE_CADDY: ${{ secrets.PRODUCTION_ENABLE_CADDY || 'true' }}
+          SEED_DEMO_DATA: ${{ github.event.inputs.seed_demo_data || 'false' }}
+        with:
+          host: ${{ secrets.PRODUCTION_SSH_HOST }}
+          username: ${{ secrets.PRODUCTION_SSH_USER }}
+          key: ${{ secrets.PRODUCTION_SSH_KEY }}
+          port: ${{ secrets.PRODUCTION_SSH_PORT || 22 }}
+          envs: DEPLOY_PATH,ENABLE_CADDY,SEED_DEMO_DATA
+          script_stop: true
+          script: |
+            set -euo pipefail
+            if [ ! -d "$DEPLOY_PATH/.git" ]; then
+              echo "Deploy path not initialized: $DEPLOY_PATH"
+              exit 1
+            fi
+            cd "$DEPLOY_PATH"
+            git fetch origin main
+            git checkout main
+            git reset --hard origin/main
+            docker compose up --build -d
+            if [ "$ENABLE_CADDY" = "true" ]; then
+              docker compose --profile prod up -d caddy
+            fi
+            if [ "$SEED_DEMO_DATA" = "true" ]; then
+              docker compose --profile demo run --rm demo-seed
+            fi
+            docker compose ps
+            curl -fsS http://localhost:8000/ready >/dev/null

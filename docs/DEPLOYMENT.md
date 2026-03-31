@@ -68,3 +68,39 @@ From repo root:
   - `docker compose up --build -d`
 - Refresh demo state:
   - `docker compose --profile demo run --rm demo-seed`
+
+## 8) CI/CD Setup
+
+This repo includes two workflows:
+
+- CI gate: `.github/workflows/eval_gate.yml`
+- CD deploy: `.github/workflows/deploy_cd.yml`
+
+CD deploy behavior:
+
+- Push to `main` auto-deploys to **staging** (if staging secrets are configured).
+- Production deploy is **manual only** via GitHub Actions `workflow_dispatch`.
+- Optional demo reseed can be triggered during manual dispatch.
+
+Required GitHub Secrets (staging):
+
+- `STAGING_SSH_HOST`
+- `STAGING_SSH_USER`
+- `STAGING_SSH_KEY`
+- `STAGING_DEPLOY_PATH`
+- optional: `STAGING_SSH_PORT` (default `22`)
+- optional: `STAGING_ENABLE_CADDY` (`true`/`false`)
+
+Required GitHub Secrets (production):
+
+- `PRODUCTION_SSH_HOST`
+- `PRODUCTION_SSH_USER`
+- `PRODUCTION_SSH_KEY`
+- `PRODUCTION_DEPLOY_PATH`
+- optional: `PRODUCTION_SSH_PORT` (default `22`)
+- optional: `PRODUCTION_ENABLE_CADDY` (`true`/`false`)
+
+GitHub Environments:
+
+- Create `staging` environment.
+- Create `production` environment and add required reviewer approvals.

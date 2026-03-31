@@ -56,6 +56,14 @@ This repo includes Caddy reverse proxy config for TLS termination.
 3. Start HTTPS proxy:
    - `docker compose --profile prod up -d caddy`
 
+## CI/CD
+
+- CI checks run on PRs and push to `main` via `.github/workflows/eval_gate.yml`.
+- CD deploy workflow is in `.github/workflows/deploy_cd.yml`:
+  - auto deploy to `staging` on push to `main` (when staging secrets are configured),
+  - manual deploy to `production` via workflow dispatch.
+- Full setup steps and secret list are in `docs/DEPLOYMENT.md`.
+
 ## Demo Dataset Management
 
 - Seed deterministic demo data:
