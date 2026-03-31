@@ -68,6 +68,7 @@ def index_chunks(
                 "document_type": chunk.document_type,
                 "document_name": chunk.document_name,
                 "chunk_index": chunk.chunk_index,
+                "text": chunk.text,
             },
         )
         for chunk, vector in zip(chunks, vectors)

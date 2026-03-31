@@ -10,7 +10,6 @@ import uuid
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from backend.core.dependencies import CurrentUser, get_current_user
-from backend.core.rate_limit import enforce_rate_limit
 from backend.core.security import (
     create_access_token,
     hash_password,
@@ -30,17 +29,19 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 def _create_demo_user(email: str):
+    full_name = email.split("@", maxsplit=1)[0].replace(".", " ").title()
     return execute_returning_one(
         """
-        INSERT INTO users (user_id, email, password_hash, role)
-        VALUES (%s, %s, %s, %s)
-        RETURNING user_id, email, password_hash, role
+        INSERT INTO users (user_id, email, password_hash, role, full_name)
+        VALUES (%s, %s, %s, %s, %s)
+        RETURNING user_id, email, full_name, password_hash, role
         """,
         (
             uuid.uuid4(),
             email,
             hash_password(str(uuid.uuid4())),
             settings.demo_auth_default_role,
+            full_name,
         ),
     )
 
@@ -50,12 +51,6 @@ def _create_demo_user(email: str):
 )
 def register(payload: UserCreate) -> UserResponse:
     """Register a new user."""
-    if not settings.enable_self_register:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Self registration is disabled",
-        )
-
     existing = fetch_optional(
         "SELECT user_id FROM users WHERE email = %s", (payload.email,)
     )
@@ -67,29 +62,33 @@ def register(payload: UserCreate) -> UserResponse:
 
     row = execute_returning_one(
         """
-        INSERT INTO users (user_id, email, password_hash, role)
-        VALUES (%s, %s, %s, %s)
-        RETURNING user_id, email, role
+        INSERT INTO users (user_id, email, password_hash, role, full_name)
+        VALUES (%s, %s, %s, %s, %s)
+        RETURNING user_id, email, full_name, role
         """,
-        (uuid.uuid4(), payload.email, hash_password(payload.password), payload.role),
+        (
+            uuid.uuid4(),
+            payload.email,
+            hash_password(payload.password),
+            payload.role,
+            payload.email.split("@", maxsplit=1)[0].replace(".", " ").title(),
+        ),
     )
 
     logger.info("Registered user '%s' (role=%s)", payload.email, payload.role)
-    return UserResponse(user_id=row["user_id"], email=row["email"], role=row["role"])
+    return UserResponse(
+        user_id=row["user_id"],
+        email=row["email"],
+        full_name=row.get("full_name"),
+        role=row["role"],
+    )
 
 
 @router.post("/login", response_model=LoginResponse)
 def login(payload: LoginRequest) -> LoginResponse:
     """Authenticate and return a JWT."""
-    enforce_rate_limit(
-        key=f"login:{payload.email.lower()}",
-        limit=settings.rate_limit_login_requests,
-        window_seconds=settings.rate_limit_login_window_seconds,
-        message="Too many login attempts. Please try again shortly.",
-    )
-
     user = fetch_optional(
-        "SELECT user_id, email, password_hash, role FROM users WHERE email = %s",
+        "SELECT user_id, email, full_name, password_hash, role FROM users WHERE email = %s",
         (payload.email,),
     )
 
@@ -112,6 +111,7 @@ def login(payload: LoginRequest) -> LoginResponse:
         user=UserResponse(
             user_id=user["user_id"],
             email=user["email"],
+            full_name=user.get("full_name"),
             role=user["role"],
         ),
     )
@@ -131,13 +131,19 @@ def logout() -> None:
 def me(user: CurrentUser = Depends(get_current_user)) -> UserResponse:
     """Return the currently authenticated user."""
     stored = fetch_optional(
-        "SELECT user_id, email, role FROM users WHERE user_id = %s",
+        "SELECT user_id, email, full_name, role FROM users WHERE user_id = %s",
         (user.user_id,),
     )
     if stored is None:
-        return UserResponse(user_id=user.user_id, email="unknown", role=user.role)
+        return UserResponse(
+            user_id=user.user_id,
+            email="unknown",
+            full_name=None,
+            role=user.role,
+        )
     return UserResponse(
         user_id=stored["user_id"],
         email=stored["email"],
+        full_name=stored.get("full_name"),
         role=stored["role"],
     )

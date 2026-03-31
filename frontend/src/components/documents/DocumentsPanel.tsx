@@ -14,9 +14,11 @@ type DocumentItem = {
 export default function DocumentsPanel({
   caseId,
   allowUpload,
+  autoRefresh = false,
 }: {
   caseId: string | null;
   allowUpload: boolean;
+  autoRefresh?: boolean;
 }) {
   const [docs, setDocs] = useState<DocumentItem[]>([]);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
@@ -48,6 +50,20 @@ export default function DocumentsPanel({
     }
     void refreshDocuments(caseId);
   }, [caseId]);
+
+  useEffect(() => {
+    if (!autoRefresh || !caseId) {
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      void refreshDocuments(caseId);
+    }, 4500);
+
+    return () => {
+      window.clearInterval(timer);
+    };
+  }, [autoRefresh, caseId]);
 
   async function submitUpload() {
     if (!caseId || !pendingFile) return;

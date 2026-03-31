@@ -1,8 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { createCase, listCases } from "@/lib/api";
-import { getToken } from "@/lib/auth";
+import { createCase, listCases, listLawyers, type LawyerOption } from "@/lib/api";
 
 type CaseItem = {
   case_id: string;
@@ -11,26 +10,6 @@ type CaseItem = {
   status: "active" | "closed";
   assigned_lawyers: string[];
 };
-
-type LawyerOption = {
-  user_id: string;
-  full_name: string;
-  email: string;
-};
-
-async function listLawyersForAdmin(): Promise<LawyerOption[]> {
-  const headers = new Headers();
-  const token = getToken();
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
-  }
-  const response = await fetch("/api/cases/lawyers", { headers });
-  if (!response.ok) {
-    throw new Error("Failed to load lawyers");
-  }
-  const data = (await response.json()) as { lawyers?: LawyerOption[] };
-  return data.lawyers ?? [];
-}
 
 export default function CasesPanel({
   allowCreate,
@@ -115,7 +94,7 @@ export default function CasesPanel({
     let cancelled = false;
     (async () => {
       try {
-        const rows = await listLawyersForAdmin();
+        const rows = await listLawyers();
         if (cancelled) {
           return;
         }

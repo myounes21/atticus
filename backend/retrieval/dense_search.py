@@ -9,8 +9,9 @@ from __future__ import annotations
 import logging
 import uuid
 from dataclasses import dataclass
+from typing import Any
 
-from qdrant_client.models import FieldCondition, Filter, MatchAny, MatchValue
+from qdrant_client.models import Condition, FieldCondition, Filter, MatchAny, MatchValue
 
 from backend.db.qdrant import get_client
 from config import settings
@@ -41,26 +42,30 @@ def search(
     top_k = top_k or settings.retrieval_top_k
     client = get_client()
 
-    must_conditions = [
+    must_conditions: list[Condition] = [
         FieldCondition(key="case_id", match=MatchValue(value=str(case_id))),
         FieldCondition(key="assigned_lawyers", match=MatchAny(any=[str(user_id)])),
         FieldCondition(key="is_latest", match=MatchValue(value=True)),
     ]
 
-    results = client.search(
+    response = client.query_points(
         collection_name=settings.qdrant_collection_name,
-        query_vector=query_vector,
+        query=query_vector,
         query_filter=Filter(must=must_conditions),
         limit=top_k,
         with_payload=True,
     )
+    results = response.points
 
-    return [
-        DenseSearchResult(
-            chunk_id=hit.payload.get("chunk_id", str(hit.id)),
-            file_id=hit.payload.get("file_id"),
-            score=hit.score,
-            payload=hit.payload or {},
+    output: list[DenseSearchResult] = []
+    for hit in results:
+        payload = hit.payload if isinstance(hit.payload, dict) else {}
+        output.append(
+            DenseSearchResult(
+                chunk_id=payload.get("chunk_id", str(hit.id)),
+                file_id=payload.get("file_id"),
+                score=hit.score,
+                payload=payload,
+            )
         )
-        for hit in results
-    ]
+    return output

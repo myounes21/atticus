@@ -2,11 +2,29 @@
 
 import { type FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { login, register } from "@/lib/api";
+import { login, register, resetDemoData } from "@/lib/api";
 import { getStoredUser, getToken, type Role, saveSession } from "@/lib/auth";
 
 function targetPathForRole(role: Role): string {
   return role === "admin" ? "/admin" : "/lawyer";
+}
+
+function decodeRoleFromToken(token: string): Role | null {
+  try {
+    const payloadSegment = token.split(".")[1];
+    if (!payloadSegment) {
+      return null;
+    }
+    const base64 = payloadSegment.replace(/-/g, "+").replace(/_/g, "/");
+    const normalized = base64.padEnd(Math.ceil(base64.length / 4) * 4, "=");
+    const decoded = JSON.parse(atob(normalized)) as { role?: unknown };
+    if (decoded.role === "admin" || decoded.role === "lawyer") {
+      return decoded.role;
+    }
+    return null;
+  } catch {
+    return null;
+  }
 }
 
 export default function HomePage() {
@@ -16,6 +34,7 @@ export default function HomePage() {
   const [role, setRole] = useState<Role>("lawyer");
   const [loginBusy, setLoginBusy] = useState(false);
   const [registerBusy, setRegisterBusy] = useState(false);
+  const [demoBusy, setDemoBusy] = useState<"lawyer" | "admin" | null>(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const selfRegisterEnabled = useMemo(
@@ -27,7 +46,7 @@ export default function HomePage() {
     [],
   );
 
-  const busy = loginBusy || registerBusy;
+  const busy = loginBusy || registerBusy || demoBusy !== null;
 
   useEffect(() => {
     const user = getStoredUser();
@@ -86,26 +105,64 @@ export default function HomePage() {
     }
   }
 
+  async function startGuidedDemo(roleTarget: "lawyer" | "admin") {
+    const demoEmail = roleTarget === "lawyer" ? "demo.lawyer@atticus.local" : "demo.admin@atticus.local";
+    const demoPassword = "DemoPass!123";
+
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    setDemoBusy(roleTarget);
+    setError("");
+    setMessage("");
+    try {
+      const adminSession = await login("demo.admin@atticus.local", demoPassword);
+      const tokenRole = decodeRoleFromToken(adminSession.access_token);
+      if (tokenRole === "admin") {
+        await resetDemoData(adminSession.access_token);
+      }
+      const result = await login(demoEmail, demoPassword);
+      saveSession(result);
+      router.replace(targetPathForRole(result.user.role));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not start demo");
+    } finally {
+      setDemoBusy(null);
+    }
+  }
+
   return (
     <main className="landing-shell">
       <section className="landing-grid">
         <section className="card landing-intro">
           <span className="intro-pill">Atticus Legal Workspace</span>
-          <h1>Simple case operations, clear answers, less tool friction.</h1>
+          <h1>Understand the product in 60 seconds.</h1>
           <p>
-            Organize cases, manage document ingestion, and ask grounded questions with source-backed
-            responses.
+            This demo shows case-scoped legal Q&amp;A with source-backed responses. Start with Lawyer mode for
+            the clearest walkthrough.
           </p>
-          <ul>
-            <li>Admins can create cases and upload files.</li>
-            <li>Lawyers can run case-scoped Q&amp;A.</li>
-            <li>Session-based access keeps each portal focused.</li>
-          </ul>
+          <div className="demo-quick-actions">
+            <button type="button" onClick={() => void startGuidedDemo("lawyer")} disabled={busy}>
+              {demoBusy === "lawyer" ? "Starting demo..." : "Start 60-second demo"}
+            </button>
+            <button
+              type="button"
+              className="secondary"
+              onClick={() => void startGuidedDemo("admin")}
+              disabled={busy}
+            >
+              {demoBusy === "admin" ? "Opening admin..." : "Open admin view"}
+            </button>
+          </div>
+          <ol className="demo-steps">
+            <li>Open a seeded case.</li>
+            <li>Click a suggested prompt.</li>
+            <li>Review answer and source references.</li>
+          </ol>
         </section>
 
         <section className="card auth-card">
           <h2>Sign in</h2>
-          <p className="muted">Enter your account details to open your portal.</p>
+          <p className="muted">Use the quick demo buttons, or sign in manually below.</p>
           {!selfRegisterEnabled && (
             <p className="muted">
               Demo accounts: <strong>demo.admin@atticus.local</strong> and <strong>demo.lawyer@atticus.local</strong>.
@@ -139,7 +196,7 @@ export default function HomePage() {
             </label>
 
             <button type="submit" disabled={busy}>
-              {loginBusy ? "Signing in..." : "Sign in"}
+              {loginBusy ? "Signing in..." : "Manual sign in"}
             </button>
           </form>
 

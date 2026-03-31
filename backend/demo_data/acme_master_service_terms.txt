@@ -1,3 +1,30 @@
-Acme Logistics retained Northstar Counsel under a Master Services Agreement signed on 2024-01-08.
-The agreement is governed by New York law and requires written notice before any scope change.
-Payment terms are net 30 from invoice issue date, with disputes raised within 10 business days.
+ACME LOGISTICS - MASTER SERVICES AGREEMENT SUMMARY
+
+Counterparties:
+- Client: Acme Logistics, Inc.
+- Counsel: Northstar Counsel LLP
+
+Execution and governing law:
+- Effective date: 2024-01-08
+- Governing law: New York
+
+Commercial terms:
+- Payment terms: Net 30 from invoice issue date.
+- Invoice dispute window: 10 business days from invoice receipt.
+- Late fees: 1.0% per month on undisputed overdue balances.
+
+Scope and change control:
+- Any scope change requires written notice and a signed change order.
+- Email notice is acceptable only if acknowledged by both parties.
+
+Confidentiality and data handling:
+- Confidentiality obligations survive termination for 3 years.
+- Client data must be stored in systems restricted to assigned legal team members.
+
+Termination and transition:
+- Either party may terminate for material breach after a 15-day cure period.
+- On termination, counsel must provide transfer-ready work product within 7 business days.
+
+Dispute resolution:
+- Escalation: project leads -> general counsel -> executive review.
+- If unresolved within 30 days, parties may initiate litigation in New York courts.

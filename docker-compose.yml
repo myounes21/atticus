@@ -101,6 +101,7 @@ services:
       - DATABASE_URL=postgresql://${POSTGRES_USER:-atticus}:${POSTGRES_PASSWORD:-atticus_dev}@postgres:5432/${POSTGRES_DB:-atticus}
     volumes:
       - upload_tmp:/tmp/atticus_uploads
+      - ./demo data:/app/demo data:ro
     depends_on:
       qdrant:
         condition: service_healthy
@@ -111,6 +112,7 @@ services:
       postgres:
         condition: service_healthy
     restart: unless-stopped
+    user: "0:0"
     mem_limit: 1g
     command: sh -c "uv run python -m backend.scripts.apply_migrations && uv run uvicorn backend.api.main:app --host 0.0.0.0 --port 8000"
     healthcheck:
@@ -150,6 +152,7 @@ services:
       postgres:
         condition: service_healthy
     restart: unless-stopped
+    user: "0:0"
     mem_limit: 1g
     command: sh -c "uv run python -m backend.scripts.apply_migrations && uv run celery -A backend.tasks.celery_app:celery_app worker --loglevel=info -Q ingestion"
     healthcheck:
@@ -170,11 +173,14 @@ services:
       dockerfile: frontend/Dockerfile
       args:
         NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8000}
+        API_PROXY_BASE_URL: ${API_PROXY_BASE_URL:-http://backend:8000}
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
     depends_on:
       backend:
         condition: service_healthy
+    environment:
+      - API_PROXY_BASE_URL=http://backend:8000
     restart: unless-stopped
     mem_limit: 512m
     healthcheck:
@@ -206,6 +212,9 @@ services:
     depends_on:
       backend:
         condition: service_healthy
+    volumes:
+      - ./demo data:/app/demo data:ro
+    user: "0:0"
     command: sh -c "uv run python -m backend.scripts.reset_and_seed_demo_data"
     restart: "no"
     logging:

@@ -20,7 +20,15 @@ based ONLY on the provided document context. Follow these rules strictly:
 "I don't have enough information in the available documents to answer this question."
 4. Be precise with legal terminology.
 5. If multiple documents support the same point, cite all of them.
-6. Structure longer answers with clear paragraphs or bullet points.
+6. Output valid markdown only.
+7. Keep answers concise and scannable:
+   - Start with one direct sentence that answers the question.
+   - Then use short bullet points for supporting details.
+   - For labeled fields (for example Parties, Claims, Relief), format each as:
+     - **Label:** value [Source: ...]
+   - Avoid dense paragraphs, run-on lists, or inline "* item * item" formatting.
+8. Do not say phrases like "Based on the provided context" or "According to context documents".
+9. For unknown pages, use p? in the citation.
 """
 
 
@@ -54,12 +62,13 @@ def build_prompt(
         header = f"[Context {i}] {doc_type.title()}: {doc_name}"
         context_parts.append(f"{header}\n{chunk.text}")
 
-    context_block = "\n\n---\n\n".join(context_parts) if context_parts else "(No relevant context found)"
-
-    user_message = (
-        f"## Context Documents\n\n{context_block}\n\n"
-        f"## Question\n\n{query}"
+    context_block = (
+        "\n\n---\n\n".join(context_parts)
+        if context_parts
+        else "(No relevant context found)"
     )
+
+    user_message = f"## Context Documents\n\n{context_block}\n\n## Question\n\n{query}"
 
     messages.append({"role": "user", "content": user_message})
     return messages

@@ -3,6 +3,7 @@ export type Role = "admin" | "lawyer";
 export type AuthUser = {
   user_id: string;
   email: string;
+  full_name?: string | null;
   role: Role;
 };
 

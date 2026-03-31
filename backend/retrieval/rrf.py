@@ -45,19 +45,33 @@ def fuse(
         cid = hit.chunk_id
         scores[cid] = scores.get(cid, 0.0) + 1.0 / (k + rank)
         dense_ranks[cid] = rank
-        meta.setdefault(cid, {
-            "file_id": getattr(hit, "file_id", None),
-            "payload": getattr(hit, "payload", {}),
-        })
+        item = meta.setdefault(
+            cid,
+            {
+                "file_id": getattr(hit, "file_id", None),
+                "payload": {},
+            },
+        )
+        payload = getattr(hit, "payload", {}) or {}
+        item["payload"] = {**item["payload"], **payload}
+        if not item.get("file_id"):
+            item["file_id"] = getattr(hit, "file_id", None)
 
     for rank, hit in enumerate(sparse_results, start=1):
         cid = hit.chunk_id
         scores[cid] = scores.get(cid, 0.0) + 1.0 / (k + rank)
         sparse_ranks[cid] = rank
-        meta.setdefault(cid, {
-            "file_id": getattr(hit, "file_id", None),
-            "payload": getattr(hit, "payload", {}),
-        })
+        item = meta.setdefault(
+            cid,
+            {
+                "file_id": getattr(hit, "file_id", None),
+                "payload": {},
+            },
+        )
+        payload = getattr(hit, "payload", {}) or {}
+        item["payload"] = {**item["payload"], **payload}
+        if not item.get("file_id"):
+            item["file_id"] = getattr(hit, "file_id", None)
 
     sorted_ids = sorted(scores, key=lambda cid: scores[cid], reverse=True)
 

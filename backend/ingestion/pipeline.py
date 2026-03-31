@@ -35,6 +35,7 @@ def run_pipeline(
     file_id: uuid.UUID | None = None,
     case_id: uuid.UUID | None = None,
     case_name: str | None = None,
+    document_name: str | None = None,
     assigned_lawyers: list[uuid.UUID] | None = None,
     version: int | None = None,
 ) -> IngestionResult:
@@ -85,6 +86,8 @@ def run_pipeline(
     try:
         parser = get_parser(file_type)
         parsed_document = parser.parse(file_path)
+        if document_name:
+            parsed_document.metadata.document_name = document_name
     except Exception as exc:
         _raise_stage_error(IngestionStage.PARSE, exc)
     _record_timing(IngestionStage.PARSE, t0)

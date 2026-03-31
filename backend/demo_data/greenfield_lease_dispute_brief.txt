@@ -1,4 +1,44 @@
-Case note: Greenfield Holdings lease dispute.
-The tenant alleges the landlord failed to complete HVAC repairs required under Section 7.2 of the lease.
-Landlord records show two completed maintenance visits on 2024-03-10 and 2024-03-18.
-Open issue: whether temporary repair satisfies the "commercially reasonable working order" clause.
+GREENFIELD HOLDINGS v. EAST HARBOR PROPERTIES
+Matter Type: Commercial lease dispute (office tower, floors 11-14)
+Forum: Anticipated filing in Kings County Commercial Division
+Status: Pre-suit demand and response exchanged
+
+Lease Snapshot
+- Original lease date: 2019-06-15
+- Premises: 58,000 rentable square feet at 490 Atlantic Exchange, Brooklyn, NY
+- Current base rent: USD 142,000/month plus operating expense true-up
+- Remaining term: through 2029-06-30
+- Use clause: general office + client conference space
+
+Disputed Clauses
+- Section 7.2 (Landlord Maintenance): Landlord must keep building systems, including base building HVAC, in commercially reasonable working order.
+- Section 11.4 (Tenant Self-Help): Tenant may perform required work after 10 business days written notice and offset reasonable costs against rent if landlord fails to cure.
+- Section 18.1 (Quiet Enjoyment): Tenant entitled to beneficial use of premises without material interference.
+- Section 23.6 (Force Majeure): Excludes payment obligations and excludes predictable equipment replacement delays caused by deferred maintenance.
+
+Factual Timeline
+- 2024-02-27: Tenant reports repeated HVAC shutdowns during business hours on floors 12 and 13.
+- 2024-03-01: Tenant sends first notice of default citing Section 7.2 and attaches temperature logs showing interior temperatures up to 84 F.
+- 2024-03-10: Landlord contractor performs temporary compressor reset; service ticket indicates likely failing chiller control board.
+- 2024-03-18: Second maintenance visit replaces relay but not control board; contractor note says "temporary stability expected 2-3 weeks".
+- 2024-03-29: Tenant sends second notice, states executive meetings moved offsite, and reserves self-help rights.
+- 2024-04-05: Landlord responds that repairs are "substantially complete" and cites regional parts backlog.
+- 2024-04-12: Tenant commissions independent HVAC vendor; report recommends full control board replacement and balancing.
+- 2024-04-16: Tenant issues intent to offset rent for emergency cooling rentals and consultant fees.
+
+Damages Claimed by Tenant (preliminary)
+- Portable cooling rentals: USD 48,600
+- Employee relocation and temporary conference space: USD 31,400
+- Consultant diagnostics and after-hours support: USD 14,250
+- Potential consequential business interruption claim reserved but not yet quantified
+
+Landlord Defenses Preview
+- Temporary repair restored usable conditions for most of March and therefore met "commercially reasonable" standard.
+- Any prolonged outage tied to supply-chain delay covered by force majeure.
+- Tenant failed to provide full 10-business-day cure period before initiating self-help vendor contract.
+
+Key Legal Questions
+1) Does repeated temporary repair satisfy Section 7.2 where technician notes recommend full replacement?
+2) Can force majeure apply when maintenance records show prior recommendations to replace aging components in 2023?
+3) Are tenant offsets valid if landlord performed partial cure actions within notice window?
+4) Is there sufficient evidence for breach of quiet enjoyment beyond routine building disruptions?

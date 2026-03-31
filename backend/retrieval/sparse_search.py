@@ -7,6 +7,7 @@ so results are safe to merge via RRF.
 from __future__ import annotations
 
 import logging
+import re
 import uuid
 from dataclasses import dataclass
 
@@ -14,6 +15,8 @@ from backend.db.elastic import get_client
 from config import settings
 
 logger = logging.getLogger(__name__)
+
+_FILENAME_PATTERN = re.compile(r"\b[^\s]+\.(pdf|docx|txt|eml)\b", re.IGNORECASE)
 
 
 @dataclass(frozen=True, slots=True)
@@ -39,6 +42,20 @@ def search(
     top_k = top_k or settings.retrieval_top_k
     client = get_client()
 
+    filename_match = _FILENAME_PATTERN.search(query_text)
+    should_clauses: list[dict] = []
+    if filename_match:
+        should_clauses.append(
+            {
+                "match_phrase": {
+                    "document_name": {
+                        "query": filename_match.group(0),
+                        "boost": 8,
+                    }
+                }
+            }
+        )
+
     body = {
         "size": top_k,
         "query": {
@@ -46,6 +63,7 @@ def search(
                 "must": [
                     {"match": {"text": query_text}},
                 ],
+                "should": should_clauses,
                 "filter": [
                     {"term": {"case_id": str(case_id)}},
                     {"term": {"assigned_lawyers": str(user_id)}},

@@ -25,15 +25,19 @@ UPLOAD_DIR = Path("/tmp/atticus_uploads")
 def _run_ingestion_job(
     file_id: uuid.UUID,
     file_path: str,
+    file_name: str | None,
     case_id: uuid.UUID | None,
+    case_name: str | None,
     assigned_lawyers: list[uuid.UUID],
     version: int | None,
 ) -> None:
     ingest_document(
         file_path=file_path,
         file_id=file_id,
+        file_name=file_name,
+        document_name=file_name,
         case_id=case_id,
-        case_name=None,
+        case_name=case_name,
         assigned_lawyers=assigned_lawyers,
         version=version,
     )
@@ -61,7 +65,7 @@ def trigger_ingestion(
 ) -> IngestionTriggerResponse:
     doc = fetch_optional(
         """
-        SELECT d.file_id, d.case_id, d.version, d.s3_key, d.name, c.assigned_lawyers
+        SELECT d.file_id, d.case_id, d.version, d.s3_key, d.name, c.name AS case_name, c.assigned_lawyers
           FROM documents d
           LEFT JOIN cases c ON c.case_id = d.case_id
          WHERE d.file_id = %s
@@ -81,9 +85,10 @@ def trigger_ingestion(
         file_id=str(file_id),
         file_path=file_path,
         s3_key=None,
-        file_name=None,
+        file_name=doc["name"],
+        document_name=doc["name"],
         case_id=str(doc["case_id"]) if doc["case_id"] else None,
-        case_name=None,
+        case_name=doc.get("case_name"),
         assigned_lawyers=[str(value) for value in (doc["assigned_lawyers"] or [])],
         version=doc["version"],
     )
@@ -92,7 +97,9 @@ def trigger_ingestion(
             _run_ingestion_job,
             file_id,
             file_path,
+            doc["name"],
             doc["case_id"],
+            doc.get("case_name"),
             doc["assigned_lawyers"] or [],
             doc["version"],
         )

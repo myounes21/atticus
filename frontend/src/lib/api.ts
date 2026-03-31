@@ -1,6 +1,6 @@
 import { clearSession, getToken, type AuthUser, type LoginResult } from "./auth";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+const API_BASE = "/api";
 
 export type CaseItem = {
   case_id: string;
@@ -8,6 +8,12 @@ export type CaseItem = {
   client_name: string | null;
   status: "active" | "closed";
   assigned_lawyers: string[];
+};
+
+export type LawyerOption = {
+  user_id: string;
+  full_name: string;
+  email: string;
 };
 
 export type DocumentItem = {
@@ -32,6 +38,37 @@ export type ChatResult = {
   chunks_used: ChatCitation[];
 };
 
+type ChatStreamDone = {
+  conversation_id?: string;
+  message_id?: string;
+};
+
+type AskChatStreamHandlers = {
+  onToken?: (token: string, fullText: string) => void;
+  onCitation?: (citation: ChatCitation) => void;
+  onDone?: (meta: ChatStreamDone) => void;
+};
+
+function formatApiError(data: unknown, fallback: string): string {
+  if (!data || typeof data !== "object") {
+    return fallback;
+  }
+
+  const detail = (data as { detail?: unknown }).detail;
+  if (typeof detail === "string" && detail.trim()) {
+    return detail;
+  }
+
+  if (Array.isArray(detail)) {
+    const first = detail[0] as { msg?: unknown; loc?: unknown } | undefined;
+    const msg = typeof first?.msg === "string" ? first.msg : "Validation error";
+    const loc = Array.isArray(first?.loc) ? first.loc.join(".") : "request";
+    return `${msg} (${loc})`;
+  }
+
+  return fallback;
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const redirectOnAuthError = init?.method !== "POST" || path !== "/auth/login";
   const token = typeof window !== "undefined" ? getToken() : null;
@@ -43,7 +80,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   try {
     response = await fetch(`${API_BASE}${path}`, { ...init, headers });
   } catch {
-    throw new Error("Cannot reach API server. Check backend and NEXT_PUBLIC_API_BASE_URL.");
+    throw new Error("Cannot reach API server. Check backend service.");
   }
   if (!response.ok) {
     if (redirectOnAuthError && (response.status === 401 || response.status === 403)) {
@@ -54,10 +91,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     }
     let message = `Request failed (${response.status})`;
     try {
-      const data = (await response.json()) as { detail?: string };
-      if (data.detail) {
-        message = data.detail;
-      }
+      const data = (await response.json()) as unknown;
+      message = formatApiError(data, message);
     } catch {
       // Ignore non-JSON error body.
     }
@@ -92,15 +127,46 @@ export async function listCases(): Promise<CaseItem[]> {
   return data.cases;
 }
 
+export async function listLawyers(): Promise<LawyerOption[]> {
+  const data = await request<{ lawyers: LawyerOption[] }>("/cases/lawyers");
+  return data.lawyers;
+}
+
 export async function createCase(payload: {
   name: string;
   client_name?: string;
-  assigned_lawyers: string[];
+  assigned_lawyers?: string[];
 }): Promise<CaseItem> {
   return request<CaseItem>("/cases", {
     method: "POST",
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ ...payload, assigned_lawyers: payload.assigned_lawyers ?? [] }),
   });
+}
+
+export async function resetDemoData(adminToken: string): Promise<void> {
+  const headers = new Headers();
+  headers.set("Authorization", `Bearer ${adminToken}`);
+
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}/cases/demo/reset`, {
+      method: "POST",
+      headers,
+    });
+  } catch {
+    throw new Error("Cannot reach API server. Check backend service.");
+  }
+
+  if (!response.ok) {
+    let message = `Demo reset failed (${response.status})`;
+    try {
+      const data = (await response.json()) as unknown;
+      message = formatApiError(data, message);
+    } catch {
+      // Ignore non-JSON error body.
+    }
+    throw new Error(message);
+  }
 }
 
 export async function listDocuments(caseId: string): Promise<DocumentItem[]> {
@@ -124,7 +190,7 @@ export async function uploadDocument(caseId: string, file: File): Promise<Docume
       headers,
     });
   } catch {
-    throw new Error("Cannot reach API server. Check backend and NEXT_PUBLIC_API_BASE_URL.");
+    throw new Error("Cannot reach API server. Check backend service.");
   }
   if (!response.ok) {
     if (response.status === 401 || response.status === 403) {
@@ -135,10 +201,8 @@ export async function uploadDocument(caseId: string, file: File): Promise<Docume
     }
     let message = `Upload failed (${response.status})`;
     try {
-      const data = (await response.json()) as { detail?: string };
-      if (data.detail) {
-        message = data.detail;
-      }
+      const data = (await response.json()) as unknown;
+      message = formatApiError(data, message);
     } catch {
       // Ignore non-JSON error body.
     }
@@ -156,4 +220,128 @@ export async function askChat(payload: {
     method: "POST",
     body: JSON.stringify(payload),
   });
+}
+
+export async function askChatStream(
+  payload: {
+    query: string;
+    case_id: string;
+    conversation_id?: string;
+  },
+  handlers: AskChatStreamHandlers = {},
+): Promise<ChatResult> {
+  const token = typeof window !== "undefined" ? getToken() : null;
+  const headers = new Headers();
+  headers.set("Content-Type", "application/json");
+  headers.set("Accept", "text/event-stream");
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}/chat/stream`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers,
+    });
+  } catch {
+    throw new Error("Cannot reach API server. Check backend service.");
+  }
+
+  if (!response.ok) {
+    let message = `Request failed (${response.status})`;
+    try {
+      const data = (await response.json()) as { detail?: string };
+      if (data.detail) {
+        message = data.detail;
+      }
+    } catch {
+      // Ignore non-JSON error body.
+    }
+    throw new Error(message);
+  }
+
+  if (!response.body) {
+    throw new Error("Streaming is not available in this environment.");
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let answer = "";
+  let conversationId = payload.conversation_id ?? "";
+  let messageId = "";
+  const citations: ChatCitation[] = [];
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) {
+      break;
+    }
+
+    buffer += decoder.decode(value, { stream: true });
+
+    while (true) {
+      const splitIndex = buffer.indexOf("\n\n");
+      if (splitIndex < 0) {
+        break;
+      }
+
+      const rawEvent = buffer.slice(0, splitIndex);
+      buffer = buffer.slice(splitIndex + 2);
+
+      const dataLines = rawEvent
+        .split("\n")
+        .filter((line) => line.startsWith("data:"))
+        .map((line) => line.slice(5).trim());
+
+      if (dataLines.length === 0) {
+        continue;
+      }
+
+      let event: { type?: string; content?: unknown };
+      try {
+        event = JSON.parse(dataLines.join("\n")) as { type?: string; content?: unknown };
+      } catch {
+        continue;
+      }
+
+      if (event.type === "token") {
+        const tokenText = typeof event.content === "string" ? event.content : "";
+        answer += tokenText;
+        handlers.onToken?.(tokenText, answer);
+      } else if (event.type === "citation") {
+        const citation = (event.content ?? {}) as ChatCitation;
+        if (citation.chunk_id && !citations.some((item) => item.chunk_id === citation.chunk_id)) {
+          citations.push(citation);
+          handlers.onCitation?.(citation);
+        }
+      } else if (event.type === "done") {
+        const doneMeta = (event.content ?? {}) as ChatStreamDone;
+        if (doneMeta.conversation_id) {
+          conversationId = doneMeta.conversation_id;
+        }
+        if (doneMeta.message_id) {
+          messageId = doneMeta.message_id;
+        }
+        handlers.onDone?.(doneMeta);
+      } else if (event.type === "error") {
+        const errorMessage =
+          typeof event.content === "string" ? event.content : "Streaming request failed";
+        throw new Error(errorMessage);
+      }
+    }
+  }
+
+  if (!conversationId || !messageId) {
+    throw new Error("Streaming ended unexpectedly. Please retry.");
+  }
+
+  return {
+    answer,
+    conversation_id: conversationId,
+    message_id: messageId,
+    chunks_used: citations,
+  };
 }

@@ -12,6 +12,7 @@ Wires together all retrieval stages:
 from __future__ import annotations
 
 import logging
+import re
 import uuid
 from contextlib import nullcontext
 from dataclasses import dataclass
@@ -28,6 +29,8 @@ from backend.retrieval.rrf import fuse
 from config import settings
 
 logger = logging.getLogger(__name__)
+
+_FILENAME_PATTERN = re.compile(r"\b[^\s]+\.(pdf|docx|txt|eml)\b", re.IGNORECASE)
 
 
 @dataclass(frozen=True, slots=True)
@@ -93,13 +96,18 @@ def retrieve(
         with trace.span("retrieval.reembed_query") if trace else nullcontext():
             query_embedding = embed_texts([rewritten])[0]
 
-    with trace.span("retrieval.dense_search") if trace else nullcontext():
-        dense_results = dense_search(
-            query_vector=query_embedding,
-            case_id=case_id,
-            user_id=user_id,
-            top_k=settings.retrieval_top_k,
-        )
+    file_specific_query = _FILENAME_PATTERN.search(rewritten) is not None
+
+    if file_specific_query:
+        dense_results = []
+    else:
+        with trace.span("retrieval.dense_search") if trace else nullcontext():
+            dense_results = dense_search(
+                query_vector=query_embedding,
+                case_id=case_id,
+                user_id=user_id,
+                top_k=settings.retrieval_top_k,
+            )
     with trace.span("retrieval.sparse_search") if trace else nullcontext():
         sparse_results = sparse_search(
             query_text=rewritten,

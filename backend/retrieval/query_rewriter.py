@@ -41,6 +41,12 @@ def rewrite(
     if not query.strip():
         return query
 
+    # Keep specific user queries unchanged to avoid losing key constraints.
+    token_count = len(query.split())
+    has_digits = any(char.isdigit() for char in query)
+    if token_count >= 9 or has_digits:
+        return query
+
     messages: list[dict[str, str]] = [
         {"role": "system", "content": _REWRITE_SYSTEM_PROMPT},
     ]

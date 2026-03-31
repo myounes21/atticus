@@ -35,9 +35,9 @@ def _reset_search_indexes() -> None:
 def main() -> None:
     execute("DELETE FROM messages")
     execute("DELETE FROM conversations")
+    execute("DELETE FROM ingestion_jobs")
     execute("DELETE FROM documents")
     execute("DELETE FROM cases")
-    execute("DELETE FROM ingestion_jobs")
     flushall()
     _reset_search_indexes()
 

@@ -19,6 +19,96 @@ from backend.retrieval.pipeline import retrieve
 
 logger = logging.getLogger(__name__)
 
+_GENERAL_ASSISTANT_PROMPT = """You are Atticus, a helpful legal assistant.
+Answer naturally for general questions (greetings, legal concepts, process guidance).
+If asked about specific case files, remind the user to reference documents and case details.
+Keep responses concise and practical.
+Use this response style:
+- One direct answer sentence first.
+- Then 2-4 short bullets when extra detail helps.
+- Avoid long dense paragraphs and repeated disclaimers.
+Output valid markdown only.
+"""
+
+_DOCUMENT_QUERY_MARKERS = (
+    "case",
+    "cases",
+    "file",
+    "files",
+    "document",
+    "documents",
+    "this case",
+    "these documents",
+    "uploaded",
+    "contract",
+    "clause",
+    "section",
+    "timeline",
+    "evidence",
+    "filing",
+    "in the file",
+    "in the document",
+    "from the document",
+    "source",
+    "page",
+)
+
+_SMALL_TALK_MARKERS = (
+    "hey",
+    "hello",
+    "hi",
+    "good morning",
+    "good evening",
+    "how are you",
+    "who are you",
+    "what can you do",
+    "thanks",
+    "thank you",
+)
+
+
+def should_skip_semantic_cache(query: str) -> bool:
+    lowered = query.lower()
+    cache_bypass_markers = (
+        ".pdf",
+        ".docx",
+        ".txt",
+        ".eml",
+        "uploaded",
+        "new file",
+        "latest file",
+        "document",
+        "file",
+    )
+    return any(marker in lowered for marker in cache_bypass_markers)
+
+
+def is_general_query(query: str) -> bool:
+    lowered = query.strip().lower()
+    if not lowered:
+        return True
+
+    has_filename = any(ext in lowered for ext in (".pdf", ".docx", ".txt", ".eml"))
+    if has_filename:
+        return False
+
+    if any(marker in lowered for marker in _DOCUMENT_QUERY_MARKERS):
+        return False
+
+    return True
+
+
+def build_general_messages(
+    query: str, chat_history: list[dict[str, str]]
+) -> list[dict[str, str]]:
+    messages: list[dict[str, str]] = [
+        {"role": "system", "content": _GENERAL_ASSISTANT_PROMPT}
+    ]
+    if chat_history:
+        messages.extend(chat_history[-10:])
+    messages.append({"role": "user", "content": query})
+    return messages
+
 
 @dataclass(frozen=True, slots=True)
 class GenerationResult:
@@ -50,11 +140,25 @@ def generate_answer(
     with trace.span("generation.chat_history") if trace else nullcontext():
         chat_history = get_history(conversation_id)
 
+    if is_general_query(query):
+        with trace.span("generation.general_response") if trace else nullcontext():
+            answer = generate(build_general_messages(query, chat_history))
+            append_turn(conversation_id, query, answer)
+            return GenerationResult(
+                answer=answer,
+                conversation_id=conversation_id,
+                message_id=message_id,
+                chunks_used=[],
+                rewritten_query=query,
+                from_cache=False,
+            )
+
     retrieval = retrieve(
         query=query,
         case_id=case_id,
         user_id=user_id,
         chat_history=chat_history,
+        skip_cache=should_skip_semantic_cache(query),
         trace=trace,
     )
 

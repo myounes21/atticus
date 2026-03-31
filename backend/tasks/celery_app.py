@@ -21,10 +21,23 @@ def get_celery_app() -> Any | None:
         return None
 
     celery_cls = cast(Any, _Celery)
-    app = celery_cls("atticus", broker=_broker_url(), backend=_broker_url())
+    app = celery_cls(
+        "atticus",
+        broker=_broker_url(),
+        backend=_broker_url(),
+        include=["backend.tasks.ingest_task"],
+    )
     app.conf.task_routes = {
         "backend.tasks.ingest_task.ingest_document_task": {"queue": "ingestion"},
     }
+    try:
+        from backend.tasks.ingest_task import ingest_document_task
+
+        app.task(name="backend.tasks.ingest_task.ingest_document_task")(
+            ingest_document_task
+        )
+    except Exception:
+        pass
     return app
 
 
@@ -37,6 +50,7 @@ def enqueue_ingestion_task(
     file_path: str,
     s3_key: str | None,
     file_name: str | None,
+    document_name: str | None,
     case_id: str | None,
     case_name: str | None,
     assigned_lawyers: list[str] | None,
@@ -59,6 +73,7 @@ def enqueue_ingestion_task(
                 "file_path": file_path,
                 "s3_key": s3_key,
                 "file_name": file_name,
+                "document_name": document_name,
                 "case_id": case_id,
                 "case_name": case_name,
                 "assigned_lawyers": assigned_lawyers or [],
@@ -68,7 +83,3 @@ def enqueue_ingestion_task(
         return True
     except Exception:
         return False
-
-
-
-

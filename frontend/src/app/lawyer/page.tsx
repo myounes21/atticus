@@ -3,6 +3,7 @@
 import { useState } from "react";
 import CasesPanel from "@/components/cases/CasesPanel";
 import ChatPanel from "@/components/chat/ChatPanel";
+import DocumentsPanel from "@/components/documents/DocumentsPanel";
 import WorkspaceShell from "@/components/layout/WorkspaceShell";
 import { useAuthGuard } from "@/lib/useAuthGuard";
 
@@ -23,11 +24,21 @@ export default function LawyerPage() {
   return (
     <WorkspaceShell
       title="Lawyer Portal"
-      subtitle="Ask questions scoped to your assigned case documents."
+      subtitle="Ask focused case questions and verify every answer with sources."
+      greeting="Hey, welcome back, Mr Finch."
+      demoGuide={[
+        "Select a case from the list.",
+        "Watch documents become ready after admin uploads.",
+        "Start with a source-specific suggested question.",
+        "Review streamed answer structure and source references.",
+      ]}
       userEmail={user?.email}
       onLogout={logout}
     >
-      <CasesPanel allowCreate={false} onSelectCase={(caseId) => setSelectedCaseId(caseId)} />
+      <div className="stack">
+        <CasesPanel allowCreate={false} onSelectCase={(caseId) => setSelectedCaseId(caseId)} />
+        <DocumentsPanel caseId={selectedCaseId} allowUpload={false} autoRefresh />
+      </div>
       <ChatPanel caseId={selectedCaseId} />
     </WorkspaceShell>
   );
