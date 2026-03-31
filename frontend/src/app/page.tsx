@@ -36,9 +36,7 @@ export default function HomePage() {
 
   useEffect(() => {
     if (demoAuthEnabled) {
-      void ensureFreshDemoData().catch(() => {
-        // Ignore prewarm errors and let button flow show actionable error.
-      });
+      void ensureFreshDemoData().catch(() => {});
     }
   }, [demoAuthEnabled]);
 
@@ -149,99 +147,157 @@ export default function HomePage() {
   }
 
   return (
-    <main className="landing-shell">
-      <section className="landing-grid">
-        <section className="card landing-intro">
-          <span className="intro-pill">Atticus Legal Workspace</span>
-          <h1>Understand the product in 60 seconds.</h1>
+    <main className="welcome-shell">
+      <div className="welcome-bg" aria-hidden="true">
+        <div className="welcome-glow welcome-glow-left" />
+        <div className="welcome-glow welcome-glow-right" />
+      </div>
+
+      <header className="welcome-branding">
+        <h1>Legal Atelier</h1>
+        <p>Precision in Practice</p>
+      </header>
+
+      <section className="welcome-demo-pill" aria-label="Environment badge">
+        <span className="material-symbols-outlined">biotech</span>
+        Demo Environment
+      </section>
+
+      <section className="welcome-card glass-panel">
+        <div className="welcome-card-main">
+          <div className="welcome-anchor">
+            <span className="material-symbols-outlined">timer</span>
+          </div>
+          <h2>Understand the product in 60 seconds</h2>
           <p>
-            This demo shows case-scoped legal Q&amp;A with source-backed responses. Start with Lawyer mode for
-            the clearest walkthrough.
+            Experience case-scoped legal Q&amp;A. Our engine ingests your active litigation files to provide
+            instant, sourced answers to complex procedural and factual inquiries.
           </p>
-          <div className="demo-quick-actions">
-            <button type="button" onClick={() => void startGuidedDemo("lawyer")} disabled={busy}>
-              {demoBusy === "lawyer" ? "Opening lawyer portal..." : "Start 60-second demo"}
+          {demoAuthEnabled && (
+            <p className="welcome-demo-note">
+              This is a simulated environment for portfolio demonstration. Authentication checks are relaxed.
+            </p>
+          )}
+
+          <div className="welcome-cta-row">
+            <button type="button" className="signature-gradient" onClick={() => void startGuidedDemo("lawyer")} disabled={busy}>
+              <span className="material-symbols-outlined">person</span>
+              {demoBusy === "lawyer" ? "Opening Lawyer Demo" : "Start Lawyer Demo"}
             </button>
             <button
               type="button"
-              className="secondary"
+              className="outline-cta"
               onClick={() => void startGuidedDemo("admin")}
               disabled={busy}
             >
-              {demoBusy === "admin" ? "Opening admin portal..." : "Open admin view"}
+              <span className="material-symbols-outlined">admin_panel_settings</span>
+              {demoBusy === "admin" ? "Opening Admin Demo" : "Start Admin Demo"}
             </button>
           </div>
-          <ol className="demo-steps">
-            <li>Open a seeded case.</li>
-            <li>Click a suggested prompt.</li>
-            <li>Review answer and source references.</li>
-          </ol>
-        </section>
 
-        <section className="card auth-card">
-          <h2>Sign in</h2>
-          <p className="muted">Use the quick demo buttons, or sign in manually below.</p>
-          {!selfRegisterEnabled && (
-            <p className="muted">
-              Demo accounts: <strong>demo.admin@atticus.local</strong> and <strong>demo.lawyer@atticus.local</strong>.
-              Password: <strong>DemoPass!123</strong>.
-            </p>
-          )}
-          {demoAuthEnabled && (
-            <p className="ok-text">Demo authentication is enabled. Password checks are relaxed.</p>
-          )}
+          <p className="welcome-trial-note">
+            <span className="material-symbols-outlined">verified_user</span>
+            No account required for trial
+          </p>
+        </div>
 
-          <form className="stack" onSubmit={(event) => void doLogin(event)}>
-            <label className="field">
-              <span>Email</span>
-              <input
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="you@firm.com"
-                autoComplete="email"
-              />
-            </label>
-
-            <label className="field">
-              <span>Password</span>
-              <input
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder={demoAuthEnabled ? "Optional in demo mode" : "Required"}
-                type="password"
-                autoComplete="current-password"
-              />
-            </label>
-
-            <button type="submit" disabled={busy}>
-              {loginBusy ? "Signing in..." : "Manual sign in"}
-            </button>
-          </form>
-
-          {selfRegisterEnabled && (
-            <div className="stack register-area">
-              <p className="muted">Need a user for local testing?</p>
-              <div className="row">
-                <select value={role} onChange={(event) => setRole(event.target.value as Role)}>
-                  <option value="admin">Admin</option>
-                  <option value="lawyer">Lawyer</option>
-                </select>
-                <button
-                  type="button"
-                  className="secondary"
-                  onClick={() => void doRegister()}
-                  disabled={busy}
-                >
-                  {registerBusy ? "Creating..." : "Create account"}
-                </button>
-              </div>
+        <div className="welcome-detail-strip">
+          <article>
+            <span className="material-symbols-outlined">psychology</span>
+            <div>
+              <h3>Neural Synthesis</h3>
+              <p>Logic applied to your case specifics.</p>
             </div>
-          )}
-
-          {error && <p className="error-text">{error}</p>}
-          {message && <p className="ok-text">{message}</p>}
-        </section>
+          </article>
+          <article>
+            <span className="material-symbols-outlined">history_edu</span>
+            <div>
+              <h3>Source Integrity</h3>
+              <p>Every answer cited to your discovery.</p>
+            </div>
+          </article>
+        </div>
       </section>
+
+      <footer className="welcome-footer-copy">
+        <p>Trusted by elite firms for complex multi-district litigation research.</p>
+        <div className="welcome-logo-placeholders" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+      </footer>
+
+      <section className="manual-auth card">
+        <details>
+          <summary>Manual sign in and account tools</summary>
+          <div className="stack">
+            {!selfRegisterEnabled && (
+              <p className="muted">
+                Demo accounts: <strong>demo.admin@atticus.local</strong> and <strong>demo.lawyer@atticus.local</strong>.
+                Password: <strong>DemoPass!123</strong>.
+              </p>
+            )}
+            <form className="stack" onSubmit={(event) => void doLogin(event)}>
+              <label className="field">
+                <span>Email</span>
+                <input
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="you@firm.com"
+                  autoComplete="email"
+                />
+              </label>
+
+              <label className="field">
+                <span>Password</span>
+                <input
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder={demoAuthEnabled ? "Optional in demo mode" : "Required"}
+                  type="password"
+                  autoComplete="current-password"
+                />
+              </label>
+
+              <button type="submit" disabled={busy}>
+                {loginBusy ? "Signing in..." : "Manual sign in"}
+              </button>
+            </form>
+
+            {selfRegisterEnabled && (
+              <div className="stack register-area">
+                <p className="muted">Need a user for local testing?</p>
+                <div className="row">
+                  <select value={role} onChange={(event) => setRole(event.target.value as Role)}>
+                    <option value="admin">Admin</option>
+                    <option value="lawyer">Lawyer</option>
+                  </select>
+                  <button
+                    type="button"
+                    className="secondary"
+                    onClick={() => void doRegister()}
+                    disabled={busy}
+                  >
+                    {registerBusy ? "Creating..." : "Create account"}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {error && <p className="error-text">{error}</p>}
+            {message && <p className="ok-text">{message}</p>}
+          </div>
+        </details>
+      </section>
+
+      <nav className="welcome-fixed-nav" aria-label="Policy links">
+        <div>
+          <a href="#">Privacy Protocol</a>
+          <a href="#">Data Residency</a>
+        </div>
+        <p>© 2024 Legal Atelier. Precision Workspace.</p>
+      </nav>
     </main>
   );
 }

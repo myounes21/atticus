@@ -15,11 +15,13 @@ export default function CasesPanel({
   allowCreate,
   autoRefresh = false,
   showAssignedSummary = false,
+  variant = "default",
   onSelectCase,
 }: {
   allowCreate: boolean;
   autoRefresh?: boolean;
   showAssignedSummary?: boolean;
+  variant?: "default" | "admin-lifecycle" | "compact";
   onSelectCase: (caseId: string | null) => void;
 }) {
   const [cases, setCases] = useState<CaseItem[]>([]);
@@ -107,7 +109,7 @@ export default function CasesPanel({
   }, [autoRefresh, refreshCases]);
 
   useEffect(() => {
-    if (!allowCreate) {
+    if (!(allowCreate || showAssignedSummary || variant === "admin-lifecycle")) {
       return;
     }
     let cancelled = false;
@@ -134,7 +136,7 @@ export default function CasesPanel({
     return () => {
       cancelled = true;
     };
-  }, [allowCreate]);
+  }, [allowCreate, showAssignedSummary, variant]);
 
   function toggleLawyer(userId: string) {
     if (primaryLawyerId && userId === primaryLawyerId && selectedLawyerIds.includes(userId)) {
@@ -187,8 +189,168 @@ export default function CasesPanel({
     }
   }
 
+  if (variant === "admin-lifecycle") {
+    return (
+      <section className="admin-lifecycle-shell">
+        <div className="admin-lifecycle-head">
+          <div className="row">
+            <h3>Active Cases Lifecycle</h3>
+            <span>{cases.length} total</span>
+          </div>
+          <button type="button" className="admin-lifecycle-link" onClick={() => void refreshCases()}>
+            View archive
+            <span className="material-symbols-outlined">arrow_forward</span>
+          </button>
+        </div>
+
+        {loading && <p className="muted">Loading cases...</p>}
+        {error && <p className="error-text">{error}</p>}
+        {message && <p className="ok-text">{message}</p>}
+
+        <ul className="list-reset admin-case-list">
+          {cases.map((item) => {
+            const lawyersForCase = item.assigned_lawyers
+              .map((lawyerId) => lawyerNameById.get(lawyerId) ?? lawyerId)
+              .slice(0, 3);
+
+            return (
+              <li key={item.case_id}>
+                <button
+                  type="button"
+                  className={item.case_id === selectedCaseId ? "admin-case-row active" : "admin-case-row"}
+                  onClick={() => updateSelection(item.case_id)}
+                >
+                  <div>
+                    <p className="admin-case-code">#{item.case_id.slice(0, 8).toUpperCase()}</p>
+                    <h4>{item.name}</h4>
+                    {item.client_name ? <p className="muted">{item.client_name}</p> : null}
+                  </div>
+
+                  <div>
+                    <p className="admin-case-label">Assigned Lawyers</p>
+                    {lawyersForCase.length > 0 ? (
+                      <div className="admin-lawyer-cluster">
+                        {lawyersForCase.map((lawyerName) => (
+                          <span key={`${item.case_id}-${lawyerName}`} className="admin-lawyer-avatar" title={lawyerName}>
+                            {lawyerName
+                              .split(" ")
+                              .map((part) => part[0])
+                              .join("")
+                              .slice(0, 2)
+                              .toUpperCase()}
+                          </span>
+                        ))}
+                        {item.assigned_lawyers.length > 3 ? <span className="admin-lawyer-more">+{item.assigned_lawyers.length - 3}</span> : null}
+                      </div>
+                    ) : (
+                      <p className="muted">None assigned</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <p className="admin-case-label">Status Progression</p>
+                    <div className="admin-case-status-line">
+                      <span className="admin-case-status-dot" aria-hidden="true" />
+                      <span>{item.status === "active" ? "Discovery Ingestion" : "Archived"}</span>
+                    </div>
+                  </div>
+
+                  <span className="material-symbols-outlined">more_horiz</span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+
+        {allowCreate && (
+          <details className="admin-case-create">
+            <summary>Create case</summary>
+            <div className="stack create-case-grid">
+              <input
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                placeholder="Case name"
+              />
+              <input
+                value={clientName}
+                onChange={(event) => setClientName(event.target.value)}
+                placeholder="Client name"
+              />
+              <div className="stack-sm">
+                <p className="muted">Assign lawyers</p>
+                <div className="assignee-picker">
+                  <div className="assignee-chip-row">
+                    {selectedLawyerIds.map((lawyerId) => {
+                      const lawyer = lawyerById.get(lawyerId);
+                      const label = lawyer?.full_name ?? lawyerId;
+                      const locked = lawyerId === primaryLawyerId;
+                      return (
+                        <span key={lawyerId} className="assignee-chip">
+                          {label}
+                          <button
+                            type="button"
+                            className="secondary"
+                            onClick={() => toggleLawyer(lawyerId)}
+                            disabled={locked}
+                            aria-label={`Remove ${label}`}
+                          >
+                            x
+                          </button>
+                        </span>
+                      );
+                    })}
+                  </div>
+
+                  <input
+                    value={lawyerSearch}
+                    onFocus={() => setPickerOpen(true)}
+                    onBlur={() => {
+                      window.setTimeout(() => setPickerOpen(false), 100);
+                    }}
+                    onChange={(event) => {
+                      setLawyerSearch(event.target.value);
+                      setPickerOpen(true);
+                    }}
+                    placeholder="Search lawyers by name or email"
+                  />
+
+                  {pickerOpen && (
+                    <ul className="assignee-results list-reset">
+                      {filteredLawyers.length === 0 ? (
+                        <li className="muted">No matching lawyers</li>
+                      ) : (
+                        filteredLawyers.map((lawyer) => (
+                          <li key={lawyer.user_id}>
+                            <button
+                              type="button"
+                              className="assignee-result-btn"
+                              onMouseDown={(event) => event.preventDefault()}
+                              onClick={() => addLawyer(lawyer.user_id)}
+                            >
+                              <span>
+                                <strong>{lawyer.full_name}</strong>
+                                <small className="muted">{lawyer.email}</small>
+                              </span>
+                            </button>
+                          </li>
+                        ))
+                      )}
+                    </ul>
+                  )}
+                </div>
+              </div>
+              <button type="button" onClick={() => void submitCreate()} disabled={creating}>
+                {creating ? "Creating..." : "Create case"}
+              </button>
+            </div>
+          </details>
+        )}
+      </section>
+    );
+  }
+
   return (
-    <section className="card">
+    <section className={variant === "compact" ? "card compact-card" : "card"}>
       <div className="section-head">
         <h2>Cases</h2>
         <span className="pill subtle">{cases.length} total</span>
@@ -303,7 +465,7 @@ export default function CasesPanel({
                   <small className="muted">Showing {filteredLawyers.length} matching lawyers</small>
                 )}
               </div>
-              <small className="muted">Mr Lawyer stays assigned in demo mode.</small>
+              <small className="muted">Mr Lawyer remains assigned in demo mode.</small>
             </div>
             <button type="button" onClick={() => void submitCreate()} disabled={creating}>
               {creating ? "Creating..." : "Create case"}
