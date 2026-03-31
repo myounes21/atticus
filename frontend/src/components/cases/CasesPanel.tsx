@@ -13,7 +13,7 @@ type CaseItem = {
 
 export default function CasesPanel({
   allowCreate,
-  autoRefresh = true,
+  autoRefresh = false,
   showAssignedSummary = false,
   onSelectCase,
 }: {
@@ -33,10 +33,29 @@ export default function CasesPanel({
   const selectedCaseIdRef = useRef<string | null>(null);
   const [lawyers, setLawyers] = useState<LawyerOption[]>([]);
   const [selectedLawyerIds, setSelectedLawyerIds] = useState<string[]>([]);
+  const [lawyerSearch, setLawyerSearch] = useState("");
+  const [pickerOpen, setPickerOpen] = useState(false);
   const primaryLawyerId = lawyers.find((item) => item.full_name.toLowerCase() === "mr lawyer")?.user_id ?? null;
   const lawyerNameById = useMemo(() => {
     return new Map(lawyers.map((lawyer) => [lawyer.user_id, lawyer.full_name]));
   }, [lawyers]);
+  const lawyerById = useMemo(() => {
+    return new Map(lawyers.map((lawyer) => [lawyer.user_id, lawyer]));
+  }, [lawyers]);
+  const filteredLawyers = useMemo(() => {
+    const query = lawyerSearch.trim().toLowerCase();
+    return lawyers
+      .filter((lawyer) => {
+        if (selectedLawyerIds.includes(lawyer.user_id)) {
+          return false;
+        }
+        if (!query) {
+          return true;
+        }
+        return lawyer.full_name.toLowerCase().includes(query) || lawyer.email.toLowerCase().includes(query);
+      })
+      .slice(0, 10);
+  }, [lawyerSearch, lawyers, selectedLawyerIds]);
 
   const updateSelection = useCallback(
     (nextCaseId: string | null) => {
@@ -126,6 +145,14 @@ export default function CasesPanel({
     );
   }
 
+  function addLawyer(userId: string) {
+    if (selectedLawyerIds.includes(userId)) {
+      return;
+    }
+    setSelectedLawyerIds((prev) => [...prev, userId]);
+    setLawyerSearch("");
+  }
+
   async function submitCreate() {
     setMessage("");
     if (!name.trim()) {
@@ -142,6 +169,7 @@ export default function CasesPanel({
       });
       setName("");
       setClientName("");
+      setLawyerSearch("");
       setSelectedLawyerIds((prev) => {
         if (prev.length === 0) {
           const defaultLawyer = lawyers.find((item) => item.full_name.toLowerCase() === "mr lawyer");
@@ -211,22 +239,70 @@ export default function CasesPanel({
             />
             <div className="stack-sm">
               <p className="muted">Assign lawyers</p>
-              <div className="stack-sm">
-                {lawyers.map((lawyer) => (
-                  <label key={lawyer.user_id} className="row">
-                    <input
-                      type="checkbox"
-                      checked={selectedLawyerIds.includes(lawyer.user_id)}
-                      disabled={lawyer.user_id === primaryLawyerId}
-                      onChange={() => toggleLawyer(lawyer.user_id)}
-                    />
-                    <span>
-                      <strong>{lawyer.full_name}</strong>
-                      <small className="muted">{lawyer.email}</small>
-                    </span>
-                  </label>
-                ))}
+              <div className="assignee-picker">
+                <div className="assignee-chip-row">
+                  {selectedLawyerIds.map((lawyerId) => {
+                    const lawyer = lawyerById.get(lawyerId);
+                    const label = lawyer?.full_name ?? lawyerId;
+                    const locked = lawyerId === primaryLawyerId;
+                    return (
+                      <span key={lawyerId} className="assignee-chip">
+                        {label}
+                        <button
+                          type="button"
+                          className="secondary"
+                          onClick={() => toggleLawyer(lawyerId)}
+                          disabled={locked}
+                          aria-label={`Remove ${label}`}
+                        >
+                          x
+                        </button>
+                      </span>
+                    );
+                  })}
+                </div>
+
+                <input
+                  value={lawyerSearch}
+                  onFocus={() => setPickerOpen(true)}
+                  onBlur={() => {
+                    window.setTimeout(() => setPickerOpen(false), 100);
+                  }}
+                  onChange={(event) => {
+                    setLawyerSearch(event.target.value);
+                    setPickerOpen(true);
+                  }}
+                  placeholder="Search lawyers by name or email"
+                />
+
+                {pickerOpen && (
+                  <ul className="assignee-results list-reset">
+                    {filteredLawyers.length === 0 ? (
+                      <li className="muted">No matching lawyers</li>
+                    ) : (
+                      filteredLawyers.map((lawyer) => (
+                        <li key={lawyer.user_id}>
+                          <button
+                            type="button"
+                            className="assignee-result-btn"
+                            onMouseDown={(event) => event.preventDefault()}
+                            onClick={() => addLawyer(lawyer.user_id)}
+                          >
+                            <span>
+                              <strong>{lawyer.full_name}</strong>
+                              <small className="muted">{lawyer.email}</small>
+                            </span>
+                          </button>
+                        </li>
+                      ))
+                    )}
+                  </ul>
+                )}
+                {pickerOpen && filteredLawyers.length > 0 && (
+                  <small className="muted">Showing {filteredLawyers.length} matching lawyers</small>
+                )}
               </div>
+              <small className="muted">Mr Lawyer stays assigned in demo mode.</small>
             </div>
             <button type="button" onClick={() => void submitCreate()} disabled={creating}>
               {creating ? "Creating..." : "Create case"}

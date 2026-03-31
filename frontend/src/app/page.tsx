@@ -9,24 +9,6 @@ function targetPathForRole(role: Role): string {
   return role === "admin" ? "/admin" : "/lawyer";
 }
 
-function decodeRoleFromToken(token: string): Role | null {
-  try {
-    const payloadSegment = token.split(".")[1];
-    if (!payloadSegment) {
-      return null;
-    }
-    const base64 = payloadSegment.replace(/-/g, "+").replace(/_/g, "/");
-    const normalized = base64.padEnd(Math.ceil(base64.length / 4) * 4, "=");
-    const decoded = JSON.parse(atob(normalized)) as { role?: unknown };
-    if (decoded.role === "admin" || decoded.role === "lawyer") {
-      return decoded.role;
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
-
 export default function HomePage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -115,16 +97,29 @@ export default function HomePage() {
     setError("");
     setMessage("");
     try {
-      const adminSession = await login("demo.admin@atticus.local", demoPassword);
-      const tokenRole = decodeRoleFromToken(adminSession.access_token);
-      if (tokenRole === "admin") {
-        await resetDemoData(adminSession.access_token);
-      }
       const result = await login(demoEmail, demoPassword);
       saveSession(result);
       router.replace(targetPathForRole(result.user.role));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not start demo");
+    } finally {
+      setDemoBusy(null);
+    }
+  }
+
+  async function startFreshDemo() {
+    const demoPassword = "DemoPass!123";
+    setDemoBusy("lawyer");
+    setError("");
+    setMessage("");
+    try {
+      const adminSession = await login("demo.admin@atticus.local", demoPassword);
+      await resetDemoData(adminSession.access_token);
+      const targetSession = await login("demo.lawyer@atticus.local", demoPassword);
+      saveSession(targetSession);
+      router.replace(targetPathForRole(targetSession.user.role));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not start fresh demo");
     } finally {
       setDemoBusy(null);
     }
@@ -151,6 +146,9 @@ export default function HomePage() {
               disabled={busy}
             >
               {demoBusy === "admin" ? "Opening admin..." : "Open admin view"}
+            </button>
+            <button type="button" className="secondary" onClick={() => void startFreshDemo()} disabled={busy}>
+              {demoBusy !== null ? "Resetting demo..." : "Start fresh demo (resets data)"}
             </button>
           </div>
           <ol className="demo-steps">

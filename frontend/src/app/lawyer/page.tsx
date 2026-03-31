@@ -36,7 +36,7 @@ export default function LawyerPage() {
       onLogout={logout}
     >
       <div className="stack">
-        <CasesPanel allowCreate={false} onSelectCase={(caseId) => setSelectedCaseId(caseId)} />
+        <CasesPanel allowCreate={false} autoRefresh onSelectCase={(caseId) => setSelectedCaseId(caseId)} />
         <DocumentsPanel caseId={selectedCaseId} allowUpload={false} autoRefresh />
       </div>
       <ChatPanel caseId={selectedCaseId} />

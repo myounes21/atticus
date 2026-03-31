@@ -35,6 +35,7 @@ export default function AdminPage() {
       <CasesPanel
         allowCreate
         showAssignedSummary
+        autoRefresh
         onSelectCase={(caseId) => setSelectedCaseId(caseId)}
       />
       <DocumentsPanel caseId={selectedCaseId} allowUpload autoRefresh />
