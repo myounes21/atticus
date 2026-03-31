@@ -4,8 +4,40 @@ type MarkdownTextProps = {
   text: string;
 };
 
+function coerceCitationContinuations(text: string): string {
+  const lines = text.split("\n");
+  const normalized: string[] = [];
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) {
+      normalized.push("");
+      continue;
+    }
+
+    const isListLine = /^[-*]\s+/.test(line) || /^\d+\.\s+/.test(line);
+    const isHeadingLine = /^(#{1,3})\s+/.test(line);
+    const hasCitation = /\[Source:[^\]]+\]/i.test(line);
+    const previous = normalized.length > 0 ? normalized[normalized.length - 1].trim() : "";
+    const previousIsList = /^[-*]\s+/.test(previous);
+
+    if (!isListLine && !isHeadingLine && hasCitation && previousIsList) {
+      normalized.push(`- ${line}`);
+      continue;
+    }
+
+    normalized.push(line);
+  }
+
+  return normalized.join("\n");
+}
+
 function normalizeMarkdown(text: string): string {
   let normalized = text.replace(/\r\n/g, "\n").trim();
+  normalized = normalized.replace(/\*\*([^*\n:][^:\n]*):\*\s*-\s*-\s*/g, "\n- **$1:** ");
+  normalized = normalized.replace(/\*\*([^*\n:][^:\n]*):\*\s*[-*]\s*/g, "\n- **$1:** ");
+  normalized = normalized.replace(/\*\*([^*\n:][^:\n]*):\s*[-*]\s*/g, "\n- **$1:** ");
+  normalized = normalized.replace(/^\*\*([^*\n:][^:\n]*):\*\*/gm, "- **$1:**");
   normalized = normalized.replace(/:\s+\*\s+/g, ":\n* ");
   normalized = normalized.replace(/\.\s+\*\s+/g, ".\n* ");
   normalized = normalized.replace(/\]\s+\*\s+/g, "]\n* ");
@@ -27,6 +59,8 @@ function normalizeMarkdown(text: string): string {
       return `${prefix}- **${cleanedLabel}:** ${cleanedValue}`;
     },
   );
+  normalized = normalized.replace(/^-\s+\*\*([^*\n]+):\*\*\s*-\s+/gm, "- **$1:** ");
+  normalized = coerceCitationContinuations(normalized);
   normalized = normalized.replace(/^\s*[-*]\s+$/gm, "");
   normalized = normalized.replace(/\n{3,}/g, "\n\n");
   return normalized;
