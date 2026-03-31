@@ -162,7 +162,7 @@ export default function CasesPanel({
     setCreating(true);
     setError("");
     try {
-      await createCase({
+      const createdCase = await createCase({
         name: name.trim(),
         client_name: clientName.trim() || undefined,
         assigned_lawyers: selectedLawyerIds,
@@ -179,6 +179,7 @@ export default function CasesPanel({
       });
       setMessage("Case created successfully.");
       await refreshCases();
+      updateSelection(createdCase.case_id);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create case");
     } finally {

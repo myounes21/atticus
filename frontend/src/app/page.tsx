@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useEffect, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { login, register, resetDemoData } from "@/lib/api";
 import { getStoredUser, getToken, type Role, saveSession } from "@/lib/auth";
@@ -9,8 +9,12 @@ function targetPathForRole(role: Role): string {
   return role === "admin" ? "/admin" : "/lawyer";
 }
 
+let demoPreparedForSession = false;
+
 export default function HomePage() {
   const router = useRouter();
+  const demoResetInFlight = useRef<Promise<void> | null>(null);
+  const demoResetCooldownAt = useRef<number>(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<Role>("lawyer");
@@ -29,6 +33,14 @@ export default function HomePage() {
   );
 
   const busy = loginBusy || registerBusy || demoBusy !== null;
+
+  useEffect(() => {
+    if (demoAuthEnabled) {
+      void ensureFreshDemoData().catch(() => {
+        // Ignore prewarm errors and let button flow show actionable error.
+      });
+    }
+  }, [demoAuthEnabled]);
 
   useEffect(() => {
     const user = getStoredUser();
@@ -87,6 +99,34 @@ export default function HomePage() {
     }
   }
 
+  async function ensureFreshDemoData(): Promise<void> {
+    if (demoPreparedForSession) {
+      return;
+    }
+    const now = Date.now();
+    if (now < demoResetCooldownAt.current) {
+      return;
+    }
+    if (demoResetInFlight.current) {
+      await demoResetInFlight.current;
+      return;
+    }
+
+    demoResetInFlight.current = (async () => {
+      const demoPassword = "DemoPass!123";
+      const adminSession = await login("demo.admin@atticus.local", demoPassword);
+      await resetDemoData(adminSession.access_token);
+      demoPreparedForSession = true;
+      demoResetCooldownAt.current = Date.now() + 5 * 60 * 1000;
+    })();
+
+    try {
+      await demoResetInFlight.current;
+    } finally {
+      demoResetInFlight.current = null;
+    }
+  }
+
   async function startGuidedDemo(roleTarget: "lawyer" | "admin") {
     const demoEmail = roleTarget === "lawyer" ? "demo.lawyer@atticus.local" : "demo.admin@atticus.local";
     const demoPassword = "DemoPass!123";
@@ -97,29 +137,12 @@ export default function HomePage() {
     setError("");
     setMessage("");
     try {
+      await ensureFreshDemoData();
       const result = await login(demoEmail, demoPassword);
       saveSession(result);
       router.replace(targetPathForRole(result.user.role));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not start demo");
-    } finally {
-      setDemoBusy(null);
-    }
-  }
-
-  async function startFreshDemo() {
-    const demoPassword = "DemoPass!123";
-    setDemoBusy("lawyer");
-    setError("");
-    setMessage("");
-    try {
-      const adminSession = await login("demo.admin@atticus.local", demoPassword);
-      await resetDemoData(adminSession.access_token);
-      const targetSession = await login("demo.lawyer@atticus.local", demoPassword);
-      saveSession(targetSession);
-      router.replace(targetPathForRole(targetSession.user.role));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not start fresh demo");
     } finally {
       setDemoBusy(null);
     }
@@ -146,9 +169,6 @@ export default function HomePage() {
               disabled={busy}
             >
               {demoBusy === "admin" ? "Opening admin portal..." : "Open admin view"}
-            </button>
-            <button type="button" className="secondary" onClick={() => void startFreshDemo()} disabled={busy}>
-              {demoBusy !== null ? "Resetting demo..." : "Start fresh demo (resets data)"}
             </button>
           </div>
           <ol className="demo-steps">
