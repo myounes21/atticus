@@ -24,11 +24,20 @@ export default function AdminPage() {
     <WorkspaceShell
       title="Admin Portal"
       subtitle="Manage cases, upload files, and monitor ingestion status."
+      demoGuide={[
+        "Select a case from the left panel.",
+        "Upload a document (.pdf, .docx, .txt, .eml).",
+        "Lawyer view will auto-refresh and use the new file in chat.",
+      ]}
       userEmail={user?.email}
       onLogout={logout}
     >
-      <CasesPanel allowCreate onSelectCase={(caseId) => setSelectedCaseId(caseId)} />
-      <DocumentsPanel caseId={selectedCaseId} allowUpload />
+      <CasesPanel
+        allowCreate
+        showAssignedSummary
+        onSelectCase={(caseId) => setSelectedCaseId(caseId)}
+      />
+      <DocumentsPanel caseId={selectedCaseId} allowUpload autoRefresh />
     </WorkspaceShell>
   );
 }
