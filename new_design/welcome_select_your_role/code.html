@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#0D7A74",
+              "background-light": "#f6f8f8",
+              "background-dark": "#112120",
+            },
+            fontFamily: {
+              "display": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .signature-gradient {
+            background: linear-gradient(135deg, #005f5a 0%, #0d7a74 100%);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface min-h-screen flex flex-col items-center justify-center p-6 selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Minimalist Background Elements -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+<div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px]"></div>
+<div class="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] rounded-full bg-tertiary/5 blur-[150px]"></div>
+</div>
+<!-- Main Branding -->
+<header class="mb-16 text-center">
+<h1 class="font-display text-3xl font-extrabold text-primary tracking-tight">Legal Atelier</h1>
+<p class="text-on-surface-variant font-label text-sm mt-2 tracking-widest uppercase">Precision in Practice</p>
+</header>
+<main class="w-full max-w-2xl"><div class="flex justify-center mb-8">
+<span class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase bg-primary/10 text-primary border border-primary/20 shadow-sm">
+<span class="material-symbols-outlined text-sm mr-2" data-icon="biotech">biotech</span>
+        Demo Environment
+    </span>
+</div>
+<!-- Central Focused Card -->
+<section class="glass-panel rounded-xl shadow-[0_32px_64px_-12px_rgba(0,95,90,0.08)] overflow-hidden border border-outline-variant/20">
+<div class="p-10 md:p-14 text-center">
+<!-- Visual Anchor -->
+<div class="mb-8 inline-flex items-center justify-center w-16 h-16 rounded-full bg-surface-container-high text-primary">
+<span class="material-symbols-outlined text-3xl" data-icon="timer">timer</span>
+</div>
+<h2 class="font-display text-4xl md:text-5xl font-bold text-on-surface tracking-tight leading-tight mb-6">
+                    Understand the product in 60 seconds
+                </h2>
+<p class="text-on-surface-variant text-lg leading-relaxed mb-10 max-w-lg mx-auto">
+                    Experience case-scoped legal Q&amp;A. Our engine ingests your active litigation files to provide instant, sourced answers to complex procedural and factual inquiries.
+                </p><p class="text-xs text-on-surface-variant/70 italic mb-10 -mt-6">
+    This is a simulated environment for portfolio demonstration. Authentication checks are relaxed.
+</p>
+<!-- Primary CTA -->
+<div class="flex flex-col items-center gap-8">
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+<button class="signature-gradient text-white font-headline font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-3 w-full sm:w-auto min-w-[200px]">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span>Start Lawyer Demo</span>
+</button>
+<button class="border-2 border-primary text-primary font-headline font-semibold py-4 px-8 rounded-xl hover:bg-primary/5 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-3 w-full sm:w-auto min-w-[200px]">
+<span class="material-symbols-outlined" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span>Start Admin Demo</span>
+</button>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="verified_user">verified_user</span>
+<span class="font-label text-xs text-on-surface-variant font-medium">No account required for trial</span>
+</div>
+</div>
+</div>
+<!-- Contextual Detail Strip -->
+<div class="bg-surface-container flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-outline-variant/30">
+<div class="flex-1 p-6 flex items-start gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="psychology">psychology</span>
+<div>
+<p class="font-headline font-bold text-sm text-on-surface">Neural Synthesis</p>
+<p class="text-xs text-on-surface-variant">Logic applied to your case specifics.</p>
+</div>
+</div>
+<div class="flex-1 p-6 flex items-start gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="history_edu">history_edu</span>
+<div>
+<p class="font-headline font-bold text-sm text-on-surface">Source Integrity</p>
+<p class="text-xs text-on-surface-variant">Every answer cited to your discovery.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Secondary Focused Messaging -->
+<footer class="mt-12 text-center">
+<p class="text-on-surface-variant font-label text-sm">
+                Trusted by elite firms for complex multi-district litigation research.
+            </p>
+<div class="mt-6 flex justify-center gap-8 opacity-40 grayscale contrast-125">
+<div class="h-6 w-24 bg-on-surface-variant/20 rounded-sm"></div>
+<div class="h-6 w-24 bg-on-surface-variant/20 rounded-sm"></div>
+<div class="h-6 w-24 bg-on-surface-variant/20 rounded-sm"></div>
+</div>
+</footer>
+</main>
+<!-- Footer Links -->
+<nav class="fixed bottom-8 w-full px-6 flex justify-between items-center text-on-surface-variant font-label text-xs">
+<div class="flex gap-6">
+<a class="hover:text-primary transition-colors" href="#">Privacy Protocol</a>
+<a class="hover:text-primary transition-colors" href="#">Data Residency</a>
+</div>
+<div class="text-right">
+<span>© 2024 Legal Atelier. Precision Workspace.</span>
+</div>
+</nav>
+</body></html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html class="light" data-lt-installed="true" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Digital Atelier Portal - Lawyer Interface</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#005f5a",
+              "primary-alt": "#0d7a74",
+              "surface": "#fcfdfd",
+              "surface-variant": "#f1f5f4",
+              "outline": "#717978",
+              "outline-variant": "#dfe4e3",
+              "on-surface": "#191c1c",
+              "on-surface-variant": "#3f4948",
+            },
+            fontFamily: {
+              "headline": ["Manrope", "sans-serif"],
+              "body": ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+                "DEFAULT": "0.375rem",
+                "xl": "0.75rem",
+                "2xl": "1rem",
+                "3xl": "1.5rem",
+                "full": "9999px",
+            },
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .signature-gradient {
+            background: linear-gradient(135deg, #005f5a 0%, #0d7a74 100%);
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .prompt-card:hover {
+            border-color: #005f5a;
+            background-color: #fcfdfd;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased h-screen flex overflow-hidden">
+<!-- Slim Sidebar -->
+<aside class="w-20 flex flex-col items-center py-8 bg-white border-r border-outline-variant/50 z-50">
+<div class="mb-10">
+<div class="flex flex-col items-center gap-2"><div class="w-10 h-10 signature-gradient rounded-xl flex items-center justify-center text-white shadow-lg"><span class="material-symbols-outlined text-2xl" style='font-variation-settings: "FILL" 1;'>gavel</span></div><span class="text-[10px] font-bold tracking-tight text-primary uppercase text-center leading-none px-1" style=""><br/></span></div>
+</div>
+<nav class="flex-1 flex flex-col space-y-8">
+<a class="group relative flex items-center justify-center p-3 text-outline hover:text-primary transition-colors" href="#" style="">
+<span class="material-symbols-outlined text-2xl" style="">folder_open</span>
+<span class="absolute left-16 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50" style="">Cases</span>
+</a>
+<a class="group relative flex items-center justify-center p-3 text-primary bg-primary/5 rounded-xl transition-colors" href="#" style="">
+<span class="material-symbols-outlined text-2xl" style='font-variation-settings: "FILL" 1;'>chat_bubble</span>
+<span class="absolute left-16 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50" style="">Assistant</span>
+</a>
+<a class="group relative flex items-center justify-center p-3 text-outline hover:text-primary transition-colors" href="#" style="">
+<span class="material-symbols-outlined text-2xl" style="">description</span>
+<span class="absolute left-16 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50" style="">Documents</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col space-y-6">
+<a class="group relative flex items-center justify-center p-3 text-outline hover:text-primary transition-colors" href="#" style="">
+<span class="material-symbols-outlined text-2xl" style="">settings</span>
+</a>
+<button class="w-10 h-10 rounded-full border border-outline-variant/40 flex items-center justify-center text-outline hover:text-primary hover:bg-primary/5 hover:border-primary/20 transition-all duration-300" style="" title="Account Settings"><span class="material-symbols-outlined text-xl" style="">person</span></button>
+</div>
+</aside>
+<div class="flex-1 flex flex-col min-w-0 relative">
+<!-- Top Navigation -->
+<header class="h-20 flex items-center justify-between px-10 border-b border-outline-variant/30 bg-surface/80 backdrop-blur-md sticky top-0 z-40">
+<div class="flex items-center gap-8">
+<div>
+<h1 class="text-sm font-semibold text-on-surface-variant" style="">ATTICUS</h1>
+</div>
+<div class="h-6 w-px bg-outline-variant/50"></div>
+<div class="flex items-center gap-3 bg-surface-variant/50 px-3 py-1.5 rounded-full border border-outline-variant/40">
+<span class="w-2 h-2 rounded-full bg-primary-alt animate-pulse"></span>
+<span class="text-[10px] font-bold tracking-widest text-primary-alt uppercase" style="">Demo Mode</span>
+</div><div class="flex items-center gap-3 bg-primary/5 px-3 py-1.5 rounded-full border border-primary/20"><span class="text-[10px] font-bold tracking-widest text-primary uppercase" style="">Finch Demo Matter</span></div>
+</div>
+<div class="flex items-center gap-3">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg" style="">search</span>
+<input class="bg-surface-variant/30 rounded-full pl-10 pr-4 py-2 text-sm w-48 focus:w-64 transition-all focus:ring-1 focus:ring-primary/20 border border-outline-variant/40 hover:border-outline-variant/80 focus:border-primary/40 focus:bg-white shadow-sm" placeholder="Search insights..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center text-outline hover:text-primary hover:bg-primary/5 border border-outline-variant/40 hover:border-primary/20 rounded-full transition-all duration-300" style="">
+<span class="material-symbols-outlined" style="">notifications</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-1 flex flex-col bg-surface relative overflow-hidden">
+<!-- Minimal Empty State Chat -->
+<div class="flex-1 flex flex-col items-center justify-center px-10 pb-20">
+<div class="max-w-2xl w-full text-center space-y-12 animate-in fade-in zoom-in-95 duration-700 pt-8">
+<!-- Greeting -->
+<div class="space-y-4">
+<div class="w-16 h-16 signature-gradient rounded-2xl flex items-center justify-center text-white mx-auto shadow-xl mb-8">
+<span class="material-symbols-outlined text-[32px]" style='font-variation-settings: "FILL" 1;'>bolt</span>
+</div>
+<h1 class="text-4xl font-headline font-extrabold text-on-surface tracking-tight leading-tight" style="">What’s on the agenda today?</h1>
+</div>
+<!-- Suggested Prompts -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+<button class="prompt-card p-5 bg-white rounded-2xl border border-outline-variant/60 transition-all duration-300 group" style="">
+<span class="material-symbols-outlined text-primary mb-3 block opacity-60 group-hover:opacity-100" style="">description</span>
+<span class="text-[13px] font-semibold text-on-surface-variant block leading-snug" style="">Summarize recent filings from Sterling Corp</span>
+</button>
+<button class="prompt-card p-5 bg-white rounded-2xl border border-outline-variant/60 transition-all duration-300 group" style="">
+<span class="material-symbols-outlined text-primary mb-3 block opacity-60 group-hover:opacity-100" style="">search_check</span>
+<span class="text-[13px] font-semibold text-on-surface-variant block leading-snug" style="">Identify inconsistencies in deposition transcripts</span>
+</button>
+<button class="prompt-card p-5 bg-white rounded-2xl border border-outline-variant/60 transition-all duration-300 group" style="">
+<span class="material-symbols-outlined text-primary mb-3 block opacity-60 group-hover:opacity-100" style="">edit_note</span>
+<span class="text-[13px] font-semibold text-on-surface-variant block leading-snug" style="">Draft a motion summary for the land transfer</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Floating Input Area -->
+<div class="w-full max-w-3xl mx-auto px-10 pb-12">
+<div class="relative bg-white rounded-3xl border border-outline-variant/60 shadow-2xl p-2 focus-within:ring-4 focus-within:ring-primary/5 focus-within:border-primary/40 transition-all duration-500">
+<textarea class="w-full bg-transparent border-none focus:ring-0 text-[15px] p-4 resize-none h-20 placeholder:text-outline/40 font-medium" placeholder="Ask anything about the Sterling Corp case..."></textarea>
+<div class="flex items-center justify-between px-3 pb-2">
+<div class="flex items-center gap-1.5">
+<button class="p-2 text-outline hover:text-primary hover:bg-primary/5 rounded-xl transition-all" style="" title="Attach Files">
+<span class="material-symbols-outlined text-xl" style="">attach_file</span>
+</button>
+<button class="p-2 text-outline hover:text-primary hover:bg-primary/5 rounded-xl transition-all" style="" title="Voice Input">
+<span class="material-symbols-outlined text-xl" style="">mic</span>
+</button>
+<button class="p-2 text-outline hover:text-primary hover:bg-primary/5 rounded-xl transition-all" style="" title="Visual Reference">
+<span class="material-symbols-outlined text-xl" style="">image</span>
+</button>
+</div>
+<button class="signature-gradient text-white px-6 py-2.5 rounded-2xl flex items-center gap-2.5 shadow-md hover:shadow-lg hover:translate-y-[-1px] active:translate-y-[1px] transition-all" style="">
+<span class="text-[11px] font-extrabold uppercase tracking-widest" style="">Send</span>
+<span class="material-symbols-outlined text-lg" style="">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Footer Badges -->
+<div class="mt-8 flex items-center justify-center gap-10 text-[9px] text-outline font-bold tracking-[0.2em] uppercase opacity-70">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]" style="">verified_user</span>
+<span class="" style="">Privileged &amp; Confidential</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]" style="">memory</span>
+<span class="" style="">Atelier Legal v4.2</span>
+</div>
+</div>
+</div>
+<!-- Case Quick Switch (Tucked Away) -->
+</main>
+</div>
+</body></html>
