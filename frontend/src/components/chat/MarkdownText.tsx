@@ -33,13 +33,10 @@ function coerceCitationContinuations(text: string): string {
 }
 
 function normalizeBrokenLabelSections(text: string): string {
-  const withLabelBreaks = text
-    .replace(/\s(?=\*\*[A-Z][A-Za-z0-9 '&()/.\-]{1,48}:\*-?)/g, "\n")
-    .replace(/\*\*([A-Za-z][A-Za-z0-9 '&()/.\-]{1,48}):\*\s*-\s*/g, "- **$1:** ")
-    .replace(/\*\*([A-Za-z][A-Za-z0-9 '&()/.\-]{1,48}):\*-\s*/g, "- **$1:** ")
-    .replace(/\*\*([A-Za-z][A-Za-z0-9 '&()/.\-]{1,48}):\*/g, "- **$1:** ")
-    .replace(/^-\s+\*\*([^*\n]+):\*\*\s*-\s*/gm, "- **$1:** ")
-    .replace(/^-\s+-\s+/gm, "- ");
+  const withLabelBreaks = text.replace(
+    /\s(?=\*\*[A-Z][A-Za-z0-9 '&()/.\-]{1,48}:\*-?)/g,
+    "\n",
+  );
 
   const lines = withLabelBreaks.split("\n");
   const normalized: string[] = [];
@@ -56,14 +53,21 @@ function normalizeBrokenLabelSections(text: string): string {
 
     const isHeading = /^(#{1,3})\s+/.test(line);
     const isList = /^[-*]\s+/.test(line) || /^\d+\.\s+/.test(line);
-    const isLabelHeader = /^-\s+\*\*[^*\n]+:\*\*/.test(line);
-    const startsNewBrokenLabel = /^\*\*[A-Za-z][A-Za-z0-9 '&()/.\-]{1,48}:/.test(line);
 
-    if (startsNewBrokenLabel) {
-      const repaired = line
-        .replace(/^\*\*([A-Za-z][A-Za-z0-9 '&()/.\-]{1,48}):\*?\s*-?\s*/, "- **$1:** ")
-        .replace(/^-\s+-\s+/, "- ");
-      normalized.push(repaired);
+    const malformedLabelMatch = line.match(
+      /^\*\*([A-Za-z][^*\n:]{1,60}):\*?\s*(?:[-*]\s*)+(.*)$/,
+    );
+    if (malformedLabelMatch) {
+      const label = malformedLabelMatch[1].trim();
+      const value = malformedLabelMatch[2].trim();
+      normalized.push(`- **${label}:** ${value}`.trimEnd());
+      labelContextActive = true;
+      continue;
+    }
+
+    const labelOnlyMatch = line.match(/^\*\*([A-Za-z][^*\n:]{1,60}):\*\*\s*$/);
+    if (labelOnlyMatch) {
+      normalized.push(`- **${labelOnlyMatch[1].trim()}:**`);
       labelContextActive = true;
       continue;
     }
@@ -73,8 +77,12 @@ function normalizeBrokenLabelSections(text: string): string {
       continue;
     }
 
-    normalized.push(line);
-    labelContextActive = isLabelHeader;
+    const cleanedLine = line
+      .replace(/^(?:[-*]\s+){2,}/, "- ")
+      .replace(/^-\s+\*\*([^*\n]+):\*\*\s*(?:[-*]\s+)+/, "- **$1:** ");
+
+    normalized.push(cleanedLine);
+    labelContextActive = /^-\s+\*\*[^*\n]+:\*\*/.test(cleanedLine);
   }
 
   return normalized.join("\n");
@@ -89,7 +97,8 @@ function normalizeMarkdown(text: string): string {
   normalized = normalized.replace(/:\s+-\s+/g, ":\n- ");
   normalized = normalized.replace(/\.\s+-\s+/g, ".\n- ");
   normalized = normalized.replace(/\]\s+-\s+/g, "]\n- ");
-  normalized = normalized.replace(/\*\s+/g, "- ");
+  normalized = normalized.replace(/(^|\n)\*\s+/g, "$1- ");
+  normalized = normalized.replace(/^(?:\s*[-*]\s+){2,}/gm, "- ");
   normalized = normalized.replace(/\n\s*[-*]\s*Document Types:\s*/gi, "\n- **Document Types:** ");
   normalized = normalized.replace(/\n\s*[-*]\s*Case:\s*/gi, "\n- **Case:** ");
   normalized = normalized.replace(/\n\s*[-*]\s*Supporting details:\s*/gi, "\n\n### Supporting details\n");
