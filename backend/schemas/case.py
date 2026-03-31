@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 
 # ── Requests ──────────────────────────────────────────────────────────
 
+
 class CaseCreate(BaseModel):
     name: str
     client_name: str | None = None
@@ -26,6 +27,7 @@ class CaseUpdate(BaseModel):
 
 # ── Responses ─────────────────────────────────────────────────────────
 
+
 class CaseResponse(BaseModel):
     case_id: uuid.UUID
     name: str
@@ -39,4 +41,15 @@ class CaseResponse(BaseModel):
 
 class CaseListResponse(BaseModel):
     cases: list[CaseResponse]
+    total: int
+
+
+class LawyerOption(BaseModel):
+    user_id: uuid.UUID
+    full_name: str
+    email: str
+
+
+class LawyerListResponse(BaseModel):
+    lawyers: list[LawyerOption]
     total: int

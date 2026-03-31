@@ -28,6 +28,7 @@ class LoginRequest(BaseModel):
 class UserResponse(BaseModel):
     user_id: uuid.UUID
     email: str
+    full_name: str | None = None
     role: str
 
 

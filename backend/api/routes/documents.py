@@ -38,7 +38,6 @@ from backend.schemas.document import (
     DocumentUpdate,
     DocumentUploadResponse,
 )
-from backend.tasks.celery_app import enqueue_ingestion_task
 from config import settings
 
 logger = logging.getLogger(__name__)
@@ -65,6 +64,7 @@ def _is_s3_configured() -> bool:
 def _trigger_ingestion_background(
     file_id: uuid.UUID,
     file_path: str,
+    file_name: str | None,
     case_id: uuid.UUID,
     case_name: str | None,
     assigned_lawyers: list[uuid.UUID],
@@ -76,6 +76,8 @@ def _trigger_ingestion_background(
     ingest_document(
         file_path=file_path,
         file_id=file_id,
+        file_name=file_name,
+        document_name=file_name,
         case_id=case_id,
         case_name=case_name,
         assigned_lawyers=assigned_lawyers,
@@ -87,7 +89,8 @@ def _safe_filename(raw_name: str, fallback: str) -> str:
     base = Path(raw_name).name.strip()
     if not base:
         base = fallback
-    safe = re.sub(r"[^A-Za-z0-9._-]", "_", base)
+    safe = re.sub(r"[^A-Za-z0-9._ -]", "", base)
+    safe = re.sub(r"\s+", " ", safe).strip()
     if safe in {"", ".", ".."}:
         safe = fallback
     return safe
@@ -172,31 +175,22 @@ async def upload_document(
     )
 
     case_row = fetch_optional(
-        "SELECT assigned_lawyers FROM cases WHERE case_id = %s",
+        "SELECT name, assigned_lawyers FROM cases WHERE case_id = %s",
         (case_id,),
     )
     assigned_lawyers = list(case_row["assigned_lawyers"] or []) if case_row else []
+    case_name = case_row["name"] if case_row else None
 
-    enqueued = enqueue_ingestion_task(
-        file_id=str(file_id),
+    background_tasks.add_task(
+        _trigger_ingestion_background,
+        file_id=file_id,
         file_path=str(tmp_path),
-        s3_key=None,
-        file_name=None,
-        case_id=str(case_id),
-        case_name=None,
-        assigned_lawyers=[str(value) for value in assigned_lawyers],
+        file_name=file_name,
+        case_id=case_id,
+        case_name=case_name,
+        assigned_lawyers=assigned_lawyers,
         version=version,
     )
-    if not enqueued:
-        background_tasks.add_task(
-            _trigger_ingestion_background,
-            file_id=file_id,
-            file_path=str(tmp_path),
-            case_id=case_id,
-            case_name=None,
-            assigned_lawyers=assigned_lawyers,
-            version=version,
-        )
 
     logger.info(
         "Upload accepted: '%s' → case %s (file_id=%s)", file_name, case_id, file_id

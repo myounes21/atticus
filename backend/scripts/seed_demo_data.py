@@ -1,12 +1,13 @@
-"""Seed deterministic demo users, cases, and synthetic documents.
+"""Seed deterministic demo users, cases, and demo documents.
 
-Designed for CV/demo environments where reviewers should see a fully working
-flow immediately after login.
+For walkthroughs, files are loaded from root ``demo data`` when present.
+Supported file types: .pdf, .docx, .txt, .eml.
 """
 
 from __future__ import annotations
 
 import uuid
+import re
 from pathlib import Path
 
 from backend.core.security import hash_password
@@ -15,29 +16,75 @@ from backend.tasks.ingest_task import ingest_document
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 DEMO_DOCS_DIR = BASE_DIR / "demo_data"
+ROOT_DEMO_DOCS_DIR = BASE_DIR.parent / "demo data"
 UPLOAD_TMP_DIR = Path("/tmp/atticus_uploads")
 
 ADMIN_EMAIL = "demo.admin@atticus.local"
 LAWYER_EMAIL = "demo.lawyer@atticus.local"
+LAWYER_TWO_EMAIL = "maria.rossi@atticus.local"
+LAWYER_THREE_EMAIL = "james.carter@atticus.local"
 DEMO_PASSWORD = "DemoPass!123"
+ALLOWED_DEMO_SUFFIXES = {".pdf", ".docx", ".txt", ".eml"}
+
+DISPLAY_NAMES: dict[str, str] = {
+    ADMIN_EMAIL: "Admin Finch",
+    LAWYER_EMAIL: "Mr Lawyer",
+    LAWYER_TWO_EMAIL: "Maria Rossi",
+    LAWYER_THREE_EMAIL: "James Carter",
+}
+
+_UPPER_WORDS = {"nda", "ip", "ai", "api", "llm", "it", "ceo", "vp"}
+
+
+def _humanize_file_name(file_name: str) -> str:
+    path = Path(file_name)
+    stem = path.stem
+    ext = path.suffix.lower()
+    words = [part for part in re.split(r"[_\-]+", stem) if part]
+    if not words:
+        return file_name
+
+    formatted_words: list[str] = []
+    for word in words:
+        lowered = word.lower()
+        if lowered in _UPPER_WORDS:
+            formatted_words.append(lowered.upper())
+        elif lowered.isdigit():
+            formatted_words.append(lowered)
+        else:
+            formatted_words.append(lowered.capitalize())
+
+    return f"{' '.join(formatted_words)}{ext}"
 
 
 def _ensure_user(email: str, role: str) -> uuid.UUID:
     row = fetch_optional("SELECT user_id, role FROM users WHERE email = %s", (email,))
     if row is not None:
+        display_name = DISPLAY_NAMES.get(
+            email,
+            email.split("@", maxsplit=1)[0].replace(".", " ").title(),
+        )
         if row["role"] != role:
             execute(
                 "UPDATE users SET role = %s WHERE user_id = %s", (role, row["user_id"])
             )
+        execute(
+            "UPDATE users SET full_name = %s WHERE user_id = %s",
+            (display_name, row["user_id"]),
+        )
         return row["user_id"]
 
+    display_name = DISPLAY_NAMES.get(
+        email,
+        email.split("@", maxsplit=1)[0].replace(".", " ").title(),
+    )
     created = execute_returning_one(
         """
-        INSERT INTO users (user_id, email, password_hash, role)
-        VALUES (%s, %s, %s, %s)
+        INSERT INTO users (user_id, email, password_hash, role, full_name)
+        VALUES (%s, %s, %s, %s, %s)
         RETURNING user_id
         """,
-        (uuid.uuid4(), email, hash_password(DEMO_PASSWORD), role),
+        (uuid.uuid4(), email, hash_password(DEMO_PASSWORD), role, display_name),
     )
     return created["user_id"]
 
@@ -74,22 +121,49 @@ def _ensure_document(
     uploaded_by: uuid.UUID,
     file_name: str,
     source_path: Path,
+    legacy_names: list[str] | None = None,
 ) -> None:
+    if source_path.suffix.lower() == ".txt":
+        text_content = source_path.read_text(encoding="utf-8")
+    else:
+        text_content = None
+
+    candidate_names = list(dict.fromkeys([file_name, *(legacy_names or [])]))
     existing = fetch_optional(
-        "SELECT file_id, status FROM documents WHERE case_id = %s AND name = %s AND is_latest = TRUE",
-        (case_id, file_name),
+        """
+        SELECT file_id, status, name
+          FROM documents
+         WHERE case_id = %s
+           AND name = ANY(%s::text[])
+           AND is_latest = TRUE
+         ORDER BY uploaded_at DESC
+         LIMIT 1
+        """,
+        (case_id, candidate_names),
     )
     if existing is not None:
-        if existing["status"] == "ready":
+        renamed = False
+        if existing["name"] != file_name:
+            execute(
+                "UPDATE documents SET name = %s WHERE file_id = %s",
+                (file_name, existing["file_id"]),
+            )
+            renamed = True
+        if existing["status"] == "ready" and not renamed:
             return
         temp_path = UPLOAD_TMP_DIR / f"{existing['file_id']}_{file_name}"
         UPLOAD_TMP_DIR.mkdir(parents=True, exist_ok=True)
-        temp_path.write_text(source_path.read_text(encoding="utf-8"), encoding="utf-8")
+        if text_content is not None:
+            temp_path.write_text(text_content, encoding="utf-8")
+        else:
+            temp_path.write_bytes(source_path.read_bytes())
         ingest_document(
             file_path=temp_path,
             file_id=existing["file_id"],
+            file_name=file_name,
+            document_name=file_name,
             case_id=case_id,
-            case_name=file_name,
+            case_name=_case_name_for_id(case_id),
             assigned_lawyers=_assigned_lawyers_for_case(case_id),
             version=1,
         )
@@ -107,13 +181,18 @@ def _ensure_document(
 
     temp_path = UPLOAD_TMP_DIR / f"{file_id}_{file_name}"
     UPLOAD_TMP_DIR.mkdir(parents=True, exist_ok=True)
-    temp_path.write_text(source_path.read_text(encoding="utf-8"), encoding="utf-8")
+    if text_content is not None:
+        temp_path.write_text(text_content, encoding="utf-8")
+    else:
+        temp_path.write_bytes(source_path.read_bytes())
 
     ingest_document(
         file_path=temp_path,
         file_id=file_id,
+        file_name=file_name,
+        document_name=file_name,
         case_id=case_id,
-        case_name=file_name,
+        case_name=_case_name_for_id(case_id),
         assigned_lawyers=_assigned_lawyers_for_case(case_id),
         version=1,
     )
@@ -127,49 +206,66 @@ def _assigned_lawyers_for_case(case_id: uuid.UUID) -> list[uuid.UUID]:
     return list(case_row["assigned_lawyers"] or []) if case_row else []
 
 
+def _case_name_for_id(case_id: uuid.UUID) -> str | None:
+    case_row = fetch_optional(
+        "SELECT name FROM cases WHERE case_id = %s",
+        (case_id,),
+    )
+    if case_row is None:
+        return None
+    return case_row["name"]
+
+
+def _collect_demo_files() -> list[Path]:
+    source_dir = ROOT_DEMO_DOCS_DIR if ROOT_DEMO_DOCS_DIR.exists() else DEMO_DOCS_DIR
+    if not source_dir.exists():
+        raise FileNotFoundError(
+            f"Demo data directory not found. Expected either '{ROOT_DEMO_DOCS_DIR}' or '{DEMO_DOCS_DIR}'."
+        )
+
+    files = [
+        path
+        for path in sorted(source_dir.rglob("*"))
+        if path.is_file() and path.suffix.lower() in ALLOWED_DEMO_SUFFIXES
+    ]
+    if not files:
+        raise FileNotFoundError(
+            f"No supported demo files found in '{source_dir}'. Add .pdf, .docx, .txt, or .eml files."
+        )
+    return files
+
+
 def main() -> None:
-    for required in (
-        DEMO_DOCS_DIR / "acme_master_service_terms.txt",
-        DEMO_DOCS_DIR / "acme_incident_timeline.txt",
-        DEMO_DOCS_DIR / "greenfield_lease_dispute_brief.txt",
-    ):
-        if not required.exists():
-            raise FileNotFoundError(f"Missing demo document: {required}")
+    demo_files = _collect_demo_files()
 
     admin_id = _ensure_user(ADMIN_EMAIL, "admin")
     lawyer_id = _ensure_user(LAWYER_EMAIL, "lawyer")
+    _ensure_user(LAWYER_TWO_EMAIL, "lawyer")
+    _ensure_user(LAWYER_THREE_EMAIL, "lawyer")
 
-    acme_case_id = _ensure_case(
-        name="Acme Logistics Breach Response",
-        client_name="Acme Logistics",
+    if ROOT_DEMO_DOCS_DIR.exists():
+        case_name = "Finch Demo Matter"
+        client_name = "Finch Legal Demo"
+    else:
+        case_name = "Core Demo Matter"
+        client_name = "Atticus Demo"
+
+    case_id = _ensure_case(
+        name=case_name,
+        client_name=client_name,
         created_by=admin_id,
         assigned_lawyer_id=lawyer_id,
     )
-    greenfield_case_id = _ensure_case(
-        name="Greenfield Lease Dispute",
-        client_name="Greenfield Holdings",
-        created_by=admin_id,
-        assigned_lawyer_id=lawyer_id,
-    )
 
-    _ensure_document(
-        case_id=acme_case_id,
-        uploaded_by=admin_id,
-        file_name="acme_master_service_terms.txt",
-        source_path=DEMO_DOCS_DIR / "acme_master_service_terms.txt",
-    )
-    _ensure_document(
-        case_id=acme_case_id,
-        uploaded_by=admin_id,
-        file_name="acme_incident_timeline.txt",
-        source_path=DEMO_DOCS_DIR / "acme_incident_timeline.txt",
-    )
-    _ensure_document(
-        case_id=greenfield_case_id,
-        uploaded_by=admin_id,
-        file_name="greenfield_lease_dispute_brief.txt",
-        source_path=DEMO_DOCS_DIR / "greenfield_lease_dispute_brief.txt",
-    )
+    for file_path in demo_files:
+        display_name = _humanize_file_name(file_path.name)
+        _ensure_document(
+            case_id=case_id,
+            uploaded_by=admin_id,
+            file_name=display_name,
+            source_path=file_path,
+            legacy_names=[file_path.name],
+        )
 
 
 if __name__ == "__main__":
