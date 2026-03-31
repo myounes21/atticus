@@ -23,6 +23,7 @@ from fastapi import (
 )
 
 from backend.api.middleware.rbac_middleware import admin_only
+from backend.api.middleware.rbac_middleware import any_authenticated
 from backend.core.dependencies import CurrentUser, get_current_user
 from backend.core.rate_limit import enforce_rate_limit
 from backend.db.postgres import (
@@ -116,7 +117,7 @@ def _assert_case_access(user: CurrentUser, case_id: uuid.UUID) -> None:
     "/upload",
     response_model=DocumentUploadResponse,
     status_code=status.HTTP_202_ACCEPTED,
-    dependencies=[Depends(admin_only)],
+    dependencies=[Depends(any_authenticated)],
 )
 async def upload_document(
     case_id: uuid.UUID,
@@ -124,7 +125,7 @@ async def upload_document(
     file: UploadFile = File(...),
     user: CurrentUser = Depends(get_current_user),
 ) -> DocumentUploadResponse:
-    """Upload a document and trigger async ingestion."""
+    """Upload a document and trigger async ingestion (admin or assigned lawyer)."""
     enforce_rate_limit(
         key=f"upload:{user.user_id}",
         limit=settings.rate_limit_upload_requests,
@@ -287,7 +288,6 @@ def delete_document(case_id: uuid.UUID, file_id: uuid.UUID) -> None:
             status_code=status.HTTP_404_NOT_FOUND, detail="Document not found"
         )
 
-    # Cascade delete from vector DB + search + cache
     try:
         from backend.ingestion.indexers.qdrant_indexer import (
             delete_by_file_id as qdrant_delete,

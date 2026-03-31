@@ -9,7 +9,6 @@ Strategy:
   3. Section name is stored in chunk metadata for the contextual prefix.
 """
 
-import re
 from typing import Literal, cast
 
 from backend.ingestion.chunkers.base import BaseChunker

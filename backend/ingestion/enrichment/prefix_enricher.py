@@ -50,7 +50,7 @@ def _build_prefix(chunk: Chunk, case_name: str | None) -> str:
 
 
 def _email_prefix(chunk: Chunk, case_name: str | None) -> str:
-    parts = [f"Document Type: Email"]
+    parts = ["Document Type: Email"]
 
     if case_name:
         parts.append(f"Case: {case_name}")

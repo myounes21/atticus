@@ -11,7 +11,6 @@ The protocol sends JSON messages::
 
 from __future__ import annotations
 
-import json
 import logging
 from typing import Iterator
 

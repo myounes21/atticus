@@ -7,7 +7,7 @@ Provides both synchronous ``generate()`` and async-generator
 from __future__ import annotations
 
 import logging
-from typing import AsyncIterator, Iterator
+from typing import Iterator
 
 from groq import Groq
 

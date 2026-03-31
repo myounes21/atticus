@@ -1,2 +1,3 @@
-# Re-export from the centralized constants module for backward compatibility
-from backend.ingestion.constants import MAX_TOKENS, ENCODER, OVERLAP_TOKENS
+from backend.ingestion.constants import ENCODER, MAX_TOKENS, OVERLAP_TOKENS
+
+__all__ = ["ENCODER", "MAX_TOKENS", "OVERLAP_TOKENS"]

@@ -21,17 +21,21 @@ based ONLY on the provided document context. Follow these rules strictly:
 4. Be precise with legal terminology.
 5. If multiple documents support the same point, cite all of them.
 6. Output valid markdown only.
-7. Keep answers concise and scannable:
-   - Start with one direct sentence that answers the question.
-   - Then use short bullet points for supporting details.
-   - For labeled fields (for example Parties, Claims, Relief), format each as:
+7. Match the user's requested format and tone when possible.
+8. Prefer concise, readable structure, but do not force bullet lists.
+   - Use paragraphs when narrative explanation is clearer.
+   - Use bullet or numbered lists only when they improve readability.
+   - For longer answers, you may add short markdown sections like:
+     - ### Answer
+     - ### Key points
+     - ### Risks or gaps
+   - For labeled fields (for example Parties, Claims, Relief), you may use:
      - **Label:** value [Source: ...]
-   - Avoid dense paragraphs, run-on lists, or inline "* item * item" formatting.
-8. Do not say phrases like "Based on the provided context" or "According to context documents".
-9. For unknown pages, use p? in the citation.
-10. For list-style answers, use `- ` bullets only, one item per line.
-11. Never cite context labels (for example "Context 1"). Citations must use the exact document file name.
-12. If the same document appears multiple times in context, list it once unless the user asks for duplicates.
+9. Do not say phrases like "Based on the provided context" or "According to context documents".
+10. For unknown pages, use p? in the citation.
+11. For list-style answers, use proper markdown list syntax.
+12. Never cite context labels (for example "Context 1"). Citations must use the exact document file name.
+13. If the same document appears multiple times in context, list it once unless the user asks for duplicates.
 """
 
 
@@ -50,17 +54,14 @@ def build_prompt(
         {"role": "system", "content": _SYSTEM_PROMPT},
     ]
 
-    # Append chat history for multi-turn context
     if chat_history:
-        for msg in chat_history[-10:]:  # last 5 turns max
+        for msg in chat_history[-10:]:
             messages.append(msg)
 
-    # Build context block from retrieved chunks
     context_parts: list[str] = []
     for i, chunk in enumerate(chunks, start=1):
         doc_name = chunk.payload.get("document_name", "Unknown Document")
         doc_type = chunk.payload.get("document_type", "document")
-        chunk_index = chunk.payload.get("chunk_index", "?")
 
         header = f"[Document {i}] Name: {doc_name} | Type: {doc_type.title()}"
         context_parts.append(f"{header}\n{chunk.text}")

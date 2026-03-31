@@ -11,7 +11,7 @@ import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from backend.api.middleware.rbac_middleware import admin_only, any_authenticated
+from backend.api.middleware.rbac_middleware import admin_only
 from backend.core.dependencies import CurrentUser, get_current_user
 from backend.db.postgres import (
     execute,

@@ -93,9 +93,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     try {
       const data = (await response.json()) as unknown;
       message = formatApiError(data, message);
-    } catch {
-      // Ignore non-JSON error body.
-    }
+    } catch {}
     throw new Error(message);
   }
   if (response.status === 204) {
@@ -162,9 +160,7 @@ export async function resetDemoData(adminToken: string): Promise<void> {
     try {
       const data = (await response.json()) as unknown;
       message = formatApiError(data, message);
-    } catch {
-      // Ignore non-JSON error body.
-    }
+    } catch {}
     throw new Error(message);
   }
 }
@@ -203,9 +199,7 @@ export async function uploadDocument(caseId: string, file: File): Promise<Docume
     try {
       const data = (await response.json()) as unknown;
       message = formatApiError(data, message);
-    } catch {
-      // Ignore non-JSON error body.
-    }
+    } catch {}
     throw new Error(message);
   }
   return (await response.json()) as DocumentItem;
@@ -256,9 +250,7 @@ export async function askChatStream(
       if (data.detail) {
         message = data.detail;
       }
-    } catch {
-      // Ignore non-JSON error body.
-    }
+    } catch {}
     throw new Error(message);
   }
 
@@ -274,13 +266,66 @@ export async function askChatStream(
   let messageId = "";
   const citations: ChatCitation[] = [];
 
+  function handleEvent(rawEvent: string) {
+    const dataLines = rawEvent
+      .split("\n")
+      .map((line) => line.trimEnd())
+      .filter((line) => line.startsWith("data:"))
+      .map((line) => line.slice(5).trim());
+
+    if (dataLines.length === 0) {
+      return;
+    }
+
+    let event: { type?: string; content?: unknown };
+    try {
+      event = JSON.parse(dataLines.join("\n")) as { type?: string; content?: unknown };
+    } catch {
+      return;
+    }
+
+    if (event.type === "token") {
+      const tokenText = typeof event.content === "string" ? event.content : "";
+      answer += tokenText;
+      handlers.onToken?.(tokenText, answer);
+      return;
+    }
+
+    if (event.type === "citation") {
+      const citation = (event.content ?? {}) as ChatCitation;
+      if (citation.chunk_id && !citations.some((item) => item.chunk_id === citation.chunk_id)) {
+        citations.push(citation);
+        handlers.onCitation?.(citation);
+      }
+      return;
+    }
+
+    if (event.type === "done") {
+      const doneMeta = (event.content ?? {}) as ChatStreamDone;
+      if (doneMeta.conversation_id) {
+        conversationId = doneMeta.conversation_id;
+      }
+      if (doneMeta.message_id) {
+        messageId = doneMeta.message_id;
+      }
+      handlers.onDone?.(doneMeta);
+      return;
+    }
+
+    if (event.type === "error") {
+      const errorMessage =
+        typeof event.content === "string" ? event.content : "Streaming request failed";
+      throw new Error(errorMessage);
+    }
+  }
+
   while (true) {
     const { value, done } = await reader.read();
     if (done) {
       break;
     }
 
-    buffer += decoder.decode(value, { stream: true });
+    buffer += decoder.decode(value, { stream: true }).replace(/\r\n/g, "\n");
 
     while (true) {
       const splitIndex = buffer.indexOf("\n\n");
@@ -291,47 +336,13 @@ export async function askChatStream(
       const rawEvent = buffer.slice(0, splitIndex);
       buffer = buffer.slice(splitIndex + 2);
 
-      const dataLines = rawEvent
-        .split("\n")
-        .filter((line) => line.startsWith("data:"))
-        .map((line) => line.slice(5).trim());
-
-      if (dataLines.length === 0) {
-        continue;
-      }
-
-      let event: { type?: string; content?: unknown };
-      try {
-        event = JSON.parse(dataLines.join("\n")) as { type?: string; content?: unknown };
-      } catch {
-        continue;
-      }
-
-      if (event.type === "token") {
-        const tokenText = typeof event.content === "string" ? event.content : "";
-        answer += tokenText;
-        handlers.onToken?.(tokenText, answer);
-      } else if (event.type === "citation") {
-        const citation = (event.content ?? {}) as ChatCitation;
-        if (citation.chunk_id && !citations.some((item) => item.chunk_id === citation.chunk_id)) {
-          citations.push(citation);
-          handlers.onCitation?.(citation);
-        }
-      } else if (event.type === "done") {
-        const doneMeta = (event.content ?? {}) as ChatStreamDone;
-        if (doneMeta.conversation_id) {
-          conversationId = doneMeta.conversation_id;
-        }
-        if (doneMeta.message_id) {
-          messageId = doneMeta.message_id;
-        }
-        handlers.onDone?.(doneMeta);
-      } else if (event.type === "error") {
-        const errorMessage =
-          typeof event.content === "string" ? event.content : "Streaming request failed";
-        throw new Error(errorMessage);
-      }
+      handleEvent(rawEvent);
     }
+  }
+
+  const trailing = buffer.trim();
+  if (trailing) {
+    handleEvent(trailing);
   }
 
   if (!conversationId || !messageId) {

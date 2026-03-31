@@ -9,7 +9,6 @@ from __future__ import annotations
 import logging
 import uuid
 from dataclasses import dataclass
-from typing import Any
 
 from qdrant_client.models import Condition, FieldCondition, Filter, MatchAny, MatchValue
 

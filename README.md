@@ -21,6 +21,13 @@ Atticus is a private legal intelligence workspace with strict case scoping, role
 - Cache/async: Redis + Celery ingestion queue.
 - Security: JWT auth, role checks, case-level access control, request rate limits.
 
+## Recent Updates
+
+- Lawyers assigned to a case can upload documents (admin upload is still supported).
+- Chat streaming now handles SSE chunks more robustly and renders markdown (lists, links, code blocks, quotes) in the UI.
+- Added unit coverage for streaming chat events (`token`, `done`, `error`) in `tests/unit/test_chat_stream_api.py`.
+- General cleanup removed dead imports/unused code paths to keep lint and builds clean.
+
 ## Run Locally
 
 1. Create env file:

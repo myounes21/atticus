@@ -23,10 +23,9 @@ _GENERAL_ASSISTANT_PROMPT = """You are Atticus, a helpful legal assistant.
 Answer naturally for general questions (greetings, legal concepts, process guidance).
 If asked about specific case files, remind the user to reference documents and case details.
 Keep responses concise and practical.
-Use this response style:
-- One direct answer sentence first.
-- Then 2-4 short bullets when extra detail helps.
-- Avoid long dense paragraphs and repeated disclaimers.
+Use natural markdown. Choose paragraphs, bullets, or numbered steps based on the request.
+Do not force bullet lists when a direct paragraph answer is clearer.
+When the answer has multiple parts, organize with short section labels.
 Output valid markdown only.
 """
 
@@ -40,6 +39,7 @@ _DOCUMENT_QUERY_MARKERS = (
     "this case",
     "these documents",
     "uploaded",
+    "upload",
     "contract",
     "clause",
     "section",
@@ -95,7 +95,10 @@ def is_general_query(query: str) -> bool:
     if any(marker in lowered for marker in _DOCUMENT_QUERY_MARKERS):
         return False
 
-    return True
+    if any(marker in lowered for marker in _SMALL_TALK_MARKERS):
+        return len(lowered.split()) <= 14
+
+    return False
 
 
 def build_general_messages(

@@ -4,10 +4,9 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass
-from typing import Sequence
 
 import jwt
-from fastapi import Depends, HTTPException, Request, status
+from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from backend.core.security import decode_access_token
