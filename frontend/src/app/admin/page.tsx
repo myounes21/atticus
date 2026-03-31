@@ -25,7 +25,7 @@ export default function AdminPage() {
       <aside className="admin-sidebar">
         <div className="admin-sidebar-brand">
           <div className="admin-brand-icon">
-            <span className="material-symbols-outlined">gavel</span>
+            <span className="material-symbols-outlined ms-fill">gavel</span>
           </div>
           <div>
             <h1>Atticus</h1>
@@ -35,7 +35,7 @@ export default function AdminPage() {
 
         <nav className="admin-nav-list">
           <button type="button" className="admin-nav-item active">
-            <span className="material-symbols-outlined">dashboard</span>
+            <span className="material-symbols-outlined ms-fill">dashboard</span>
             Dashboard
           </button>
           <button type="button" className="admin-nav-item">
@@ -76,32 +76,36 @@ export default function AdminPage() {
         <header className="admin-topbar glass-effect">
           <div>
             <h2>The Informed Architect</h2>
-            <p>Firm Administration and Operations</p>
+            <p>Firm Administration &amp; Operations</p>
           </div>
           <div className="admin-topbar-actions">
             <label className="admin-search">
               <span className="material-symbols-outlined">search</span>
               <input placeholder="Search cases, docs, or lawyers..." />
             </label>
-            <button type="button" className="admin-icon-btn" aria-label="Notifications">
-              <span className="material-symbols-outlined">notifications</span>
-              <span className="admin-notification-dot" aria-hidden="true" />
-            </button>
-            <button type="button" className="admin-icon-btn" aria-label="Settings">
-              <span className="material-symbols-outlined">settings</span>
-            </button>
-            <div className="admin-user">
-              <p>Admin</p>
-              <small>{user?.email ?? "Mr. Finch"}</small>
+            <div className="admin-topbar-divider">
+              <button type="button" className="admin-icon-btn" aria-label="Notifications">
+                <span className="material-symbols-outlined">notifications</span>
+                <span className="admin-notification-dot" aria-hidden="true" />
+              </button>
+              <button type="button" className="admin-icon-btn" aria-label="Settings">
+                <span className="material-symbols-outlined">settings</span>
+              </button>
             </div>
-            <Image
-              className="admin-avatar"
-              alt="Admin profile"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAAAlvlgfi6TBj_xxCe0mQuuD1ldiVQMVB_fAOR955O8fXQqT53wiu55B29oLpkhzwnpEwAowLfOQ7hXsecqxHJziq6FTdqgKcYZnchVyXvpwdhBjcuvDvrliXnbVU7g-LeOM56gWADEMhSofQhq8AovRip3mN7mZBbk3X-kyl8KBR61GgEqHuc6pNtB5CEkIU-kbNvh-bJGHlzwh5K3msb417Zho2fKkIvLBeTX710ziXCZ5byN1CEEWRytwQ_QBV3qxO4wZw9j4"
-              width={40}
-              height={40}
-              unoptimized={false}
-            />
+            <div className="admin-profile">
+              <div className="admin-user">
+                <p>Admin</p>
+                <small>{user?.email ?? "Mr. Finch"}</small>
+              </div>
+              <Image
+                className="admin-avatar"
+                alt="Admin profile"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAAAlvlgfi6TBj_xxCe0mQuuD1ldiVQMVB_fAOR955O8fXQqT53wiu55B29oLpkhzwnpEwAowLfOQ7hXsecqxHJziq6FTdqgKcYZnchVyXvpwdhBjcuvDvrliXnbVU7g-LeOM56gWADEMhSofQhq8AovRip3mN7mZBbk3X-kyl8KBR61GgEqHuc6pNtB5CEkIU-kbNvh-bJGHlzwh5K3msb417Zho2fKkIvLBeTX710ziXCZ5byN1CEEWRytwQ_QBV3qxO4wZw9j4"
+                width={40}
+                height={40}
+                unoptimized={false}
+              />
+            </div>
           </div>
         </header>
 
@@ -110,12 +114,19 @@ export default function AdminPage() {
             <article className="admin-overview-card">
               <h3>Administrative Overview</h3>
               <p>
-                Infrastructure operational. Your workspace leverages a production-minded stack of FastAPI, Next.js,
-                and Celery. Document ingestion and hybrid vector search are currently active across all assigned matters.
+                Infrastructure operational. Your workspace leverages a production-minded stack of <strong>FastAPI</strong>,{" "}
+                <strong>Next.js</strong>, and <strong>Celery</strong>. Document ingestion and hybrid vector search are
+                currently active across all assigned matters.
               </p>
               <div className="admin-overview-chips">
-                <span>Engine: Qdrant + ES</span>
-                <span>RBAC Hardened</span>
+                <span className="admin-chip">
+                  <span className="admin-chip-dot" aria-hidden="true" />
+                  Engine: Qdrant + ES
+                </span>
+                <span className="admin-chip">
+                  <span className="material-symbols-outlined">security</span>
+                  RBAC Hardened
+                </span>
               </div>
             </article>
 
@@ -127,11 +138,17 @@ export default function AdminPage() {
               <div className="admin-pulse-metrics">
                 <div>
                   <p>Aggregate Win Rate</p>
-                  <strong>94.2%</strong>
+                  <div className="admin-pulse-value">
+                    <strong>94.2%</strong>
+                    <span className="admin-pulse-delta">+2.1%</span>
+                  </div>
                 </div>
                 <div>
                   <p>Case Velocity</p>
-                  <strong>+12.4%</strong>
+                  <div className="admin-pulse-value">
+                    <strong>+12.4%</strong>
+                    <span className="material-symbols-outlined admin-pulse-trend">trending_up</span>
+                  </div>
                 </div>
               </div>
               <div className="admin-throughput">
@@ -139,7 +156,9 @@ export default function AdminPage() {
                   <span>Ingestion Pipeline Throughput</span>
                   <span>89%</span>
                 </div>
-                <progress value={89} max={100} aria-label="Ingestion throughput" />
+                <div className="admin-throughput-bar" aria-label="Ingestion throughput">
+                  <div className="admin-throughput-fill" style={{ width: "89%" }} />
+                </div>
               </div>
             </article>
           </div>
@@ -157,7 +176,7 @@ export default function AdminPage() {
         </section>
       </section>
 
-      <button type="button" className="admin-fab" aria-label="Open assistant">
+      <button type="button" className="admin-fab" aria-label="Open AI Operational Assistant">
         <span className="material-symbols-outlined">chat_bubble</span>
       </button>
     </main>

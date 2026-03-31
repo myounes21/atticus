@@ -89,7 +89,7 @@ export default function DocumentsPanel({
       <section className="admin-ingestion-shell">
         <div className="admin-ingestion-head">
           <h3>Ingestion Oversight</h3>
-          <span className="material-symbols-outlined">cloud_sync</span>
+          <span className="material-symbols-outlined ms-fill">cloud_sync</span>
         </div>
 
         {allowUpload && caseId && (
@@ -106,7 +106,7 @@ export default function DocumentsPanel({
             </div>
             <div>
               <p>Vault Deposit</p>
-              <small>Automatic OCR and vector indexing</small>
+              <small>Automatic OCR &amp; vector indexing</small>
             </div>
           </label>
         )}
@@ -131,17 +131,29 @@ export default function DocumentsPanel({
             const normalized = item.status.toLowerCase();
             const active = normalized.includes("processing") || normalized.includes("index") || normalized.includes("queued");
             const done = normalized.includes("complete") || normalized.includes("done") || normalized.includes("ready");
+            const ext = item.name.split(".").pop()?.toLowerCase();
+            const iconMap: Record<string, string> = {
+              pdf: "picture_as_pdf",
+              doc: "description",
+              docx: "description",
+              txt: "article",
+              eml: "mail",
+              png: "image",
+              jpg: "image",
+              jpeg: "image",
+            };
+            const icon = iconMap[ext ?? ""] ?? "description";
             return (
               <li key={item.file_id} className="admin-job-row">
                 <div className="admin-job-icon">
-                  <span className="material-symbols-outlined">description</span>
+                  <span className="material-symbols-outlined">{icon}</span>
                 </div>
                 <div className="admin-job-meta">
                   <p>{item.name}</p>
                   <small className={done ? "ok-text" : active ? "admin-job-active" : "muted"}>{item.status}</small>
                 </div>
                 {active && !done ? <span className="admin-job-spinner" aria-hidden="true" /> : null}
-                {done ? <span className="material-symbols-outlined admin-job-done">check_circle</span> : null}
+                {done ? <span className="material-symbols-outlined admin-job-done ms-fill">check_circle</span> : null}
               </li>
             );
           })}
