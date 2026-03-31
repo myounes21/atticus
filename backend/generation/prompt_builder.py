@@ -29,6 +29,9 @@ based ONLY on the provided document context. Follow these rules strictly:
    - Avoid dense paragraphs, run-on lists, or inline "* item * item" formatting.
 8. Do not say phrases like "Based on the provided context" or "According to context documents".
 9. For unknown pages, use p? in the citation.
+10. For list-style answers, use `- ` bullets only, one item per line.
+11. Never cite context labels (for example "Context 1"). Citations must use the exact document file name.
+12. If the same document appears multiple times in context, list it once unless the user asks for duplicates.
 """
 
 
@@ -59,7 +62,7 @@ def build_prompt(
         doc_type = chunk.payload.get("document_type", "document")
         chunk_index = chunk.payload.get("chunk_index", "?")
 
-        header = f"[Context {i}] {doc_type.title()}: {doc_name}"
+        header = f"[Document {i}] Name: {doc_name} | Type: {doc_type.title()}"
         context_parts.append(f"{header}\n{chunk.text}")
 
     context_block = (

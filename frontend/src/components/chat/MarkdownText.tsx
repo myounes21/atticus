@@ -12,6 +12,10 @@ function normalizeMarkdown(text: string): string {
   normalized = normalized.replace(/:\s+-\s+/g, ":\n- ");
   normalized = normalized.replace(/\.\s+-\s+/g, ".\n- ");
   normalized = normalized.replace(/\]\s+-\s+/g, "]\n- ");
+  normalized = normalized.replace(/\*\s+/g, "- ");
+  normalized = normalized.replace(/\n\s*[-*]\s*Document Types:\s*/gi, "\n- **Document Types:** ");
+  normalized = normalized.replace(/\n\s*[-*]\s*Case:\s*/gi, "\n- **Case:** ");
+  normalized = normalized.replace(/\n\s*[-*]\s*Supporting details:\s*/gi, "\n\n### Supporting details\n");
   normalized = normalized.replace(
     /(^|\n)([A-Za-z][A-Za-z0-9\s\-()\/]+):\s+([^\n]+(?:\n(?![A-Za-z][A-Za-z0-9\s\-()\/]+:\s+)[^\n]+)*)/g,
     (_match, prefix, label, value) => {
@@ -23,6 +27,8 @@ function normalizeMarkdown(text: string): string {
       return `${prefix}- **${cleanedLabel}:** ${cleanedValue}`;
     },
   );
+  normalized = normalized.replace(/^\s*[-*]\s+$/gm, "");
+  normalized = normalized.replace(/\n{3,}/g, "\n\n");
   return normalized;
 }
 
@@ -93,13 +99,23 @@ export default function MarkdownText({ text }: MarkdownTextProps) {
     const unorderedMatch = line.match(/^[-*]\s+(.+)$/);
     if (unorderedMatch) {
       const items: string[] = [];
+      const seen = new Set<string>();
       while (index < lines.length) {
         const candidate = lines[index].trim();
         const match = candidate.match(/^[-*]\s+(.+)$/);
         if (!match) {
           break;
         }
-        items.push(match[1]);
+        const itemText = match[1];
+        const dedupeKey = itemText
+          .replace(/\[Source:[^\]]+\]/gi, "")
+          .replace(/\s+/g, " ")
+          .trim()
+          .toLowerCase();
+        if (dedupeKey && !seen.has(dedupeKey)) {
+          seen.add(dedupeKey);
+          items.push(itemText);
+        }
         index += 1;
       }
 
