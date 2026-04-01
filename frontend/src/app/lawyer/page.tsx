@@ -1,98 +1,129 @@
 "use client";
 
-import { useState } from "react";
-import CasesPanel from "@/components/cases/CasesPanel";
+import { useEffect, useState } from "react";
 import ChatPanel from "@/components/chat/ChatPanel";
-import DocumentsPanel from "@/components/documents/DocumentsPanel";
+import { listCases } from "@/lib/api";
 import { useAuthGuard } from "@/lib/useAuthGuard";
 
 export default function LawyerPage() {
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   const { loading, user, logout } = useAuthGuard({ allowedRoles: ["lawyer"] });
 
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      if (selectedCaseId) return;
+      try {
+        const cases = await listCases();
+        if (!cancelled && cases.length > 0) {
+          setSelectedCaseId(cases[0].case_id);
+        }
+      } catch {
+        // Ignore; we fall back to empty selection.
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedCaseId]);
+
   if (loading) {
     return (
-      <main className="portal-loading-shell">
-        <section className="card">
-          <p className="muted">Loading lawyer workspace...</p>
+      <main className="grid min-h-screen place-items-center p-6">
+        <section className="rounded-xl border border-outline-variant/30 bg-white px-6 py-4 shadow-sm">
+          <p className="text-sm text-on-surface-variant">Loading lawyer workspace...</p>
         </section>
       </main>
     );
   }
 
   return (
-    <main className="lawyer-portal">
-      <aside className="lawyer-slim-sidebar">
-        <div className="lawyer-logo-mark">
-          <span className="material-symbols-outlined">gavel</span>
+    <main className="flex h-screen overflow-hidden bg-surface font-body text-on-surface antialiased">
+      <aside className="z-50 flex w-20 flex-col items-center border-r border-outline-variant/50 bg-white py-8">
+        <div className="mb-10">
+          <div className="signature-gradient flex h-10 w-10 items-center justify-center rounded-xl text-white shadow-lg">
+            <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: '"FILL" 1' }}>
+              gavel
+            </span>
+          </div>
         </div>
-        <nav>
-          <button type="button" className="lawyer-icon-btn">
-            <span className="material-symbols-outlined">folder_open</span>
+
+        <nav className="flex flex-1 flex-col space-y-8" aria-label="Primary">
+          <button type="button" className="group relative flex items-center justify-center p-3 text-outline transition-colors hover:text-primary" aria-label="Cases">
+            <span className="material-symbols-outlined text-2xl">folder_open</span>
+            <span className="absolute left-16 whitespace-nowrap rounded bg-on-surface px-2 py-1 text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100">
+              Cases
+            </span>
           </button>
-          <button type="button" className="lawyer-icon-btn active">
-            <span className="material-symbols-outlined">chat_bubble</span>
+          <button type="button" className="group relative flex items-center justify-center rounded-xl bg-primary/5 p-3 text-primary transition-colors" aria-current="page" aria-label="Assistant">
+            <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: '"FILL" 1' }}>
+              chat_bubble
+            </span>
+            <span className="absolute left-16 whitespace-nowrap rounded bg-on-surface px-2 py-1 text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100">
+              Assistant
+            </span>
           </button>
-          <button type="button" className="lawyer-icon-btn">
-            <span className="material-symbols-outlined">description</span>
+          <button type="button" className="group relative flex items-center justify-center p-3 text-outline transition-colors hover:text-primary" aria-label="Documents">
+            <span className="material-symbols-outlined text-2xl">description</span>
+            <span className="absolute left-16 whitespace-nowrap rounded bg-on-surface px-2 py-1 text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100">
+              Documents
+            </span>
           </button>
         </nav>
-        <div className="lawyer-sidebar-foot">
-          <button type="button" className="lawyer-icon-btn">
-            <span className="material-symbols-outlined">settings</span>
+
+        <div className="mt-auto flex flex-col space-y-6">
+          <button type="button" className="group relative flex items-center justify-center p-3 text-outline transition-colors hover:text-primary" aria-label="Settings">
+            <span className="material-symbols-outlined text-2xl">settings</span>
           </button>
           <button
             type="button"
-            className="lawyer-account-chip"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant/40 text-outline transition-all duration-300 hover:border-primary/20 hover:bg-primary/5 hover:text-primary"
             onClick={logout}
             title={user?.email ? `Logout (${user.email})` : "Logout"}
           >
-            <span className="material-symbols-outlined">person</span>
+            <span className="material-symbols-outlined text-xl">person</span>
           </button>
         </div>
       </aside>
 
-      <section className="lawyer-main-shell">
-        <header className="lawyer-topbar">
-          <div className="lawyer-topbar-left">
+      <section className="relative flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-40 flex h-20 items-center justify-between border-b border-outline-variant/30 bg-surface/80 px-10 backdrop-blur-md">
+          <div className="flex items-center gap-8">
             <div>
-              <p className="lawyer-brand">ATTICUS</p>
+              <h1 className="text-sm font-semibold text-on-surface-variant">ATTICUS</h1>
             </div>
-            <div className="lawyer-divider" />
-            <span className="lawyer-pill pulse">Demo Mode</span>
-            <span className="lawyer-pill case">{selectedCaseId ? "Matter Selected" : "Finch Demo Matter"}</span>
+            <div className="h-6 w-px bg-outline-variant/50" />
+            <div className="flex items-center gap-3 rounded-full border border-outline-variant/40 bg-surface-container-low/50 px-3 py-1.5">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-primary-alt" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-primary-alt">Demo Mode</span>
+            </div>
+            <div className="flex items-center gap-3 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Finch Demo Matter</span>
+            </div>
           </div>
 
-          <div className="lawyer-topbar-right">
-            <label className="lawyer-search">
-              <span className="material-symbols-outlined">search</span>
-              <input placeholder="Search insights..." />
+          <div className="flex items-center gap-3">
+            <label className="group relative">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-lg text-outline">search</span>
+              <input
+                className="w-48 rounded-full border border-outline-variant/40 bg-surface-container-low/30 py-2 pl-10 pr-4 text-sm shadow-sm transition-all hover:border-outline-variant/80 focus:w-64 focus:border-primary/40 focus:bg-white focus:ring-1 focus:ring-primary/20"
+                placeholder="Search insights..."
+              />
             </label>
-            <button type="button" className="lawyer-ring-btn">
+            <button
+              type="button"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant/40 text-outline transition-all duration-300 hover:border-primary/20 hover:bg-primary/5 hover:text-primary"
+              aria-label="Notifications"
+            >
               <span className="material-symbols-outlined">notifications</span>
             </button>
           </div>
         </header>
 
-        <section className="lawyer-content-grid">
-          <aside className="lawyer-left-column">
-            <CasesPanel allowCreate={false} autoRefresh variant="compact" onSelectCase={(caseId) => setSelectedCaseId(caseId)} />
-            <DocumentsPanel caseId={selectedCaseId} allowUpload={false} autoRefresh variant="compact" />
-          </aside>
-          <section className="lawyer-chat-column">
-            <ChatPanel caseId={selectedCaseId} variant="lawyer-atelier" />
-            <div className="lawyer-footer-badges" aria-hidden="true">
-              <div>
-                <span className="material-symbols-outlined">verified_user</span>
-                Privileged and Confidential
-              </div>
-              <div>
-                <span className="material-symbols-outlined">memory</span>
-                Atelier Legal v4.2
-              </div>
-            </div>
-          </section>
-        </section>
+        <main className="flex flex-1 flex-col overflow-hidden bg-surface">
+          <ChatPanel caseId={selectedCaseId} variant="lawyer-atelier" />
+        </main>
       </section>
     </main>
   );

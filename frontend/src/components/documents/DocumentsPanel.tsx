@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { listDocuments, uploadDocument } from "@/lib/api";
 
 type DocumentItem = {
@@ -15,12 +15,10 @@ export default function DocumentsPanel({
   caseId,
   allowUpload,
   autoRefresh = false,
-  variant = "default",
 }: {
   caseId: string | null;
   allowUpload: boolean;
   autoRefresh?: boolean;
-  variant?: "default" | "compact" | "ingestion";
 }) {
   const [docs, setDocs] = useState<DocumentItem[]>([]);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
@@ -84,113 +82,22 @@ export default function DocumentsPanel({
     }
   }
 
-  if (variant === "ingestion") {
-    return (
-      <section className="admin-ingestion-shell">
-        <div className="admin-ingestion-head">
-          <h3>Ingestion Oversight</h3>
-          <span className="material-symbols-outlined ms-fill">cloud_sync</span>
-        </div>
-
-        {allowUpload && caseId && (
-          <label className="admin-upload-drop" aria-label="Vault deposit">
-            <input
-              type="file"
-              onChange={(event) => {
-                const file = event.target.files?.[0] ?? null;
-                setPendingFile(file);
-              }}
-            />
-            <div className="admin-upload-icon">
-              <span className="material-symbols-outlined">upload_file</span>
-            </div>
-            <div>
-              <p>Vault Deposit</p>
-              <small>Automatic OCR &amp; vector indexing</small>
-            </div>
-          </label>
-        )}
-
-        {allowUpload && caseId && pendingFile && (
-          <div className="admin-upload-inline">
-            <span className="muted">{pendingFile.name}</span>
-            <button type="button" onClick={() => void submitUpload()} disabled={uploading}>
-              {uploading ? "Uploading..." : "Upload"}
-            </button>
-          </div>
-        )}
-
-        {!caseId && <p className="muted">Select a case to view jobs.</p>}
-        {loading && <p className="muted">Loading jobs...</p>}
-        {error && <p className="error-text">{error}</p>}
-        {message && <p className="ok-text">{message}</p>}
-
-        <div className="admin-jobs-caption">Live Jobs</div>
-        <ul className="list-reset admin-jobs-list">
-          {docs.slice(0, 4).map((item) => {
-            const normalized = item.status.toLowerCase();
-            const active = normalized.includes("processing") || normalized.includes("index") || normalized.includes("queued");
-            const done = normalized.includes("complete") || normalized.includes("done") || normalized.includes("ready");
-            const ext = item.name.split(".").pop()?.toLowerCase();
-            const iconMap: Record<string, string> = {
-              pdf: "picture_as_pdf",
-              doc: "description",
-              docx: "description",
-              txt: "article",
-              eml: "mail",
-              png: "image",
-              jpg: "image",
-              jpeg: "image",
-            };
-            const icon = iconMap[ext ?? ""] ?? "description";
-            return (
-              <li key={item.file_id} className="admin-job-row">
-                <div className="admin-job-icon">
-                  <span className="material-symbols-outlined">{icon}</span>
-                </div>
-                <div className="admin-job-meta">
-                  <p>{item.name}</p>
-                  <small className={done ? "ok-text" : active ? "admin-job-active" : "muted"}>{item.status}</small>
-                </div>
-                {active && !done ? <span className="admin-job-spinner" aria-hidden="true" /> : null}
-                {done ? <span className="material-symbols-outlined admin-job-done ms-fill">check_circle</span> : null}
-              </li>
-            );
-          })}
-          {!loading && caseId && docs.length === 0 && <li className="muted">No documents uploaded yet.</li>}
-        </ul>
-      </section>
-    );
-  }
+  const jobs = useMemo(() => docs.slice(0, 4), [docs]);
 
   return (
-    <section className={variant === "compact" ? "card compact-card" : "card"}>
-      <div className="section-head">
-        <h2>Documents</h2>
-        <span className="pill subtle">{docs.length} files</span>
+    <section className="space-y-6 rounded-2xl border border-outline-variant/10 bg-surface-container-low/50 p-8">
+      <div className="flex items-center justify-between">
+        <h3 className="font-headline text-lg font-extrabold text-on-surface">Ingestion Oversight</h3>
+        <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: '"FILL" 1' }}>
+          cloud_sync
+        </span>
       </div>
-      {!caseId && <p className="muted">Select a case to view documents.</p>}
-      {loading && <p className="muted">Loading documents...</p>}
-      {error && <p className="error-text">{error}</p>}
-      {message && <p className="ok-text">{message}</p>}
-      {!loading && caseId && docs.length === 0 && <p className="muted">No documents uploaded for this case.</p>}
-
-      <ul className="list-reset stack-sm">
-        {docs.map((item) => (
-          <li key={item.file_id} className="list-row">
-            <span>
-              <strong>{item.name}</strong>
-              {item.is_latest ? <small className="muted">Latest version</small> : null}
-            </span>
-            <span className="status-tag">
-              v{item.version} {item.status}
-            </span>
-          </li>
-        ))}
-      </ul>
 
       {allowUpload && caseId && (
-        <div className="row upload-row upload-card">
+        <label
+          className="group flex cursor-pointer flex-col items-center justify-center space-y-4 rounded-2xl border-2 border-dashed border-outline-variant/40 bg-surface-container-lowest p-10 text-center transition-all hover:border-primary/50 hover:bg-surface-container-low"
+          aria-label="Vault deposit"
+        >
           <input
             type="file"
             onChange={(event) => {
@@ -198,12 +105,96 @@ export default function DocumentsPanel({
               setPendingFile(file);
             }}
           />
-          <span className="muted">{pendingFile ? pendingFile.name : "No file selected"}</span>
-          <button type="button" onClick={() => void submitUpload()} disabled={!pendingFile || uploading}>
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary transition-transform group-hover:scale-110">
+            <span className="material-symbols-outlined text-3xl">upload_file</span>
+          </div>
+          <div>
+            <p className="text-sm font-bold text-on-surface">Vault Deposit</p>
+            <p className="text-[11px] font-medium text-outline">Automatic OCR &amp; vector indexing</p>
+          </div>
+        </label>
+      )}
+
+      {allowUpload && caseId && pendingFile && (
+        <div className="flex items-center justify-between gap-3 rounded-xl border border-outline-variant/20 bg-surface-container-lowest px-4 py-3">
+          <span className="truncate text-sm text-on-surface-variant">{pendingFile.name}</span>
+          <button
+            type="button"
+            onClick={() => void submitUpload()}
+            disabled={uploading}
+            className="rounded-xl bg-primary px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-60"
+          >
             {uploading ? "Uploading..." : "Upload"}
           </button>
         </div>
       )}
+
+      {!caseId && <p className="text-sm text-on-surface-variant">Select a case to view jobs.</p>}
+      {loading && <p className="text-sm text-on-surface-variant">Loading jobs...</p>}
+      {error && <p className="text-sm text-red-600">{error}</p>}
+      {message && <p className="text-sm text-primary-alt">{message}</p>}
+
+      <div className="text-[10px] font-black uppercase tracking-[0.15em] text-outline">Live Jobs</div>
+      <ul className="space-y-3">
+        {jobs.map((item) => {
+          const normalized = item.status.toLowerCase();
+          const active =
+            normalized.includes("processing") || normalized.includes("index") || normalized.includes("queued");
+          const done = normalized.includes("complete") || normalized.includes("done") || normalized.includes("ready");
+          const ext = item.name.split(".").pop()?.toLowerCase();
+          const iconMap: Record<string, string> = {
+            pdf: "picture_as_pdf",
+            doc: "description",
+            docx: "description",
+            txt: "article",
+            eml: "mail",
+            png: "image",
+            jpg: "image",
+            jpeg: "image",
+          };
+          const icon = iconMap[ext ?? ""] ?? "description";
+
+          return (
+            <li
+              key={item.file_id}
+              className="flex items-center justify-between gap-3 rounded-xl border border-outline-variant/5 bg-surface-container-lowest p-4 shadow-sm"
+            >
+              <div className="flex min-w-0 items-center gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/5 text-primary">
+                  <span className="material-symbols-outlined text-xl">{icon}</span>
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-xs font-bold text-on-surface">{item.name}</p>
+                  <p
+                    className={
+                      done
+                        ? "text-[10px] font-bold uppercase tracking-wider text-primary-alt"
+                        : active
+                          ? "text-[10px] font-bold uppercase tracking-wider text-primary"
+                          : "text-[10px] font-bold uppercase tracking-wider text-outline"
+                    }
+                  >
+                    {item.status}
+                  </p>
+                </div>
+              </div>
+
+              <div className="shrink-0">
+                {active && !done ? (
+                  <span className="block h-8 w-8 animate-spin rounded-full border-2 border-primary/20 border-t-primary" />
+                ) : null}
+                {done ? (
+                  <span className="material-symbols-outlined text-xl text-primary" style={{ fontVariationSettings: '"FILL" 1' }}>
+                    check_circle
+                  </span>
+                ) : null}
+              </div>
+            </li>
+          );
+        })}
+
+        {!loading && caseId && docs.length === 0 && <li className="text-sm text-on-surface-variant">No documents uploaded yet.</li>}
+      </ul>
     </section>
   );
 }
