@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { login, resetDemoData } from "@/lib/api";
 import { type Role, saveSession } from "@/lib/auth";
@@ -15,50 +15,17 @@ export default function HomePage() {
   const router = useRouter();
   const demoResetInFlight = useRef<Promise<void> | null>(null);
   const demoResetCooldownAt = useRef<number>(0);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loginBusy, setLoginBusy] = useState(false);
   const [demoBusy, setDemoBusy] = useState<"lawyer" | "admin" | null>(null);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
 
   const demoAuthEnabled = useMemo(() => process.env.NEXT_PUBLIC_DEMO_AUTH !== "false", []);
 
-  const busy = loginBusy || demoBusy !== null;
+  const busy = demoBusy !== null;
 
   useEffect(() => {
     if (demoAuthEnabled) {
       void ensureFreshDemoData().catch(() => {});
     }
   }, [demoAuthEnabled]);
-
-  function validateCredentials(): boolean {
-    if (!email.trim()) {
-      setError("Email is required.");
-      return false;
-    }
-    if (!demoAuthEnabled && !password.trim()) {
-      setError("Password is required.");
-      return false;
-    }
-    return true;
-  }
-
-  async function doLogin(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!validateCredentials()) return;
-    setLoginBusy(true); setError(""); setMessage("");
-    try {
-      const result = await login(email.trim(), password || "demo");
-      saveSession(result);
-      setMessage(`Welcome back, ${result.user.email}`);
-      router.push(targetPathForRole(result.user.role));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed");
-    } finally {
-      setLoginBusy(false);
-    }
-  }
 
   async function ensureFreshDemoData(): Promise<void> {
     if (demoPreparedForSession) return;
@@ -88,17 +55,14 @@ export default function HomePage() {
     const demoEmail = roleTarget === "lawyer" ? "demo.lawyer@atticus.local" : "demo.admin@atticus.local";
     const demoPassword = "DemoPass!123";
 
-    setEmail(demoEmail);
-    setPassword(demoPassword);
     setDemoBusy(roleTarget);
-    setError(""); setMessage("");
     try {
       await ensureFreshDemoData();
       const result = await login(demoEmail, demoPassword);
       saveSession(result);
       router.push(targetPathForRole(result.user.role));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not start demo");
+      console.error("Could not start demo", err);
     } finally {
       setDemoBusy(null);
     }
@@ -188,48 +152,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        <footer className="mt-12 text-center">
-          <p className="text-on-surface-variant font-label text-sm">
-            Trusted by elite firms for complex multi-district litigation research.
-          </p>
-          <div className="mt-6 flex justify-center gap-8 opacity-40 grayscale contrast-125">
-            <div className="h-6 w-24 bg-on-surface-variant/20 rounded-sm"></div>
-            <div className="h-6 w-24 bg-on-surface-variant/20 rounded-sm"></div>
-            <div className="h-6 w-24 bg-on-surface-variant/20 rounded-sm"></div>
-          </div>
-        </footer>
-
-        <div className="mt-12 flex justify-center">
-          <details className="text-center group">
-            <summary className="cursor-pointer text-xs text-outline hover:text-primary transition-colors font-medium">
-              Advanced: Manual Authentication
-            </summary>
-            <div className="mt-6 p-6 glass-panel rounded-xl text-left">
-               <form className="flex flex-col gap-4" onSubmit={doLogin}>
-                  <label className="flex flex-col gap-1 text-sm font-semibold text-on-surface-variant">
-                    Email
-                    <input 
-                      className="border border-outline-variant/40 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary/40 outline-none transition-all"
-                      value={email} onChange={e => setEmail(e.target.value)} placeholder="you@firm.com" 
-                    />
-                  </label>
-                  <label className="flex flex-col gap-1 text-sm font-semibold text-on-surface-variant">
-                    Password
-                    <input 
-                      type="password"
-                      className="border border-outline-variant/40 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary/40 outline-none transition-all"
-                      value={password} onChange={e => setPassword(e.target.value)} 
-                    />
-                  </label>
-                  <button type="submit" disabled={busy} className="signature-gradient text-white py-2 rounded-lg font-bold mt-2">
-                    {loginBusy ? "Signing in..." : "Sign In"}
-                  </button>
-                  {error && <p className="text-red-600 text-sm">{error}</p>}
-                  {message && <p className="text-primary text-sm">{message}</p>}
-               </form>
-            </div>
-          </details>
-        </div>
       </main>
 
       <nav className="fixed bottom-8 w-full px-6 flex justify-between items-center text-on-surface-variant font-label text-xs">
