@@ -238,7 +238,7 @@ export default function HomePage() {
           <a href="#" className="hover:text-primary transition-colors">Data Residency</a>
         </div>
         <div className="text-right">
-          <span>© 2024 Legal Assistant. Precision Workspace.</span>
+          <span>© 2026 Legal Assistant. Precision Workspace.</span>
         </div>
       </nav>
     </div>
