@@ -1,15 +1,3 @@
-"""
-Prefix enricher — adds a contextual prefix to each chunk before embedding.
-
-The prefix captures document-level context (type, name, case) plus
-strategy-specific signals (section, sender, date) so the embedding
-vector encodes *where* the chunk sits in the document, not just *what*
-it says.
-
-After enrichment the chunk's `text` field contains the prefixed text
-ready for the embedder.
-"""
-
 from backend.schemas.chunkers_schema import Chunk
 from backend.ingestion.constants import STRUCTURE_MAP
 

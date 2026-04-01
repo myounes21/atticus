@@ -1,14 +1,3 @@
-"""
-Narrative chunker for brief / court_filing documents.
-
-Strategy:
-  1. Split text into paragraphs (double newline).
-  2. Greedily merge consecutive paragraphs until they approach MAX_TOKENS,
-     keeping paragraph boundaries intact so retrieval never mid-cuts a
-     legal argument.
-  3. Apply overlap so adjacent chunks share context.
-"""
-
 from typing import Literal, cast
 
 from backend.ingestion.chunkers.base import BaseChunker

@@ -1,5 +1,3 @@
-"""Atticus API — FastAPI application entry point."""
-
 import logging
 
 from fastapi import FastAPI, HTTPException, status

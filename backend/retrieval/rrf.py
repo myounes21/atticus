@@ -1,14 +1,3 @@
-"""Reciprocal Rank Fusion (RRF).
-
-Merges dense (Qdrant) and sparse (Elasticsearch) result lists into a single
-ranked list using the RRF formula:
-    score(d) = Σ  1 / (k + rank_i(d))
-where *k* is a constant (default 60) and *rank_i* is the 1-based rank of
-document *d* in result list *i*.
-"""
-
-from __future__ import annotations
-
 from dataclasses import dataclass
 
 from config import settings

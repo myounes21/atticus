@@ -1,12 +1,3 @@
-"""BGE reranker model wrapper.
-
-Uses a cross-encoder model (self-hosted) to score query/chunk relevance.
-Falls back to identity scoring if the model cannot be loaded so the rest
-of the pipeline keeps working during development.
-"""
-
-from __future__ import annotations
-
 import logging
 from dataclasses import dataclass
 from functools import lru_cache

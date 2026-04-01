@@ -1,11 +1,3 @@
-"""Chat history — fetches previous conversation turns from PostgreSQL.
-
-In local/dev mode the function falls back to an in-memory dict so the
-generation pipeline works without a running Postgres instance.
-"""
-
-from __future__ import annotations
-
 import logging
 import uuid
 

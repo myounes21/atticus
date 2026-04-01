@@ -1,16 +1,3 @@
-"""Retrieval pipeline orchestrator.
-
-Wires together all retrieval stages:
-  1. Semantic cache check
-  2. Query rewrite
-  3. Parallel dense + sparse search
-  4. RRF fusion
-  5. Reranking
-  6. Return top-k chunks ready for generation
-"""
-
-from __future__ import annotations
-
 import logging
 import re
 import uuid

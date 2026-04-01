@@ -1,11 +1,3 @@
-"""Seed deterministic demo users, cases, and demo documents.
-
-For walkthroughs, files are loaded from root ``demo data`` when present.
-Supported file types: .pdf, .docx, .txt, .eml.
-"""
-
-from __future__ import annotations
-
 import uuid
 import re
 from pathlib import Path

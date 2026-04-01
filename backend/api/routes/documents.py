@@ -1,12 +1,3 @@
-"""Document management API routes.
-
-Upload, list, get, update, delete documents within a case.
-Upload triggers the ingestion pipeline asynchronously.
-Delete triggers cascade removal from S3, Qdrant, Elasticsearch, and cache.
-"""
-
-from __future__ import annotations
-
 import logging
 import re
 import uuid

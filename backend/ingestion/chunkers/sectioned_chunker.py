@@ -1,14 +1,3 @@
-"""
-Sectioned chunker for contract / settlement / legal_notice documents.
-
-Strategy:
-  1. Split text into sections using heading-like patterns (numbered clauses,
-     ALL-CAPS headings, markdown-style headings).
-  2. Each section becomes one chunk.  If a section exceeds MAX_TOKENS it is
-     split token-wise with overlap so retrieval context is never lost.
-  3. Section name is stored in chunk metadata for the contextual prefix.
-"""
-
 from typing import Literal, cast
 
 from backend.ingestion.chunkers.base import BaseChunker

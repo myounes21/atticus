@@ -1,11 +1,3 @@
-"""Sparse (BM25) search using Elasticsearch.
-
-Runs a filtered BM25 query with the same RBAC filters as dense search
-so results are safe to merge via RRF.
-"""
-
-from __future__ import annotations
-
 import logging
 import re
 import uuid

@@ -1,16 +1,3 @@
-"""JWT authentication middleware.
-
-Extracts the JWT from ``Authorization: Bearer <token>`` headers, validates
-it, and attaches the decoded user info to ``request.state.user``.
-
-NOTE: Most routes use the ``get_current_user`` FastAPI dependency instead
-of this middleware.  This middleware provides a backstop that makes the
-user available to *all* request handlers automatically for observability
-and logging.
-"""
-
-from __future__ import annotations
-
 import logging
 
 from fastapi import Request

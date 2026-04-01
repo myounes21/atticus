@@ -1,11 +1,3 @@
-"""Case management API routes (Admin only).
-
-CRUD for cases: create, list, get, update, delete.
-Uses in-memory storage for development.
-"""
-
-from __future__ import annotations
-
 import logging
 import uuid
 

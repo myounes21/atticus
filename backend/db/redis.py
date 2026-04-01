@@ -1,10 +1,3 @@
-"""Redis connection helper.
-
-Used for the semantic cache and as the Celery broker.
-"""
-
-from __future__ import annotations
-
 from functools import lru_cache
 
 import redis as _redis

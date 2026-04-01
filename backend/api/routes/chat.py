@@ -1,11 +1,3 @@
-"""Chat API routes.
-
-Handles lawyer queries: submit a question, list conversations,
-view a conversation, delete a conversation.
-"""
-
-from __future__ import annotations
-
 import json
 import logging
 import time

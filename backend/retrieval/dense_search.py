@@ -1,11 +1,3 @@
-"""Dense (vector) search using Qdrant.
-
-Searches the Qdrant collection with RBAC filters (assigned_lawyers, case_id,
-is_latest) and returns the top-k matching chunk IDs with scores.
-"""
-
-from __future__ import annotations
-
 import logging
 import uuid
 from dataclasses import dataclass

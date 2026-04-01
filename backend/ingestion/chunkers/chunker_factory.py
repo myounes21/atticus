@@ -1,10 +1,3 @@
-"""
-Chunker factory — routes document category → appropriate chunker.
-
-Uses the STRUCTURE_MAP from ingestion constants to determine which
-chunking strategy to apply, then instantiates the correct chunker.
-"""
-
 from backend.ingestion.chunkers.base import BaseChunker
 from backend.ingestion.chunkers.email_chunker import EmailChunker
 from backend.ingestion.chunkers.depositions_chunker import DepositionChunker

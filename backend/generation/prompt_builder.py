@@ -1,13 +1,3 @@
-"""Prompt builder — constructs the legal-aware system + context prompt.
-
-Rules encoded in the system prompt:
-  • Answer ONLY from the provided context.
-  • Cite every claim: [Source: {doc_name}, v{version}, p{page}].
-  • If the answer is not found: say "I don't have that information."
-"""
-
-from __future__ import annotations
-
 from backend.retrieval.reranker import RerankedChunk
 
 _SYSTEM_PROMPT = """\

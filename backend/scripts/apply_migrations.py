@@ -1,7 +1,3 @@
-"""Apply SQL migrations in backend/migrations in lexicographic order."""
-
-from __future__ import annotations
-
 from pathlib import Path
 from typing import LiteralString, cast
 

@@ -1,7 +1,3 @@
-"""User-related Pydantic schemas."""
-
-from __future__ import annotations
-
 import uuid
 from typing import Literal
 

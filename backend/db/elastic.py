@@ -1,11 +1,3 @@
-"""Elasticsearch connection helper.
-
-Provides a singleton ``Elasticsearch`` client and index bootstrapping used by
-both ingestion indexers and the sparse-search retrieval module.
-"""
-
-from __future__ import annotations
-
 from functools import lru_cache
 
 from elasticsearch import Elasticsearch

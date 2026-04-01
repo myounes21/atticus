@@ -1,12 +1,3 @@
-"""Query rewriter — expands short or ambiguous queries via LLM.
-
-Uses Groq (Llama-3) to reformulate the user query into a richer search
-query before retrieval.  If the LLM call fails, the original query is
-returned unchanged so retrieval still proceeds.
-"""
-
-from __future__ import annotations
-
 import logging
 
 from groq import Groq

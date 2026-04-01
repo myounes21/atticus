@@ -1,17 +1,3 @@
-"""Role-based access control middleware.
-
-Provides a reusable ``RoleChecker`` dependency factory for FastAPI routes.
-
-Usage::
-
-    admin_only = RoleChecker(["admin"])
-
-    @router.post("/cases", dependencies=[Depends(admin_only)])
-    def create_case(...): ...
-"""
-
-from __future__ import annotations
-
 from fastapi import Depends, HTTPException, status
 
 from backend.core.dependencies import CurrentUser, get_current_user

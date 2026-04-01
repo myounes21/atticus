@@ -1,10 +1,3 @@
-"""Generation pipeline orchestrator.
-
-Wires retrieval → prompt building → LLM call → caching → history storage.
-"""
-
-from __future__ import annotations
-
 import logging
 import uuid
 from contextlib import nullcontext

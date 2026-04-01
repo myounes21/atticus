@@ -1,12 +1,3 @@
-"""Redis-backed semantic cache.
-
-Before hitting the vector DB and LLM, we check if a semantically similar
-query was recently answered.  If cosine similarity > 0.95, return the
-cached answer instantly.
-"""
-
-from __future__ import annotations
-
 import json
 import logging
 import math

@@ -1,12 +1,3 @@
-"""Cache invalidation — removes cache entries that reference deleted documents.
-
-When a document is deleted (or re-ingested), all semantic cache entries
-that used chunks from that file must be purged so stale answers are never
-served.
-"""
-
-from __future__ import annotations
-
 import json
 import logging
 

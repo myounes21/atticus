@@ -1,11 +1,3 @@
-"""LLM client — Groq (Llama-3) with streaming support.
-
-Provides both synchronous ``generate()`` and async-generator
-``generate_stream()`` for token-by-token streaming.
-"""
-
-from __future__ import annotations
-
 import logging
 from typing import Iterator
 

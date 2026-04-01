@@ -1,7 +1,3 @@
-"""Security utilities — password hashing and JWT token management."""
-
-from __future__ import annotations
-
 import uuid
 from datetime import datetime, timedelta, timezone
 

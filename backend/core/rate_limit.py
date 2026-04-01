@@ -1,7 +1,3 @@
-"""Simple Redis-backed fixed-window rate limiting utilities."""
-
-from __future__ import annotations
-
 from fastapi import HTTPException, status
 
 from backend.db.redis import get_client

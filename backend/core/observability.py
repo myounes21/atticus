@@ -1,10 +1,3 @@
-"""Langfuse observability helpers with safe no-op fallback.
-
-This module intentionally defaults to metadata-only tracing.
-"""
-
-from __future__ import annotations
-
 import logging
 import time
 import uuid

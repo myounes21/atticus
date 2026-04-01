@@ -1,11 +1,3 @@
-"""Qdrant connection helper.
-
-Provides a module-level singleton ``QdrantClient`` so every caller shares one
-connection, and thin convenience wrappers used across retrieval & ingestion.
-"""
-
-from __future__ import annotations
-
 from functools import lru_cache
 
 from qdrant_client import QdrantClient

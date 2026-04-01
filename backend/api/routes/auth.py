@@ -1,9 +1,3 @@
-"""Auth API routes: login, logout, me.
-
-Uses an in-memory user store for development.  Production should swap
-this out for PostgreSQL queries.
-"""
-
 import logging
 import uuid
 

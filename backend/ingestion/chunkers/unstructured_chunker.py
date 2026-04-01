@@ -1,13 +1,3 @@
-"""
-Unstructured chunker for note / invoice / evidence documents.
-
-Strategy:
-  Simple fixed-window token split with overlap.  These document types
-  have no reliable internal structure so we fall back to the safest
-  strategy and let the embedding + contextual prefix do the heavy
-  lifting for retrieval quality.
-"""
-
 from typing import Literal, cast
 
 from backend.ingestion.chunkers.base import BaseChunker

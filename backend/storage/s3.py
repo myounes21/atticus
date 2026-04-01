@@ -1,11 +1,3 @@
-"""AWS S3 storage wrapper.
-
-All original documents are stored in S3 as the single source of truth.
-Re-ingestion rebuilds everything from S3 if the databases are lost.
-"""
-
-from __future__ import annotations
-
 import logging
 from functools import lru_cache
 from io import BufferedIOBase

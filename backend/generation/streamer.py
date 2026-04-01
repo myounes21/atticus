@@ -1,16 +1,3 @@
-"""WebSocket token streamer.
-
-Streams LLM tokens to the client over a WebSocket connection.
-The protocol sends JSON messages::
-
-    {"type": "token",    "content": "..."}
-    {"type": "citation", "content": {...}}
-    {"type": "done",     "content": ""}
-    {"type": "error",    "content": "..."}
-"""
-
-from __future__ import annotations
-
 import logging
 from typing import Iterator
 

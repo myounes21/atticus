@@ -1,11 +1,3 @@
-"""Reset demo dataset for public walkthroughs.
-
-This script is destructive for conversational and case/document data.
-Use it only in demo/dev environments.
-"""
-
-from __future__ import annotations
-
 from backend.db.postgres import execute
 from backend.db.elastic import ensure_index as ensure_elastic_index
 from backend.db.elastic import get_client as get_elastic_client
