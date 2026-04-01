@@ -42,9 +42,6 @@ class UnstructuredChunker(BaseChunker):
 
         return chunks
 
-    # ------------------------------------------------------------------
-    # Helpers
-    # ------------------------------------------------------------------
 
     def _split_tokens(self, text: str) -> list[str]:
         tokens = ENCODER.encode(text)

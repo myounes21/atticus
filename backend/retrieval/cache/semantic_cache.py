@@ -37,7 +37,6 @@ def check_cache(
     client = get_client()
     threshold = settings.cache_similarity_threshold
 
-    # Scan existing cache entries for this case
     pattern = f"{_CACHE_PREFIX}{case_id}:*"
     for key in client.scan_iter(match=pattern, count=100):
         raw = client.get(key)

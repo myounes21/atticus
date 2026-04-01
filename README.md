@@ -21,7 +21,7 @@ It ships as a full-stack app with role-based access, document ingestion, hybrid 
 - Data: PostgreSQL
 - Search: Qdrant (dense), Elasticsearch (sparse)
 - Cache/Queue: Redis + Celery
-- LLM: Groq API
+- LLM: local Ollama (`llama3.3:70b`)
 - Optional tracing: Langfuse (metadata-only by default)
 
 ## Quick Start
@@ -29,6 +29,7 @@ It ships as a full-stack app with role-based access, document ingestion, hybrid 
 ```bash
 cp .env.example .env
 docker compose up --build -d
+docker compose exec ollama ollama pull llama3.3:70b
 docker compose --profile demo run --rm demo-seed
 ```
 

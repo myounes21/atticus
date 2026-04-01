@@ -187,7 +187,7 @@ def generate_answer(
         )
 
     with (
-        trace.span("generation.llm_call", metadata={"model": "groq"})
+        trace.span("generation.llm_call", metadata={"model": "ollama"})
         if trace
         else nullcontext()
     ):

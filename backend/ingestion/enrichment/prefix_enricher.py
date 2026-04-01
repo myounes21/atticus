@@ -17,9 +17,6 @@ def enrich_chunks(
     return [enrich_chunk(c, case_name) for c in chunks]
 
 
-# ------------------------------------------------------------------
-# Internal builders
-# ------------------------------------------------------------------
 
 def _build_prefix(chunk: Chunk, case_name: str | None) -> str:
     """Build the appropriate prefix based on the document's structure type."""

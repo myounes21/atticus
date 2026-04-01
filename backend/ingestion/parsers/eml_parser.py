@@ -79,7 +79,6 @@ class EmlParser(BaseParser):
         if preferred is not None:
             return (preferred.get_content() or "").strip()
 
-        # Fallback: collect text/plain parts
         parts: list[str] = []
         if message.is_multipart():
             for part in message.walk():
@@ -96,7 +95,6 @@ class EmlParser(BaseParser):
         if body:
             return body
 
-        # Last fallback: parse html while preserving link targets
         html_part = message.get_body(preferencelist='html')
         if html_part is not None:
             html = html_part.get_content() or ""

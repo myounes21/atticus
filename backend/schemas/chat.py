@@ -4,8 +4,6 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 
-# ── Chunk reference in answers ────────────────────────────────────────
-
 class ChunkReference(BaseModel):
     """Citation info attached to each answer."""
 
@@ -19,15 +17,12 @@ class ChunkReference(BaseModel):
     text_snippet: str | None = None
 
 
-# ── Requests ──────────────────────────────────────────────────────────
-
 class ChatRequest(BaseModel):
     query: str
     case_id: uuid.UUID
     conversation_id: uuid.UUID | None = None
 
 
-# ── Responses ─────────────────────────────────────────────────────────
 
 class ChatResponse(BaseModel):
     answer: str

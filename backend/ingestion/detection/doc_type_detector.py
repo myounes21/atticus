@@ -1,10 +1,9 @@
 import logging
 import time
-from functools import lru_cache
 from typing import NamedTuple
-from groq import Groq
+
+from backend.generation.llm_client import generate
 from config import settings
-from groq.types.chat import ChatCompletionUserMessageParam
 from dataclasses import dataclass
 from backend.ingestion.constants import (
     ALIASES,
@@ -16,10 +15,6 @@ from backend.ingestion.constants import (
 )
 
 logger = logging.getLogger(__name__)
-
-@lru_cache(maxsize=1)
-def _get_client() -> Groq:
-    return Groq(api_key=settings.groq_api_key)
 
 
 @dataclass
@@ -70,16 +65,17 @@ def _get_llm_response(content: str) -> _LLMOutcome:
     last_error: Exception | None = None
     for attempt in range(1, max_attempts + 1):
         try:
-            response = _get_client().chat.completions.create(
-                model=settings.groq_llm_model,
+            raw_label = generate(
                 messages=[
-                    ChatCompletionUserMessageParam(
-                        role="user",
-                        content=DETECTION_PROMPT.format(content=snippet),
-                    )
+                    {
+                        "role": "user",
+                        "content": DETECTION_PROMPT.format(content=snippet),
+                    }
                 ],
+                model=settings.ollama_model,
+                temperature=0.0,
+                max_tokens=128,
             )
-            raw_label = response.choices[0].message.content
             return _LLMOutcome(
                 raw_label=raw_label,
                 normalized_label=_normalize_llm_result(raw_label),
@@ -105,7 +101,7 @@ def _normalize_detector_output(result: str | None) -> str:
     return _normalize_llm_result(result)
 
 
-def _classify_with_groq(content: str) -> str:
+def _classify_with_llm(content: str) -> str:
     """Backward-compatible alias used by older tests/callers."""
     return _get_llm_response(content).normalized_label
 
@@ -124,7 +120,7 @@ def _unknown_result(
         source=source,
         raw_label=raw_label,
         normalized_label=normalized_label,
-        model=settings.groq_llm_model,
+        model=settings.ollama_model,
         attempts=attempts,
         error=error,
     )
@@ -138,7 +134,7 @@ def detect(content: str, file_type: str | None = None) -> DetectionResult:
             STRUCTURE_MAP["email"],
             False,
             source="deterministic:file_type",
-            model=settings.groq_llm_model,
+            model=settings.ollama_model,
         )
 
     if file_type == "txt" and len(content.strip()) <= TXT_NOTE_SHORTCUT_MAX_CHARS:
@@ -147,7 +143,7 @@ def detect(content: str, file_type: str | None = None) -> DetectionResult:
             STRUCTURE_MAP["note"],
             False,
             source="deterministic:txt_shortcut",
-            model=settings.groq_llm_model,
+            model=settings.ollama_model,
         )
 
     outcome = _get_llm_response(content)
@@ -170,7 +166,7 @@ def detect(content: str, file_type: str | None = None) -> DetectionResult:
             source="llm",
             raw_label=outcome.raw_label,
             normalized_label=outcome.normalized_label,
-            model=settings.groq_llm_model,
+            model=settings.ollama_model,
             attempts=outcome.attempts,
             error=outcome.error,
         )

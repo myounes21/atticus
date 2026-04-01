@@ -9,8 +9,6 @@ from config import settings
 _pwd_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-# ── Password helpers ──────────────────────────────────────────────────
-
 def hash_password(plain: str) -> str:
     """Return a bcrypt hash of *plain*."""
     return _pwd_ctx.hash(plain)
@@ -21,7 +19,6 @@ def verify_password(plain: str, hashed: str) -> bool:
     return _pwd_ctx.verify(plain, hashed)
 
 
-# ── JWT helpers ───────────────────────────────────────────────────────
 
 def create_access_token(
     user_id: uuid.UUID,

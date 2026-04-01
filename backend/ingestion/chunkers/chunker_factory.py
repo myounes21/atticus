@@ -25,12 +25,10 @@ def get_chunker(document_category: str) -> BaseChunker:
     Conversational types (email, deposition) have dedicated chunkers.
     All other categories are routed via STRUCTURE_MAP → generic chunker.
     """
-    # Direct category match first (conversational types)
     chunker_cls = _CHUNKER_BY_CATEGORY.get(document_category)
     if chunker_cls is not None:
         return chunker_cls()
 
-    # Route via structure type
     structure_type = STRUCTURE_MAP.get(document_category, "unstructured")
     chunker_cls = _CHUNKER_BY_STRUCTURE.get(structure_type, UnstructuredChunker)
     return chunker_cls()

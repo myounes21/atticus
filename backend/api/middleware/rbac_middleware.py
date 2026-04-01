@@ -20,7 +20,6 @@ class RoleChecker:
         return user
 
 
-# Convenience instances
 admin_only = RoleChecker(["admin"])
 lawyer_only = RoleChecker(["lawyer"])
 any_authenticated = RoleChecker(["admin", "lawyer"])

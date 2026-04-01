@@ -151,7 +151,6 @@ class DepositionChunker(BaseChunker):
         context_turns = [turn for turn in block if turn.speaker != "A"]
         answer_turns = [turn for turn in block if turn.speaker == "A"]
 
-        # Without clear Q/A structure, fallback to plain token splitting.
         if not context_turns or not answer_turns:
             return self._split_if_needed(block_text)
 

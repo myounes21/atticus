@@ -5,9 +5,6 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 
-# ── Requests ──────────────────────────────────────────────────────────
-
-
 class CaseCreate(BaseModel):
     name: str
     client_name: str | None = None
@@ -20,8 +17,6 @@ class CaseUpdate(BaseModel):
     status: Literal["active", "closed"] | None = None
     assigned_lawyers: list[uuid.UUID] | None = None
 
-
-# ── Responses ─────────────────────────────────────────────────────────
 
 
 class CaseResponse(BaseModel):

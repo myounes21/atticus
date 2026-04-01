@@ -12,8 +12,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=ENV_PATH, extra="ignore")
 
     # LLM
-    groq_api_key: str = ""
-    groq_llm_model: str = "llama-3.3-70b-versatile"
+    ollama_base_url: str = "http://localhost:11434"
+    ollama_model: str = "llama3.3:70b"
 
     # Document detector configs
     detection_snippet_length: int = 1000

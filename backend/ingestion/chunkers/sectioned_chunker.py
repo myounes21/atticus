@@ -46,10 +46,6 @@ class SectionedChunker(BaseChunker):
 
         return chunks
 
-    # ------------------------------------------------------------------
-    # Helpers
-    # ------------------------------------------------------------------
-
     def _split_into_sections(self, text: str) -> list[tuple[str, str]]:
         """Return list of (heading, body) pairs."""
         matches = list(SECTION_HEADING_PATTERN.finditer(text))
@@ -59,7 +55,6 @@ class SectionedChunker(BaseChunker):
 
         sections: list[tuple[str, str]] = []
 
-        # Text before the first heading is its own section
         preamble = text[: matches[0].start()].strip()
         if preamble:
             sections.append(("Preamble", preamble))

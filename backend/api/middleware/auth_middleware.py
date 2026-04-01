@@ -8,7 +8,6 @@ from backend.core.security import decode_access_token
 
 logger = logging.getLogger(__name__)
 
-# Paths that do NOT require authentication
 _PUBLIC_PATHS = {
     "/docs",
     "/redoc",
@@ -31,7 +30,6 @@ class AuthMiddleware(BaseHTTPMiddleware):
     ) -> Response:
         request.state.user = None
 
-        # Skip public paths
         if request.url.path in _PUBLIC_PATHS:
             return await call_next(request)
 
@@ -42,6 +40,6 @@ class AuthMiddleware(BaseHTTPMiddleware):
                 payload = decode_access_token(token)
                 request.state.user = payload
             except Exception:
-                pass  # dependency handles rejection
+                pass
 
         return await call_next(request)

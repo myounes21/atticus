@@ -68,14 +68,12 @@ DOCUMENT_CATEGORY = Literal[
 
 
 class Metadata(BaseModel):
-    # general
     document_name: str | None = None
     file_type: Literal["pdf", "docx", "eml", "txt"] | None = None
 
     structure_type: STRUCTURE_TYPE | None = None
     document_category: DOCUMENT_CATEGORY | None = None
 
-    # optional signals
     page_count: int | None = None
     subject: str | None = None
     participants: list[str] | None = None

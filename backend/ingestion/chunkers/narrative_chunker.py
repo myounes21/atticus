@@ -39,10 +39,6 @@ class NarrativeChunker(BaseChunker):
 
         return chunks
 
-    # ------------------------------------------------------------------
-    # Helpers
-    # ------------------------------------------------------------------
-
     @staticmethod
     def _split_paragraphs(text: str) -> list[str]:
         """Split on double-newline boundaries, preserving non-empty blocks."""
@@ -65,7 +61,6 @@ class NarrativeChunker(BaseChunker):
         for para in paragraphs:
             para_tokens = len(ENCODER.encode(para))
 
-            # Single paragraph too large → flush current, then split it
             if para_tokens > MAX_TOKENS:
                 if current_parts:
                     blocks.append("\n\n".join(current_parts))

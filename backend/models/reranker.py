@@ -16,8 +16,6 @@ class RerankResult:
     text: str
 
 
-# ── Model loading ─────────────────────────────────────────────────────
-
 @lru_cache(maxsize=1)
 def _load_model():
     """Lazily load the cross-encoder model.  Returns *None* if unavailable."""
@@ -35,8 +33,6 @@ def _load_model():
         return None
 
 
-# ── Public API ────────────────────────────────────────────────────────
-
 def rerank(
     query: str,
     texts: list[str],
@@ -53,7 +49,6 @@ def rerank(
     model = _load_model()
 
     if model is None:
-        # Fallback: return inputs unchanged with uniform scores
         results = [
             RerankResult(index=i, score=1.0, text=t)
             for i, t in enumerate(texts)
@@ -63,7 +58,6 @@ def rerank(
     pairs = [(query, text) for text in texts]
     raw_scores = model.predict(pairs)
 
-    # Normalize via sigmoid to [0, 1]
     import math
 
     def _sigmoid(x: float) -> float:

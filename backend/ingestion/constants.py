@@ -1,9 +1,6 @@
 import re
 import tiktoken
 
-# ──────────────────────────────────────────────────────────────────────
-# Parser constants
-# ──────────────────────────────────────────────────────────────────────
 EMAIL_SPLIT_MARKERS = (
     r"^\s*-{2,}\s*Original Message\s*-{2,}\s*$",
     r"^\s*On\s+.+?wrote:\s*$",
@@ -26,9 +23,6 @@ EMBEDDED_HEADER_KEYS = (
 HTML_BLOCK_TAGS_WITH_BREAK = {"p", "div", "br", "li", "tr"}
 HTML_BLOCK_TAGS_END_BREAK = {"p", "div", "li", "tr"}
 
-# ──────────────────────────────────────────────────────────────────────
-# Detector constants
-# ──────────────────────────────────────────────────────────────────────
 VALID_CATEGORIES = {
     "email",
     "contract",
@@ -76,12 +70,8 @@ Document:
 {content}
 """
 
-# For very short TXT documents, skip LLM classification and keep deterministic note routing.
 TXT_NOTE_SHORTCUT_MAX_CHARS = 400
 
-# ──────────────────────────────────────────────────────────────────────
-# File type constants
-# ──────────────────────────────────────────────────────────────────────
 FILE_TYPE = ("pdf", "docx", "eml", "txt")
 
 STRUCTURE_MAP = {
@@ -99,29 +89,21 @@ STRUCTURE_MAP = {
 
 DEFAULT_DEPOSITION_DOCUMENT_NAME = "unknown.txt"
 
-# ──────────────────────────────────────────────────────────────────────
-# Chunker constants
-# ──────────────────────────────────────────────────────────────────────
 MAX_TOKENS = 500
 OVERLAP_TOKENS = 50
 ENCODER = tiktoken.get_encoding("cl100k_base")
 
-# Heading pattern used by the sectioned chunker to split contracts,
-# settlements, and legal notices into clause-level sections.
 SECTION_HEADING_PATTERN = re.compile(
     r"(?:^|\n)"
     r"(?:"
-    r"(?:#{1,4}\s+.+)"                                          # markdown headings
-    r"|(?:(?:ARTICLE|SECTION|CLAUSE)\s+[\dIVXivx]+[.:]\s*.+)"   # ARTICLE I: …
-    r"|(?:\d{1,3}[.)]\s+[A-Z].+)"                               # 1. Definitions / 1) …
-    r"|(?:[A-Z][A-Z ]{4,})"                                      # ALL-CAPS HEADING
+    r"(?:#{1,4}\s+.+)"
+    r"|(?:(?:ARTICLE|SECTION|CLAUSE)\s+[\dIVXivx]+[.:]\s*.+)"
+    r"|(?:\d{1,3}[.)]\s+[A-Z].+)"
+    r"|(?:[A-Z][A-Z ]{4,})"
     r")",
     re.MULTILINE,
 )
 
-# ──────────────────────────────────────────────────────────────────────
-# Elasticsearch index mapping
-# ──────────────────────────────────────────────────────────────────────
 ES_INDEX_MAPPING = {
     "mappings": {
         "properties": {

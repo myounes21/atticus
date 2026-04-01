@@ -23,7 +23,6 @@ app = FastAPI(
     version="0.1.0",
 )
 
-# Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
@@ -33,7 +32,6 @@ app.add_middleware(
 )
 app.add_middleware(AuthMiddleware)
 
-# Routers
 app.include_router(auth_router)
 app.include_router(cases_router)
 app.include_router(documents_router)

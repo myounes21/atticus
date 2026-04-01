@@ -1,8 +1,6 @@
 import logging
 
-from groq import Groq
-
-from config import settings
+from backend.generation.llm_client import generate
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +30,6 @@ def rewrite(
     if not query.strip():
         return query
 
-    # Keep specific user queries unchanged to avoid losing key constraints.
     token_count = len(query.split())
     has_digits = any(char.isdigit() for char in query)
     if token_count >= 9 or has_digits:
@@ -42,22 +39,18 @@ def rewrite(
         {"role": "system", "content": _REWRITE_SYSTEM_PROMPT},
     ]
 
-    # Include recent history for context
     if chat_history:
-        for msg in chat_history[-4:]:  # last 2 turns
+        for msg in chat_history[-4:]:
             messages.append(msg)
 
     messages.append({"role": "user", "content": query})
 
     try:
-        client = Groq(api_key=settings.groq_api_key)
-        response = client.chat.completions.create(
-            model=settings.groq_llm_model,
+        rewritten = generate(
             messages=messages,
             temperature=0.0,
             max_tokens=256,
-        )
-        rewritten = response.choices[0].message.content.strip()
+        ).strip()
         if rewritten:
             logger.info("Rewrote query: '%s' → '%s'", query, rewritten)
             return rewritten

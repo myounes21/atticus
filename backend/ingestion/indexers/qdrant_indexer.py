@@ -74,7 +74,6 @@ def index_chunks(
         for chunk, vector in zip(chunks, vectors)
     ]
 
-    # Qdrant recommends batches of ~100 points
     batch_size = 100
     for i in range(0, len(points), batch_size):
         batch = points[i : i + batch_size]

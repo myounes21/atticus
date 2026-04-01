@@ -23,7 +23,6 @@ async def stream_tokens(
             full_answer_parts.append(token)
             await websocket.send_json({"type": "token", "content": token})
 
-        # Send citation metadata
         if chunks_used:
             for chunk_ref in chunks_used:
                 await websocket.send_json({"type": "citation", "content": chunk_ref})
@@ -35,6 +34,6 @@ async def stream_tokens(
         try:
             await websocket.send_json({"type": "error", "content": str(exc)})
         except Exception:
-            pass  # connection already closed
+            pass
 
     return "".join(full_answer_parts)

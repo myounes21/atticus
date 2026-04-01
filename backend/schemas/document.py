@@ -5,14 +5,11 @@ from typing import Literal
 from pydantic import BaseModel
 
 
-# ── Requests ──────────────────────────────────────────────────────────
-
 class DocumentUpdate(BaseModel):
     name: str | None = None
     status: Literal["processing", "ready", "failed", "review_required"] | None = None
 
 
-# ── Responses ─────────────────────────────────────────────────────────
 
 class DocumentUploadResponse(BaseModel):
     file_id: uuid.UUID

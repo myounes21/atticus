@@ -1,15 +1,15 @@
 import logging
 from typing import Iterator
 
-from groq import Groq
+from ollama import Client
 
 from config import settings
 
 logger = logging.getLogger(__name__)
 
 
-def _get_client() -> Groq:
-    return Groq(api_key=settings.groq_api_key)
+def _get_client() -> Client:
+    return Client(host=settings.ollama_base_url)
 
 
 def generate(
@@ -20,20 +20,19 @@ def generate(
 ) -> str:
     """Synchronous LLM call.  Returns the full answer as a string."""
     client = _get_client()
-    model = model or settings.groq_llm_model
+    model = model or settings.ollama_model
 
-    response = client.chat.completions.create(
+    response = client.chat(
         model=model,
         messages=messages,
-        temperature=temperature,
-        max_tokens=max_tokens,
+        options={"temperature": temperature, "num_predict": max_tokens},
     )
 
-    answer = response.choices[0].message.content or ""
+    answer = response.get("message", {}).get("content", "")
     logger.info(
         "LLM response: model=%s tokens=%s",
         model,
-        getattr(response.usage, "total_tokens", "?"),
+        response.get("eval_count", "?"),
     )
     return answer
 
@@ -46,17 +45,16 @@ def generate_stream(
 ) -> Iterator[str]:
     """Streaming LLM call.  Yields tokens one at a time."""
     client = _get_client()
-    model = model or settings.groq_llm_model
+    model = model or settings.ollama_model
 
-    stream = client.chat.completions.create(
+    stream = client.chat(
         model=model,
         messages=messages,
-        temperature=temperature,
-        max_tokens=max_tokens,
+        options={"temperature": temperature, "num_predict": max_tokens},
         stream=True,
     )
 
     for chunk in stream:
-        delta = chunk.choices[0].delta
-        if delta and delta.content:
-            yield delta.content
+        content = chunk.get("message", {}).get("content")
+        if content:
+            yield content

@@ -1,8 +1,4 @@
-# Atticus — Docker Compose full-stack development environment
-# Start with: docker compose up
-
 services:
-  # ── Infrastructure ──────────────────────────────────────────────────
 
   qdrant:
     image: qdrant/qdrant:v1.17.1
@@ -59,6 +55,47 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  ollama:
+    image: ollama/ollama:0.5.11
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  # Optional one-shot model bootstrap.
+  # Run only when explicitly requested:
+  # docker compose --profile llm-bootstrap run --rm ollama-model-pull
+  ollama-model-pull:
+    image: ollama/ollama:0.5.11
+    profiles: ["llm-bootstrap"]
+    env_file: .env
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3.3:70b}
+    depends_on:
+      ollama:
+        condition: service_healthy
+    volumes:
+      - ollama_data:/root/.ollama
+    command: sh -c "ollama pull \"$${OLLAMA_MODEL}\""
+    restart: "no"
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "5"
+
   postgres:
     image: postgres:16-alpine
     environment:
@@ -82,8 +119,6 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # ── Application ─────────────────────────────────────────────────────
-
   backend:
     build:
       context: .
@@ -98,6 +133,8 @@ services:
       - ELASTICSEARCH_PORT=9200
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3.3:70b}
       - DATABASE_URL=postgresql://${POSTGRES_USER:-atticus}:${POSTGRES_PASSWORD:-atticus_dev}@postgres:5432/${POSTGRES_DB:-atticus}
     volumes:
       - upload_tmp:/tmp/atticus_uploads
@@ -108,6 +145,8 @@ services:
       elasticsearch:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      ollama:
         condition: service_healthy
       postgres:
         condition: service_healthy
@@ -139,6 +178,8 @@ services:
       - ELASTICSEARCH_PORT=9200
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3.3:70b}
       - DATABASE_URL=postgresql://${POSTGRES_USER:-atticus}:${POSTGRES_PASSWORD:-atticus_dev}@postgres:5432/${POSTGRES_DB:-atticus}
     volumes:
       - upload_tmp:/tmp/atticus_uploads
@@ -148,6 +189,8 @@ services:
       qdrant:
         condition: service_healthy
       elasticsearch:
+        condition: service_healthy
+      ollama:
         condition: service_healthy
       postgres:
         condition: service_healthy
@@ -208,9 +251,13 @@ services:
       - ELASTICSEARCH_PORT=9200
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3.3:70b}
       - DATABASE_URL=postgresql://${POSTGRES_USER:-atticus}:${POSTGRES_PASSWORD:-atticus_dev}@postgres:5432/${POSTGRES_DB:-atticus}
     depends_on:
       backend:
+        condition: service_healthy
+      ollama:
         condition: service_healthy
     volumes:
       - ./demo data:/app/demo data:ro
@@ -269,6 +316,7 @@ volumes:
   qdrant_data:
   es_data:
   redis_data:
+  ollama_data:
   pg_data:
   upload_tmp:
   caddy_data:

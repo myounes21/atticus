@@ -3,7 +3,6 @@ import uuid
 
 logger = logging.getLogger(__name__)
 
-# In-memory fallback for dev/local (production uses PostgreSQL)
 _memory_store: dict[uuid.UUID, list[dict[str, str]]] = {}
 
 
