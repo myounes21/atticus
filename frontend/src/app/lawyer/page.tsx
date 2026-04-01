@@ -2,13 +2,16 @@
 
 import { useEffect, useState } from "react";
 import ChatPanel from "@/components/chat/ChatPanel";
-import { listCases, type CaseItem } from "@/lib/api";
+import { listCases, listDocuments, type CaseItem, type DocumentItem } from "@/lib/api";
 import { useAuthGuard } from "@/lib/useAuthGuard";
+
+type SidePanelMode = "cases" | "documents" | null;
 
 export default function LawyerPage() {
   const [cases, setCases] = useState<CaseItem[]>([]);
+  const [documents, setDocuments] = useState<DocumentItem[]>([]);
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
-  const [showCasesPanel, setShowCasesPanel] = useState(false);
+  const [sidePanelMode, setSidePanelMode] = useState<SidePanelMode>(null);
   const { loading, user, logout } = useAuthGuard({ allowedRoles: ["lawyer"] });
 
   useEffect(() => {
@@ -29,6 +32,31 @@ export default function LawyerPage() {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (!selectedCaseId) {
+      setDocuments([]);
+      return;
+    }
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const rows = await listDocuments(selectedCaseId);
+        if (!cancelled) {
+          setDocuments(rows);
+        }
+      } catch {
+        if (!cancelled) {
+          setDocuments([]);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedCaseId]);
 
   if (loading) {
     return (
@@ -55,12 +83,12 @@ export default function LawyerPage() {
           <button
             type="button"
             className={
-              showCasesPanel
+              sidePanelMode === "cases"
                 ? "group relative flex items-center justify-center rounded-xl bg-primary/5 p-3 text-primary transition-colors"
                 : "group relative flex items-center justify-center p-3 text-outline transition-colors hover:text-primary"
             }
             aria-label="Cases"
-            onClick={() => setShowCasesPanel((prev) => !prev)}
+            onClick={() => setSidePanelMode((prev) => (prev === "cases" ? null : "cases"))}
           >
             <span className="material-symbols-outlined text-2xl">folder_open</span>
             <span className="absolute left-16 whitespace-nowrap rounded bg-on-surface px-2 py-1 text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100">
@@ -75,7 +103,16 @@ export default function LawyerPage() {
               Assistant
             </span>
           </button>
-          <button type="button" className="group relative flex items-center justify-center p-3 text-outline transition-colors hover:text-primary" aria-label="Documents">
+          <button
+            type="button"
+            className={
+              sidePanelMode === "documents"
+                ? "group relative flex items-center justify-center rounded-xl bg-primary/5 p-3 text-primary transition-colors"
+                : "group relative flex items-center justify-center p-3 text-outline transition-colors hover:text-primary"
+            }
+            aria-label="Documents"
+            onClick={() => setSidePanelMode((prev) => (prev === "documents" ? null : "documents"))}
+          >
             <span className="material-symbols-outlined text-2xl">description</span>
             <span className="absolute left-16 whitespace-nowrap rounded bg-on-surface px-2 py-1 text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100">
               Documents
@@ -100,43 +137,69 @@ export default function LawyerPage() {
 
       <aside
         className={
-          showCasesPanel
+          sidePanelMode
             ? "w-80 border-r border-outline-variant/40 bg-white/90 p-4 transition-all duration-300"
             : "w-0 overflow-hidden p-0 transition-all duration-300"
         }
       >
-        {showCasesPanel && (
+        {sidePanelMode && (
           <div className="flex h-full min-h-0 flex-col">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="font-headline text-sm font-bold tracking-wide text-on-surface">Cases</h2>
+              <h2 className="font-headline text-sm font-bold tracking-wide text-on-surface">
+                {sidePanelMode === "cases" ? "Cases" : "Documents"}
+              </h2>
               <span className="rounded-full bg-surface-container px-2.5 py-1 text-[10px] font-bold text-outline">
-                {cases.length}
+                {sidePanelMode === "cases" ? cases.length : documents.length}
               </span>
             </div>
 
             <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
-              {cases.length === 0 ? (
+              {sidePanelMode === "cases" && cases.length === 0 ? (
                 <p className="text-xs text-on-surface-variant">No cases available.</p>
-              ) : (
-                cases.map((item) => (
-                  <button
-                    key={item.case_id}
-                    type="button"
-                    onClick={() => {
-                      setSelectedCaseId(item.case_id);
-                      setShowCasesPanel(false);
-                    }}
-                    className={
-                      item.case_id === selectedCaseId
-                        ? "w-full rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 text-left"
-                        : "w-full rounded-xl border border-outline-variant/30 bg-surface-container-lowest px-3 py-2 text-left hover:border-primary/30"
-                    }
-                  >
-                    <p className="truncate text-sm font-semibold text-on-surface">{item.name}</p>
-                    <p className="mt-1 text-[11px] text-on-surface-variant">#{item.case_id.slice(0, 8).toUpperCase()}</p>
-                  </button>
-                ))
-              )}
+              ) : null}
+
+              {sidePanelMode === "documents" && !selectedCaseId ? (
+                <p className="text-xs text-on-surface-variant">Select a case to view documents.</p>
+              ) : null}
+
+              {sidePanelMode === "documents" && selectedCaseId && documents.length === 0 ? (
+                <p className="text-xs text-on-surface-variant">No documents available for this case.</p>
+              ) : null}
+
+              {sidePanelMode === "cases"
+                ? cases.map((item) => (
+                    <button
+                      key={item.case_id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedCaseId(item.case_id);
+                        setSidePanelMode(null);
+                      }}
+                      className={
+                        item.case_id === selectedCaseId
+                          ? "w-full rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 text-left"
+                          : "w-full rounded-xl border border-outline-variant/30 bg-surface-container-lowest px-3 py-2 text-left hover:border-primary/30"
+                      }
+                    >
+                      <p className="truncate text-sm font-semibold text-on-surface">{item.name}</p>
+                      <p className="mt-1 text-[11px] text-on-surface-variant">#{item.case_id.slice(0, 8).toUpperCase()}</p>
+                    </button>
+                  ))
+                : null}
+
+              {sidePanelMode === "documents"
+                ? documents.map((item) => (
+                    <div
+                      key={item.file_id}
+                      className="w-full rounded-xl border border-outline-variant/30 bg-surface-container-lowest px-3 py-2 text-left"
+                    >
+                      <p className="truncate text-sm font-semibold text-on-surface">{item.name}</p>
+                      <p className="mt-1 text-[11px] text-on-surface-variant">
+                        v{item.version} · {item.status}
+                      </p>
+                    </div>
+                  ))
+                : null}
             </div>
           </div>
         )}
