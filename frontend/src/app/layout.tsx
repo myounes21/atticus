@@ -2,22 +2,24 @@ import "./globals.css";
 import type { ReactNode } from "react";
 import { Inter, Manrope } from "next/font/google";
 
-const headingFont = Manrope({
-  variable: "--font-heading",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const bodyFont = Inter({
-  variable: "--font-body",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${headingFont.variable} ${bodyFont.variable}`}>{children}</body>
+      <body className={`${manrope.variable} ${inter.variable} font-body selection:bg-primary-fixed selection:text-on-surface`}>
+        {children}
+      </body>
     </html>
   );
 }
