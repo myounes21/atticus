@@ -29,9 +29,9 @@ export default function ChatPanel({
 
   const suggestedPrompts = useMemo(
     () => [
-      "Summarize recent filings from Sterling Corp",
-      "Identify inconsistencies in deposition transcripts",
-      "Draft a motion summary for the land transfer",
+      "Compare Mayella and Tom’s testimonies",
+      "Find contradictions in witness statements",
+      "List the most powerful evidences that we have"
     ],
     [],
   );
