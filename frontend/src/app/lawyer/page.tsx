@@ -87,7 +87,7 @@ export default function LawyerPage() {
         </div>
       </aside>
 
-      <section className="relative flex min-w-0 flex-1 flex-col">
+      <section className="relative flex min-h-0 min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-40 flex h-20 items-center justify-between border-b border-outline-variant/30 bg-surface/80 px-10 backdrop-blur-md">
           <div className="flex items-center gap-8">
             <div>
@@ -121,7 +121,7 @@ export default function LawyerPage() {
           </div>
         </header>
 
-        <main className="flex flex-1 flex-col overflow-hidden bg-surface">
+        <main className="flex min-h-0 flex-1 flex-col overflow-hidden bg-surface">
           <ChatPanel caseId={selectedCaseId} variant="lawyer-atelier" />
         </main>
       </section>

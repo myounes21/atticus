@@ -144,7 +144,7 @@ export default function ChatPanel({
   }
 
   return (
-    <section className={variant === "lawyer-atelier" ? "flex flex-1 flex-col bg-surface" : "rounded-2xl border border-outline-variant/30 bg-white p-4 shadow-sm"}>
+    <section className={variant === "lawyer-atelier" ? "flex min-h-0 flex-1 flex-col bg-surface" : "rounded-2xl border border-outline-variant/30 bg-white p-4 shadow-sm"}>
       {variant !== "lawyer-atelier" && (
         <div className="mb-4 flex items-center justify-between">
           <h2 className="font-headline text-lg font-bold text-on-surface">Case Assistant</h2>
