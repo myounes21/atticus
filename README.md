@@ -24,6 +24,34 @@ It ships as a full-stack app with role-based access, document ingestion, hybrid 
 - LLM: local Ollama (`llama3.3:70b`)
 - Optional tracing: Langfuse (metadata-only by default)
 
+## Project Structure
+
+```text
+atticus/
+├── backend/
+│   ├── api/              # FastAPI app, routes, middleware
+│   ├── core/             # Security, dependencies, observability, rate limiting
+│   ├── db/               # PostgreSQL, Redis, Qdrant, Elasticsearch clients
+│   ├── generation/       # LLM chat pipeline and streaming helpers
+│   ├── ingestion/        # Parsing, chunking, indexing ingestion pipeline
+│   ├── retrieval/        # Dense+sparse retrieval, reranking, fusion
+│   ├── schemas/          # Pydantic request/response models
+│   ├── scripts/          # Operational scripts (migrations/seeding tasks)
+│   └── migrations/       # SQL schema migrations
+├── frontend/
+│   ├── src/              # Next.js UI code
+│   └── public/           # Static assets
+├── tests/
+│   ├── unit/
+│   ├── evaluation/
+│   └── legal_safety/
+├── docs/                 # Deployment and operational docs
+├── deploy/               # Reverse-proxy configuration (Caddy)
+├── demo data/            # Demo files seeded into the app
+├── docker-compose.yml    # Local/dev/prod service orchestration
+└── README.md
+```
+
 ## Quick Start
 
 ```bash
