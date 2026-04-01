@@ -2,7 +2,7 @@
 
 import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { login, register, resetDemoData } from "@/lib/api";
+import { login, resetDemoData } from "@/lib/api";
 import { getStoredUser, getToken, type Role, saveSession } from "@/lib/auth";
 
 function targetPathForRole(role: Role): string {
@@ -17,22 +17,14 @@ export default function HomePage() {
   const demoResetCooldownAt = useRef<number>(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<Role>("lawyer");
   const [loginBusy, setLoginBusy] = useState(false);
-  const [registerBusy, setRegisterBusy] = useState(false);
   const [demoBusy, setDemoBusy] = useState<"lawyer" | "admin" | null>(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const selfRegisterEnabled = useMemo(
-    () => process.env.NEXT_PUBLIC_ENABLE_SELF_REGISTER !== "false",
-    [],
-  );
-  const demoAuthEnabled = useMemo(
-    () => process.env.NEXT_PUBLIC_DEMO_AUTH !== "false",
-    [],
-  );
 
-  const busy = loginBusy || registerBusy || demoBusy !== null;
+  const demoAuthEnabled = useMemo(() => process.env.NEXT_PUBLIC_DEMO_AUTH !== "false", []);
+
+  const busy = loginBusy || demoBusy !== null;
 
   useEffect(() => {
     if (demoAuthEnabled) {
@@ -62,12 +54,8 @@ export default function HomePage() {
 
   async function doLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!validateCredentials()) {
-      return;
-    }
-    setLoginBusy(true);
-    setError("");
-    setMessage("");
+    if (!validateCredentials()) return;
+    setLoginBusy(true); setError(""); setMessage("");
     try {
       const result = await login(email.trim(), password || "demo");
       saveSession(result);
@@ -80,31 +68,10 @@ export default function HomePage() {
     }
   }
 
-  async function doRegister() {
-    if (!validateCredentials()) {
-      return;
-    }
-    setRegisterBusy(true);
-    setError("");
-    setMessage("");
-    try {
-      const user = await register(email.trim(), password || "demo", role);
-      setMessage(`Registered ${user.email}. You can now log in.`);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Registration failed");
-    } finally {
-      setRegisterBusy(false);
-    }
-  }
-
   async function ensureFreshDemoData(): Promise<void> {
-    if (demoPreparedForSession) {
-      return;
-    }
+    if (demoPreparedForSession) return;
     const now = Date.now();
-    if (now < demoResetCooldownAt.current) {
-      return;
-    }
+    if (now < demoResetCooldownAt.current) return;
     if (demoResetInFlight.current) {
       await demoResetInFlight.current;
       return;
@@ -132,8 +99,7 @@ export default function HomePage() {
     setEmail(demoEmail);
     setPassword(demoPassword);
     setDemoBusy(roleTarget);
-    setError("");
-    setMessage("");
+    setError(""); setMessage("");
     try {
       await ensureFreshDemoData();
       const result = await login(demoEmail, demoPassword);
@@ -147,157 +113,142 @@ export default function HomePage() {
   }
 
   return (
-    <main className="welcome-shell">
-      <div className="welcome-bg" aria-hidden="true">
-        <div className="welcome-glow welcome-glow-left" />
-        <div className="welcome-glow welcome-glow-right" />
+    <div className="flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden relative">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px]"></div>
+        <div className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] rounded-full bg-tertiary/5 blur-[150px]"></div>
       </div>
 
-      <header className="welcome-branding">
-        <h1>Legal Atelier</h1>
-        <p>Precision in Practice</p>
+      <header className="mb-16 text-center">
+        <h1 className="font-display text-3xl font-extrabold text-primary tracking-tight">Legal Assistant</h1>
+        <p className="text-on-surface-variant font-label text-sm mt-2 tracking-widest uppercase">Precision in Practice</p>
       </header>
 
-      <section className="welcome-demo-pill" aria-label="Environment badge">
-        <span className="material-symbols-outlined">biotech</span>
-        Demo Environment
-      </section>
+      <main className="w-full max-w-2xl">
+        <div className="flex justify-center mb-8">
+          <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase bg-primary/10 text-primary border border-primary/20 shadow-sm">
+            <span className="material-symbols-outlined text-sm mr-2">biotech</span>
+            Demo Environment
+          </span>
+        </div>
 
-      <section className="welcome-card glass-panel">
-        <div className="welcome-card-main">
-          <div className="welcome-anchor">
-            <span className="material-symbols-outlined">timer</span>
-          </div>
-          <h2>Understand the product in 60 seconds</h2>
-          <p>
-            Experience case-scoped legal Q&amp;A. Our engine ingests your active litigation files to provide
-            instant, sourced answers to complex procedural and factual inquiries.
-          </p>
-          {demoAuthEnabled && (
-            <p className="welcome-demo-note">
-              This is a simulated environment for portfolio demonstration. Authentication checks are relaxed.
+        <section className="glass-panel rounded-xl shadow-[0_32px_64px_-12px_rgba(0,95,90,0.08)] overflow-hidden border border-outline-variant/20">
+          <div className="p-10 md:p-14 text-center">
+            <div className="mb-8 inline-flex items-center justify-center w-16 h-16 rounded-full bg-surface-container-high text-primary">
+              <span className="material-symbols-outlined text-3xl">timer</span>
+            </div>
+            
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-on-surface tracking-tight leading-tight mb-6">
+              Understand the product in 60 seconds
+            </h2>
+            
+            <p className="text-on-surface-variant text-lg leading-relaxed mb-10 max-w-lg mx-auto">
+              Experience case-scoped legal Q&amp;A. Our engine ingests your active litigation files to provide instant, sourced answers to complex procedural and factual inquiries.
             </p>
-          )}
-
-          <div className="welcome-cta-row">
-            <button type="button" className="signature-gradient" onClick={() => void startGuidedDemo("lawyer")} disabled={busy}>
-              <span className="material-symbols-outlined">person</span>
-              {demoBusy === "lawyer" ? "Opening Lawyer Demo" : "Start Lawyer Demo"}
-            </button>
-            <button
-              type="button"
-              className="outline-cta"
-              onClick={() => void startGuidedDemo("admin")}
-              disabled={busy}
-            >
-              <span className="material-symbols-outlined">admin_panel_settings</span>
-              {demoBusy === "admin" ? "Opening Admin Demo" : "Start Admin Demo"}
-            </button>
-          </div>
-
-          <p className="welcome-trial-note">
-            <span className="material-symbols-outlined">verified_user</span>
-            No account required for trial
-          </p>
-        </div>
-
-        <div className="welcome-detail-strip">
-          <article>
-            <span className="material-symbols-outlined">psychology</span>
-            <div>
-              <h3>Neural Synthesis</h3>
-              <p>Logic applied to your case specifics.</p>
-            </div>
-          </article>
-          <article>
-            <span className="material-symbols-outlined">history_edu</span>
-            <div>
-              <h3>Source Integrity</h3>
-              <p>Every answer cited to your discovery.</p>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <footer className="welcome-footer-copy">
-        <p>Trusted by elite firms for complex multi-district litigation research.</p>
-        <div className="welcome-logo-placeholders" aria-hidden="true">
-          <span />
-          <span />
-          <span />
-        </div>
-      </footer>
-
-      <section className="manual-auth card">
-        <details>
-          <summary>Manual sign in and account tools</summary>
-          <div className="stack">
-            {!selfRegisterEnabled && (
-              <p className="muted">
-                Demo accounts: <strong>demo.admin@atticus.local</strong> and <strong>demo.lawyer@atticus.local</strong>.
-                Password: <strong>DemoPass!123</strong>.
+            
+            {demoAuthEnabled && (
+              <p className="text-xs text-on-surface-variant/70 italic mb-10 -mt-6">
+                This is a simulated environment for portfolio demonstration. Authentication checks are relaxed.
               </p>
             )}
-            <form className="stack" onSubmit={(event) => void doLogin(event)}>
-              <label className="field">
-                <span>Email</span>
-                <input
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  placeholder="you@firm.com"
-                  autoComplete="email"
-                />
-              </label>
 
-              <label className="field">
-                <span>Password</span>
-                <input
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  placeholder={demoAuthEnabled ? "Optional in demo mode" : "Required"}
-                  type="password"
-                  autoComplete="current-password"
-                />
-              </label>
-
-              <button type="submit" disabled={busy}>
-                {loginBusy ? "Signing in..." : "Manual sign in"}
-              </button>
-            </form>
-
-            {selfRegisterEnabled && (
-              <div className="stack register-area">
-                <p className="muted">Need a user for local testing?</p>
-                <div className="row">
-                  <select value={role} onChange={(event) => setRole(event.target.value as Role)}>
-                    <option value="admin">Admin</option>
-                    <option value="lawyer">Lawyer</option>
-                  </select>
-                  <button
-                    type="button"
-                    className="secondary"
-                    onClick={() => void doRegister()}
-                    disabled={busy}
-                  >
-                    {registerBusy ? "Creating..." : "Create account"}
-                  </button>
-                </div>
+            <div className="flex flex-col items-center gap-8">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+                <button 
+                  onClick={() => startGuidedDemo("lawyer")}
+                  disabled={busy}
+                  className="signature-gradient text-white font-headline font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-3 w-full sm:w-auto min-w-[200px]"
+                >
+                  <span className="material-symbols-outlined">person</span>
+                  <span>{demoBusy === "lawyer" ? "Opening..." : "Start Lawyer Demo"}</span>
+                </button>
+                <button 
+                  onClick={() => startGuidedDemo("admin")}
+                  disabled={busy}
+                  className="border-2 border-primary text-primary font-headline font-semibold py-4 px-8 rounded-xl hover:bg-primary/5 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-3 w-full sm:w-auto min-w-[200px]"
+                >
+                  <span className="material-symbols-outlined">admin_panel_settings</span>
+                  <span>{demoBusy === "admin" ? "Opening..." : "Start Admin Demo"}</span>
+                </button>
               </div>
-            )}
-
-            {error && <p className="error-text">{error}</p>}
-            {message && <p className="ok-text">{message}</p>}
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary text-sm">verified_user</span>
+                <span className="font-label text-xs text-on-surface-variant font-medium">No account required for trial</span>
+              </div>
+            </div>
           </div>
-        </details>
-      </section>
 
-      <nav className="welcome-fixed-nav" aria-label="Policy links">
-        <div>
-          <a href="#">Privacy Protocol</a>
-          <a href="#">Data Residency</a>
+          <div className="bg-surface-container flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-outline-variant/30">
+            <div className="flex-1 p-6 flex items-start gap-4">
+              <span className="material-symbols-outlined text-primary">psychology</span>
+              <div>
+                <p className="font-headline font-bold text-sm text-on-surface">Neural Synthesis</p>
+                <p className="text-xs text-on-surface-variant">Logic applied to your case specifics.</p>
+              </div>
+            </div>
+            <div className="flex-1 p-6 flex items-start gap-4">
+              <span className="material-symbols-outlined text-primary">history_edu</span>
+              <div>
+                <p className="font-headline font-bold text-sm text-on-surface">Source Integrity</p>
+                <p className="text-xs text-on-surface-variant">Every answer cited to your discovery.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer className="mt-12 text-center">
+          <p className="text-on-surface-variant font-label text-sm">
+            Trusted by elite firms for complex multi-district litigation research.
+          </p>
+          <div className="mt-6 flex justify-center gap-8 opacity-40 grayscale contrast-125">
+            <div className="h-6 w-24 bg-on-surface-variant/20 rounded-sm"></div>
+            <div className="h-6 w-24 bg-on-surface-variant/20 rounded-sm"></div>
+            <div className="h-6 w-24 bg-on-surface-variant/20 rounded-sm"></div>
+          </div>
+        </footer>
+
+        <div className="mt-12 flex justify-center">
+          <details className="text-center group">
+            <summary className="cursor-pointer text-xs text-outline hover:text-primary transition-colors font-medium">
+              Advanced: Manual Authentication
+            </summary>
+            <div className="mt-6 p-6 glass-panel rounded-xl text-left">
+               <form className="flex flex-col gap-4" onSubmit={doLogin}>
+                  <label className="flex flex-col gap-1 text-sm font-semibold text-on-surface-variant">
+                    Email
+                    <input 
+                      className="border border-outline-variant/40 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary/40 outline-none transition-all"
+                      value={email} onChange={e => setEmail(e.target.value)} placeholder="you@firm.com" 
+                    />
+                  </label>
+                  <label className="flex flex-col gap-1 text-sm font-semibold text-on-surface-variant">
+                    Password
+                    <input 
+                      type="password"
+                      className="border border-outline-variant/40 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary/40 outline-none transition-all"
+                      value={password} onChange={e => setPassword(e.target.value)} 
+                    />
+                  </label>
+                  <button type="submit" disabled={busy} className="signature-gradient text-white py-2 rounded-lg font-bold mt-2">
+                    {loginBusy ? "Signing in..." : "Sign In"}
+                  </button>
+                  {error && <p className="text-red-600 text-sm">{error}</p>}
+                  {message && <p className="text-primary text-sm">{message}</p>}
+               </form>
+            </div>
+          </details>
         </div>
-        <p>© 2024 Legal Atelier. Precision Workspace.</p>
+      </main>
+
+      <nav className="fixed bottom-8 w-full px-6 flex justify-between items-center text-on-surface-variant font-label text-xs">
+        <div className="flex gap-6">
+          <a href="#" className="hover:text-primary transition-colors">Privacy Protocol</a>
+          <a href="#" className="hover:text-primary transition-colors">Data Residency</a>
+        </div>
+        <div className="text-right">
+          <span>© 2024 Legal Assistant. Precision Workspace.</span>
+        </div>
       </nav>
-    </main>
+    </div>
   );
 }
