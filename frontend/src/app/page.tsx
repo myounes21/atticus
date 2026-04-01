@@ -3,7 +3,7 @@
 import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { login, resetDemoData } from "@/lib/api";
-import { getStoredUser, getToken, type Role, saveSession } from "@/lib/auth";
+import { type Role, saveSession } from "@/lib/auth";
 
 function targetPathForRole(role: Role): string {
   return role === "admin" ? "/admin" : "/lawyer";
@@ -32,14 +32,6 @@ export default function HomePage() {
     }
   }, [demoAuthEnabled]);
 
-  useEffect(() => {
-    const user = getStoredUser();
-    const token = getToken();
-    if (user && token) {
-      router.replace(targetPathForRole(user.role));
-    }
-  }, [router]);
-
   function validateCredentials(): boolean {
     if (!email.trim()) {
       setError("Email is required.");
@@ -60,7 +52,7 @@ export default function HomePage() {
       const result = await login(email.trim(), password || "demo");
       saveSession(result);
       setMessage(`Welcome back, ${result.user.email}`);
-      router.replace(targetPathForRole(result.user.role));
+      router.push(targetPathForRole(result.user.role));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {
@@ -104,7 +96,7 @@ export default function HomePage() {
       await ensureFreshDemoData();
       const result = await login(demoEmail, demoPassword);
       saveSession(result);
-      router.replace(targetPathForRole(result.user.role));
+      router.push(targetPathForRole(result.user.role));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not start demo");
     } finally {
