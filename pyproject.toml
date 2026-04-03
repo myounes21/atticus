@@ -24,6 +24,7 @@ dependencies = [
     "python-multipart>=0.0.18",
     "psycopg[binary]>=3.2.9",
     "langfuse>=2.60.7",
+    "sentence-transformers>=3.0.1",
 ]
 
 [dependency-groups]

@@ -1,35 +1,14 @@
 import uuid
 from qdrant_client import QdrantClient
-from qdrant_client.models import (
-    Distance,
-    PointStruct,
-    VectorParams,
-)
+from qdrant_client.models import PointStruct
 
+from backend.db.qdrant import ensure_collection, get_client
 from config import settings
 from backend.schemas.chunkers_schema import Chunk
 
 
 def _get_client() -> QdrantClient:
-    return QdrantClient(
-        host=settings.qdrant_host,
-        port=settings.qdrant_port,
-    )
-
-
-def ensure_collection(client: QdrantClient | None = None) -> None:
-    """Create the chunks collection if it doesn't already exist."""
-    client = client or _get_client()
-    collections = [c.name for c in client.get_collections().collections]
-
-    if settings.qdrant_collection_name not in collections:
-        client.create_collection(
-            collection_name=settings.qdrant_collection_name,
-            vectors_config=VectorParams(
-                size=settings.embedding_dimension,
-                distance=Distance.COSINE,
-            ),
-        )
+    return get_client()
 
 
 def index_chunks(

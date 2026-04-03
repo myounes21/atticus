@@ -20,8 +20,7 @@ From repo root:
    - `ENABLE_SELF_REGISTER=false`
    - `NEXT_PUBLIC_DEMO_AUTH=false`
    - `NEXT_PUBLIC_ENABLE_SELF_REGISTER=false`
-   - optional observability:
-     - `LANGFUSE_ENABLED=true`
+   - required observability:
      - `LANGFUSE_PUBLIC_KEY=<key>`
      - `LANGFUSE_SECRET_KEY=<key>`
      - `LANGFUSE_BASE_URL=https://cloud.langfuse.com`

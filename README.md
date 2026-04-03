@@ -22,7 +22,7 @@ It ships as a full-stack app with role-based access, document ingestion, hybrid 
 - Search: Qdrant (dense), Elasticsearch (sparse)
 - Cache/Queue: Redis + Celery
 - LLM: local Ollama (`llama3.3:70b`)
-- Optional tracing: Langfuse (metadata-only by default)
+- Tracing: Langfuse (required, metadata-only by default)
 
 ## Project Structure
 

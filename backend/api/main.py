@@ -1,4 +1,5 @@
 import logging
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -13,14 +14,25 @@ from backend.db.elastic import get_client as get_es_client
 from backend.db.postgres import fetch_optional
 from backend.db.qdrant import get_client as get_qdrant_client
 from backend.db.redis import get_client as get_redis_client
+from backend.models.embedder import assert_embedding_backend_ready, warmup_embedder
 from config import settings
 
 logger = logging.getLogger(__name__)
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    if settings.app_env.lower() == "production":
+        assert_embedding_backend_ready()
+    if settings.embedding_warmup_on_startup:
+        warmup_embedder()
+    yield
 
 app = FastAPI(
     title="Atticus API",
     description="Legal Intelligence Platform — private, self-hosted RAG for law firms",
     version="0.1.0",
+    lifespan=lifespan,
 )
 
 app.add_middleware(
@@ -50,6 +62,7 @@ def readiness_check() -> dict[str, str]:
         fetch_optional("SELECT 1")
         get_redis_client().ping()
         get_qdrant_client().get_collections()
+        assert_embedding_backend_ready()
         if not get_es_client().ping():
             raise RuntimeError("Elasticsearch ping failed")
         return {"status": "ready"}

@@ -20,7 +20,7 @@ This is the concise technical companion to `README.md`, focused on how the curre
 - Storage/search: PostgreSQL, Qdrant, Elasticsearch, Redis
 - Worker: Celery (with fallback patterns in route/task flow)
 - LLM calls: local Ollama client (`ollama_model`)
-- Observability: optional Langfuse, metadata-only by default
+- Observability: required Langfuse, metadata-only by default
 
 Notable current implementation behavior:
 

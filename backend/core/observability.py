@@ -1,11 +1,12 @@
 import logging
 import time
 import uuid
-from importlib import import_module
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from functools import lru_cache
 from typing import Any, Iterator
+
+from langfuse import Langfuse
 
 from config import settings
 
@@ -32,25 +33,16 @@ def _to_json_safe(data: dict[str, Any] | None) -> dict[str, Any]:
 
 
 @lru_cache(maxsize=1)
-def _langfuse_client() -> Any | None:
-    if not settings.langfuse_enabled:
-        return None
-    if not settings.langfuse_public_key or not settings.langfuse_secret_key:
-        logger.warning("Langfuse enabled but missing credentials; tracing disabled")
-        return None
-
+def _langfuse_client() -> Langfuse:
     try:
-        langfuse_module = import_module("langfuse")
-        Langfuse = getattr(langfuse_module, "Langfuse")
-
         return Langfuse(
             public_key=settings.langfuse_public_key,
             secret_key=settings.langfuse_secret_key,
             host=settings.langfuse_base_url,
         )
-    except Exception:
-        logger.warning("Failed to initialize Langfuse client", exc_info=True)
-        return None
+    except Exception as exc:
+        logger.exception("Failed to initialize Langfuse client")
+        raise RuntimeError("Failed to initialize Langfuse client") from exc
 
 
 @dataclass(slots=True)
@@ -115,8 +107,6 @@ class ObsTrace:
 
     def __enter__(self) -> "ObsTrace":
         self._client = _langfuse_client()
-        if self._client is None:
-            return self
         try:
             self._trace = self._client.trace(
                 name=self.name,

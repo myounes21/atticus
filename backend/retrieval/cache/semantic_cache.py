@@ -36,6 +36,7 @@ def check_cache(
     """Check if a similar query is cached.  Returns ``None`` on miss."""
     client = get_client()
     threshold = settings.cache_similarity_threshold
+    mismatch_count = 0
 
     pattern = f"{_CACHE_PREFIX}{case_id}:*"
     for key in client.scan_iter(match=pattern, count=100):
@@ -47,6 +48,9 @@ def check_cache(
         cached_embedding = entry.get("query_embedding", [])
         if not cached_embedding:
             continue
+        if len(cached_embedding) != len(query_embedding):
+            mismatch_count += 1
+            continue
 
         similarity = _cosine_similarity(query_embedding, cached_embedding)
         if similarity >= threshold:
@@ -56,6 +60,12 @@ def check_cache(
                 source_file_ids=entry.get("source_file_ids", []),
                 chunks_used=entry.get("chunks_used", []),
             )
+
+    if mismatch_count:
+        logger.debug(
+            "Skipped %d semantic-cache entries due to embedding dimension mismatch",
+            mismatch_count,
+        )
 
     return None
 

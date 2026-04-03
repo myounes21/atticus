@@ -24,8 +24,17 @@ class Settings(BaseSettings):
     CHUNK_OVERLAP: ClassVar[int] = 50
 
     # Embedder
+    embedding_backend: Literal["sentence_transformers", "fallback"] = (
+        "sentence_transformers"
+    )
     embedder_model: str = "BAAI/bge-m3"
     embedding_dimension: int = 1024
+    embedding_batch_size: int = 32
+    embedding_device: str = "cpu"
+    embedding_normalize: bool = True
+    embedding_model_cache_dir: str = ""
+    embedding_fallback_enabled: bool = True
+    embedding_warmup_on_startup: bool = False
 
     # Reranker (HuggingFace only)
     huggingface_reranker_model: str = "BAAI/bge-reranker-base"
@@ -87,10 +96,9 @@ class Settings(BaseSettings):
     cache_ttl_seconds: int = 3600
     cache_similarity_threshold: float = 0.95
 
-    # Langfuse observability
-    langfuse_enabled: bool = False
-    langfuse_public_key: str = ""
-    langfuse_secret_key: str = ""
+    # Langfuse observability (required)
+    langfuse_public_key: str = "dev-langfuse-public-key"
+    langfuse_secret_key: str = "dev-langfuse-secret-key"
     langfuse_base_url: str = "https://cloud.langfuse.com"
     langfuse_capture_content: bool = False
 
@@ -144,6 +152,13 @@ class Settings(BaseSettings):
             raise ValueError("upload_max_mb must be at least 1")
         if self.max_chat_query_chars < 200:
             raise ValueError("max_chat_query_chars must be at least 200")
+        if self.embedding_dimension < 8:
+            raise ValueError("embedding_dimension must be at least 8")
+        if self.embedding_batch_size < 1:
+            raise ValueError("embedding_batch_size must be at least 1")
+
+        if not self.langfuse_public_key or not self.langfuse_secret_key:
+            raise ValueError("langfuse_public_key and langfuse_secret_key must be set")
 
         if self.app_env.lower() == "production":
             if (
@@ -161,11 +176,20 @@ class Settings(BaseSettings):
                 raise ValueError("demo_auth must be disabled in production")
             if self.enable_self_register:
                 raise ValueError("enable_self_register must be disabled in production")
-            if self.langfuse_enabled:
-                if not self.langfuse_public_key or not self.langfuse_secret_key:
-                    raise ValueError(
-                        "langfuse_public_key and langfuse_secret_key are required when langfuse_enabled=true"
-                    )
+            if self.embedding_backend == "fallback":
+                raise ValueError("embedding_backend cannot be 'fallback' in production")
+            if self.embedding_fallback_enabled:
+                raise ValueError(
+                    "embedding_fallback_enabled must be false in production"
+                )
+            if self.langfuse_public_key.startswith("dev-"):
+                raise ValueError(
+                    "langfuse_public_key must be set to a real production value"
+                )
+            if self.langfuse_secret_key.startswith("dev-"):
+                raise ValueError(
+                    "langfuse_secret_key must be set to a real production value"
+                )
         return self
 
 
