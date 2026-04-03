@@ -4,13 +4,18 @@
 
 From repo root:
 
-1. `cp .env.example .env`
+1. `cp .env.production.example .env`
 2. Edit `.env` for production:
    - `APP_ENV=production`
    - `APP_DOMAIN=<your-domain>`
    - `ALLOWED_ORIGINS=["https://<your-domain>"]`
    - `JWT_SECRET_KEY=<long-random-secret>`
    - `POSTGRES_PASSWORD=<strong-password>`
+   - `EMBEDDING_BACKEND=sentence_transformers`
+   - `EMBEDDER_MODEL=BAAI/bge-m3`
+   - `EMBEDDING_FALLBACK_ENABLED=false`
+   - `ELASTIC_XPACK_SECURITY_ENABLED=true`
+   - `ELASTICSEARCH_PASSWORD=<strong-password>`
    - `DEMO_AUTH=false`
    - `ENABLE_SELF_REGISTER=false`
    - `NEXT_PUBLIC_DEMO_AUTH=false`
@@ -21,6 +26,8 @@ From repo root:
      - `LANGFUSE_SECRET_KEY=<key>`
      - `LANGFUSE_BASE_URL=https://cloud.langfuse.com`
      - `LANGFUSE_CAPTURE_CONTENT=false`
+
+  For local development, continue using `.env.example`.
 
 ## 2) Start Application
 

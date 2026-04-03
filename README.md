@@ -110,6 +110,8 @@ docker compose --profile demo run --rm demo-seed
 
 ## Deployment
 
+- Local/dev env template: `.env.example`
+- Production env template: `.env.production.example`
 - Standard app stack: `docker compose up --build -d`
 - HTTPS proxy (Caddy): `docker compose --profile prod up -d caddy`
 - Full runbook: `docs/DEPLOYMENT.md`
@@ -122,7 +124,9 @@ docker compose --profile demo run --rm demo-seed
 ## Practical Notes
 
 - Retrieval and route handlers enforce case scoping (`case_id`, `assigned_lawyers`, `is_latest`).
-- Embeddings currently use a deterministic fallback embedder in `backend/models/embedder.py`.
+- Embeddings use `sentence-transformers` (`BAAI/bge-m3`) with optional deterministic fallback (`EMBEDDING_FALLBACK_ENABLED`).
+- Production mode blocks startup if fallback embeddings are allowed (`APP_ENV=production` requires `EMBEDDING_FALLBACK_ENABLED=false`).
+- `/ready` validates embedding backend availability to catch model dependency issues before serving traffic.
 - Reranker falls back gracefully if CrossEncoder runtime deps are unavailable.
 - Some evaluation/legal-safety test files are present as placeholders.
 
