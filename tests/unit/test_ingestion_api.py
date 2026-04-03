@@ -1,5 +1,6 @@
 import uuid
 
+from fastapi import HTTPException, status
 from fastapi.testclient import TestClient
 
 from backend.api.main import app
@@ -203,3 +204,58 @@ def test_get_ingestion_job_404_when_missing(monkeypatch, tmp_path) -> None:
 
     assert response.status_code == 404
     assert "not found" in response.json()["detail"].lower()
+
+
+def test_trigger_ingestion_uses_s3_source_when_local_missing(monkeypatch, tmp_path) -> None:
+    store = IngestionJobStore(db_path=tmp_path / "jobs.db")
+    file_id = uuid.uuid4()
+    captured: dict[str, object] = {}
+
+    monkeypatch.setattr(
+        "backend.api.routes.ingestion.get_ingestion_job_store", lambda: store
+    )
+
+    def _capture_enqueue(**kwargs):
+        captured.update(kwargs)
+        return True
+
+    monkeypatch.setattr(
+        "backend.api.routes.ingestion.enqueue_ingestion_task", _capture_enqueue
+    )
+    monkeypatch.setattr(
+        "backend.api.routes.ingestion.fetch_optional",
+        lambda query, params: {
+            "file_id": file_id,
+            "case_id": None,
+            "version": 1,
+            "s3_key": "documents/case/file/test.txt",
+            "name": "test.txt",
+            "assigned_lawyers": [],
+        },
+    )
+
+    def _missing_local_file(_value):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Uploaded content not found",
+        )
+
+    monkeypatch.setattr(
+        "backend.api.routes.ingestion._resolve_uploaded_file_path",
+        _missing_local_file,
+    )
+
+    _set_admin_override()
+    try:
+        client = TestClient(app)
+        response = client.post(
+            "/ingestion/jobs",
+            json={"file_id": str(file_id)},
+        )
+    finally:
+        _clear_overrides()
+
+    assert response.status_code == 202
+    assert captured["s3_key"] == "documents/case/file/test.txt"
+    assert str(captured["file_path"]).endswith(f"{file_id}_s3")
+

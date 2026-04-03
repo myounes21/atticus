@@ -106,8 +106,20 @@ def ingest_document(
         temp_download_path = (
             Path(tempfile.gettempdir()) / f"ingest_{effective_file_id}_{safe_name}"
         )
-        s3_download_file(s3_key=s3_key, local_path=temp_download_path)
-        file_path = temp_download_path
+        try:
+            s3_download_file(s3_key=s3_key, local_path=temp_download_path)
+            file_path = temp_download_path
+        except Exception:
+            if file_path.exists():
+                logger.warning(
+                    "S3 download failed for '%s'; falling back to local path '%s'",
+                    s3_key,
+                    file_path,
+                    exc_info=True,
+                )
+                temp_download_path = None
+            else:
+                raise
 
     try:
         existing_job = store.get_job(effective_file_id)

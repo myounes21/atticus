@@ -24,6 +24,7 @@ from backend.db.postgres import (
     fetch_optional,
 )
 from backend.storage.s3 import delete_object as s3_delete_object
+from backend.storage.s3 import upload_file as s3_upload_file
 from backend.schemas.document import (
     DocumentListResponse,
     DocumentResponse,
@@ -56,6 +57,7 @@ def _is_s3_configured() -> bool:
 def _trigger_ingestion_background(
     file_id: uuid.UUID,
     file_path: str,
+    s3_key: str | None,
     file_name: str | None,
     case_id: uuid.UUID,
     case_name: str | None,
@@ -68,6 +70,7 @@ def _trigger_ingestion_background(
     ingest_document(
         file_path=file_path,
         file_id=file_id,
+        s3_key=s3_key,
         file_name=file_name,
         document_name=file_name,
         case_id=case_id,
@@ -147,7 +150,6 @@ async def upload_document(
                 break
             size += len(chunk)
             if size > max_upload_bytes:
-                handle.close()
                 tmp_path.unlink(missing_ok=True)
                 raise HTTPException(
                     status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
@@ -156,6 +158,17 @@ async def upload_document(
             handle.write(chunk)
 
     s3_key: str | None = None
+    if _is_s3_configured():
+        candidate_key = f"documents/{case_id}/{file_id}/{file_name}"
+        try:
+            s3_upload_file(tmp_path, candidate_key)
+            s3_key = candidate_key
+        except Exception:
+            logger.warning(
+                "S3 upload failed for file_id=%s, using local temp fallback",
+                file_id,
+                exc_info=True,
+            )
 
     row = execute_returning_one(
         """
@@ -177,6 +190,7 @@ async def upload_document(
         _trigger_ingestion_background,
         file_id=file_id,
         file_path=str(tmp_path),
+        s3_key=s3_key,
         file_name=file_name,
         case_id=case_id,
         case_name=case_name,

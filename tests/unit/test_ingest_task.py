@@ -199,3 +199,47 @@ def test_ingest_document_task_uses_precreated_job_mode(monkeypatch) -> None:
     assert captured["assigned_lawyers"] == [lawyer_id]
 
 
+def test_ingest_document_falls_back_to_local_when_s3_download_fails(
+    monkeypatch,
+    tmp_path,
+) -> None:
+    file_id = uuid.uuid4()
+    store = _FakeJobStore()
+    local_path = tmp_path / "doc.txt"
+    local_path.write_text("hello", encoding="utf-8")
+    captured_pipeline: dict[str, object] = {}
+
+    def _fake_pipeline(**kwargs):
+        captured_pipeline.update(kwargs)
+        return IngestionResult(
+            file_id=file_id,
+            file_type="txt",
+            detection=DetectionResult(
+                category="note",
+                structure_type="unstructured",
+                needs_review=False,
+            ),
+            parsed_document=ParsedDocument(text="hello"),
+            chunks=[],
+            needs_review=False,
+            stage_timings_ms={"parse": 1},
+        )
+
+    monkeypatch.setattr(
+        "backend.tasks.ingest_task.s3_download_file",
+        lambda **kwargs: (_ for _ in ()).throw(RuntimeError("s3 down")),
+    )
+    monkeypatch.setattr("backend.tasks.ingest_task.run_pipeline", _fake_pipeline)
+
+    result = ingest_document(
+        file_path=str(local_path),
+        file_id=file_id,
+        s3_key="documents/case/file/doc.txt",
+        file_name="doc.txt",
+        job_store=cast(Any, store),
+    )
+
+    assert result.status == IngestionJobStatus.COMPLETED
+    assert str(captured_pipeline["file_path"]) == str(local_path)
+
+
