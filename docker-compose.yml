@@ -84,7 +84,11 @@ services:
   ollama-model-pull:
     image: ollama/ollama:0.5.11
     profiles: ["llm-bootstrap"]
-    env_file: .env
+    env_file:
+      - path: .env.example
+        required: true
+      - path: .env
+        required: false
     environment:
       - OLLAMA_HOST=http://ollama:11434
       - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3.3:70b}
@@ -130,7 +134,11 @@ services:
       dockerfile: backend/Dockerfile
     ports:
       - "${APP_PORT:-8000}:8000"
-    env_file: .env
+    env_file:
+      - path: .env.example
+        required: true
+      - path: .env
+        required: false
     environment:
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
@@ -175,7 +183,11 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    env_file: .env
+    env_file:
+      - path: .env.example
+        required: true
+      - path: .env
+        required: false
     environment:
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
@@ -248,7 +260,11 @@ services:
       context: .
       dockerfile: backend/Dockerfile
     profiles: ["demo"]
-    env_file: .env
+    env_file:
+      - path: .env.example
+        required: true
+      - path: .env
+        required: false
     environment:
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
@@ -283,9 +299,13 @@ services:
         condition: service_healthy
       frontend:
         condition: service_healthy
-    env_file: .env
+    env_file:
+      - path: .env.example
+        required: true
+      - path: .env
+        required: false
     environment:
-      - APP_DOMAIN=${APP_DOMAIN}
+      - APP_DOMAIN=${APP_DOMAIN:-localhost}
     ports:
       - "80:80"
       - "443:443"
