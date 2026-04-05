@@ -33,20 +33,23 @@ jobs:
       (github.event_name == 'workflow_dispatch' && github.event.inputs.target == 'staging')
     steps:
       - name: Check staging secrets
-        if: >-
-          secrets.STAGING_SSH_HOST == '' ||
-          secrets.STAGING_SSH_USER == '' ||
-          secrets.STAGING_SSH_KEY == '' ||
-          secrets.STAGING_DEPLOY_PATH == ''
+        env:
+          STAGING_SSH_HOST: ${{ secrets.STAGING_SSH_HOST }}
+          STAGING_SSH_USER: ${{ secrets.STAGING_SSH_USER }}
+          STAGING_SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+          STAGING_DEPLOY_PATH: ${{ secrets.STAGING_DEPLOY_PATH }}
         run: |
-          echo "Required staging secrets are not configured."
-          exit 1
+          missing=0
+          for secret_name in STAGING_SSH_HOST STAGING_SSH_USER STAGING_SSH_KEY STAGING_DEPLOY_PATH; do
+            if [ -z "${!secret_name}" ]; then
+              echo "Missing required staging secret: ${secret_name}"
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
       - name: Deploy over SSH
-        if: >-
-          secrets.STAGING_SSH_HOST != '' &&
-          secrets.STAGING_SSH_USER != '' &&
-          secrets.STAGING_SSH_KEY != '' &&
-          secrets.STAGING_DEPLOY_PATH != ''
         uses: appleboy/ssh-action@v1.2.0
         env:
           DEPLOY_PATH: ${{ secrets.STAGING_DEPLOY_PATH }}
@@ -88,20 +91,23 @@ jobs:
       github.event.inputs.target == 'production'
     steps:
       - name: Check production secrets
-        if: >-
-          secrets.PRODUCTION_SSH_HOST == '' ||
-          secrets.PRODUCTION_SSH_USER == '' ||
-          secrets.PRODUCTION_SSH_KEY == '' ||
-          secrets.PRODUCTION_DEPLOY_PATH == ''
+        env:
+          PRODUCTION_SSH_HOST: ${{ secrets.PRODUCTION_SSH_HOST }}
+          PRODUCTION_SSH_USER: ${{ secrets.PRODUCTION_SSH_USER }}
+          PRODUCTION_SSH_KEY: ${{ secrets.PRODUCTION_SSH_KEY }}
+          PRODUCTION_DEPLOY_PATH: ${{ secrets.PRODUCTION_DEPLOY_PATH }}
         run: |
-          echo "Required production secrets are not configured."
-          exit 1
+          missing=0
+          for secret_name in PRODUCTION_SSH_HOST PRODUCTION_SSH_USER PRODUCTION_SSH_KEY PRODUCTION_DEPLOY_PATH; do
+            if [ -z "${!secret_name}" ]; then
+              echo "Missing required production secret: ${secret_name}"
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
       - name: Deploy over SSH
-        if: >-
-          secrets.PRODUCTION_SSH_HOST != '' &&
-          secrets.PRODUCTION_SSH_USER != '' &&
-          secrets.PRODUCTION_SSH_KEY != '' &&
-          secrets.PRODUCTION_DEPLOY_PATH != ''
         uses: appleboy/ssh-action@v1.2.0
         env:
           DEPLOY_PATH: ${{ secrets.PRODUCTION_DEPLOY_PATH }}
