@@ -23,8 +23,6 @@ from backend.db.postgres import (
     fetch_all,
     fetch_optional,
 )
-from backend.storage.s3 import delete_object as s3_delete_object
-from backend.storage.s3 import upload_file as s3_upload_file
 from backend.schemas.document import (
     DocumentListResponse,
     DocumentResponse,
@@ -46,18 +44,21 @@ def _allowed_extensions() -> set[str]:
     return set(settings.upload_allowed_extensions)
 
 
-def _is_s3_configured() -> bool:
-    return bool(
-        settings.s3_bucket_name
-        and settings.aws_access_key_id
-        and settings.aws_secret_access_key
-    )
+def _delete_uploaded_temp_files(file_id: uuid.UUID) -> None:
+    for candidate in UPLOAD_DIR.glob(f"{file_id}_*"):
+        if not candidate.is_file():
+            continue
+        try:
+            candidate.unlink(missing_ok=True)
+        except Exception:
+            logger.warning(
+                "Failed to delete tmp upload file '%s'", candidate, exc_info=True
+            )
 
 
 def _trigger_ingestion_background(
     file_id: uuid.UUID,
     file_path: str,
-    s3_key: str | None,
     file_name: str | None,
     case_id: uuid.UUID,
     case_name: str | None,
@@ -70,7 +71,6 @@ def _trigger_ingestion_background(
     ingest_document(
         file_path=file_path,
         file_id=file_id,
-        s3_key=s3_key,
         file_name=file_name,
         document_name=file_name,
         case_id=case_id,
@@ -157,26 +157,13 @@ async def upload_document(
                 )
             handle.write(chunk)
 
-    s3_key: str | None = None
-    if _is_s3_configured():
-        candidate_key = f"documents/{case_id}/{file_id}/{file_name}"
-        try:
-            s3_upload_file(tmp_path, candidate_key)
-            s3_key = candidate_key
-        except Exception:
-            logger.warning(
-                "S3 upload failed for file_id=%s, using local temp fallback",
-                file_id,
-                exc_info=True,
-            )
-
     row = execute_returning_one(
         """
-        INSERT INTO documents (file_id, case_id, name, version, is_latest, status, s3_key, uploaded_by)
-        VALUES (%s, %s, %s, %s, TRUE, 'processing', %s, %s)
+        INSERT INTO documents (file_id, case_id, name, version, is_latest, status, uploaded_by)
+        VALUES (%s, %s, %s, %s, TRUE, 'processing', %s)
         RETURNING *
         """,
-        (file_id, case_id, file_name, version, s3_key, user.user_id),
+        (file_id, case_id, file_name, version, user.user_id),
     )
 
     case_row = fetch_optional(
@@ -190,7 +177,6 @@ async def upload_document(
         _trigger_ingestion_background,
         file_id=file_id,
         file_path=str(tmp_path),
-        s3_key=s3_key,
         file_name=file_name,
         case_id=case_id,
         case_name=case_name,
@@ -285,7 +271,7 @@ def update_document(
 def delete_document(case_id: uuid.UUID, file_id: uuid.UUID) -> None:
     """Delete a document and cascade removal from all stores."""
     doc = fetch_optional(
-        "SELECT file_id, s3_key FROM documents WHERE file_id = %s AND case_id = %s",
+        "SELECT file_id FROM documents WHERE file_id = %s AND case_id = %s",
         (file_id, case_id),
     )
     if doc is None:
@@ -302,9 +288,6 @@ def delete_document(case_id: uuid.UUID, file_id: uuid.UUID) -> None:
         )
         from backend.retrieval.cache.cache_invalidator import invalidate_by_file_id
 
-        if doc.get("s3_key") and _is_s3_configured():
-            s3_delete_object(doc["s3_key"])
-
         qdrant_delete(file_id)
         elastic_delete(file_id)
         invalidate_by_file_id(str(file_id))
@@ -312,6 +295,8 @@ def delete_document(case_id: uuid.UUID, file_id: uuid.UUID) -> None:
         logger.warning(
             "Cascade delete partial failure for file_id=%s", file_id, exc_info=True
         )
+
+    _delete_uploaded_temp_files(file_id)
 
     execute(
         "DELETE FROM documents WHERE file_id = %s AND case_id = %s", (file_id, case_id)

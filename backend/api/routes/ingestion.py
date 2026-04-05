@@ -25,7 +25,6 @@ UPLOAD_DIR = Path("/tmp/atticus_uploads")
 def _run_ingestion_job(
     file_id: uuid.UUID,
     file_path: str,
-    s3_key: str | None,
     file_name: str | None,
     case_id: uuid.UUID | None,
     case_name: str | None,
@@ -35,7 +34,6 @@ def _run_ingestion_job(
     ingest_document(
         file_path=file_path,
         file_id=file_id,
-        s3_key=s3_key,
         file_name=file_name,
         document_name=file_name,
         case_id=case_id,
@@ -55,18 +53,6 @@ def _resolve_uploaded_file_path(file_id: uuid.UUID) -> str:
     )
 
 
-def _resolve_ingestion_source(
-    file_id: uuid.UUID,
-    s3_key: str | None,
-) -> tuple[str, str | None]:
-    try:
-        return _resolve_uploaded_file_path(file_id), s3_key
-    except HTTPException:
-        if s3_key:
-            return str(UPLOAD_DIR / f"{file_id}_s3"), s3_key
-        raise
-
-
 @router.post(
     "",
     response_model=IngestionTriggerResponse,
@@ -79,7 +65,7 @@ def trigger_ingestion(
 ) -> IngestionTriggerResponse:
     doc = fetch_optional(
         """
-        SELECT d.file_id, d.case_id, d.version, d.s3_key, d.name, c.name AS case_name, c.assigned_lawyers
+        SELECT d.file_id, d.case_id, d.version, d.name, c.name AS case_name, c.assigned_lawyers
           FROM documents d
           LEFT JOIN cases c ON c.case_id = d.case_id
          WHERE d.file_id = %s
@@ -90,7 +76,7 @@ def trigger_ingestion(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Document not found"
         )
-    file_path, s3_key = _resolve_ingestion_source(payload.file_id, doc.get("s3_key"))
+    file_path = _resolve_uploaded_file_path(payload.file_id)
     file_id = payload.file_id
     store = get_ingestion_job_store()
     store.create_job(file_id=file_id, file_path=file_path, status="queued")
@@ -98,7 +84,6 @@ def trigger_ingestion(
     enqueued = enqueue_ingestion_task(
         file_id=str(file_id),
         file_path=file_path,
-        s3_key=s3_key,
         file_name=doc["name"],
         document_name=doc["name"],
         case_id=str(doc["case_id"]) if doc["case_id"] else None,
@@ -111,7 +96,6 @@ def trigger_ingestion(
             _run_ingestion_job,
             file_id,
             file_path,
-            s3_key,
             doc["name"],
             doc["case_id"],
             doc.get("case_name"),

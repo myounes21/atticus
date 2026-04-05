@@ -10,7 +10,6 @@ class DocumentUpdate(BaseModel):
     status: Literal["processing", "ready", "failed", "review_required"] | None = None
 
 
-
 class DocumentUploadResponse(BaseModel):
     file_id: uuid.UUID
     name: str
@@ -25,7 +24,6 @@ class DocumentResponse(BaseModel):
     version: int
     is_latest: bool
     status: str
-    s3_key: str | None = None
     uploaded_by: uuid.UUID | None = None
     uploaded_at: datetime | None = None
 

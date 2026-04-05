@@ -42,7 +42,7 @@ def run_pipeline(
     """Execute the full ingestion pipeline for a single document.
 
     Args:
-        file_path:         path to the raw file on disk (after S3 download).
+        file_path:         path to the raw file on disk.
         file_id:           pre-generated UUID for this document.
         case_id:           the case this document belongs to.
         case_name:         human-readable case name (used in contextual prefix).

@@ -13,6 +13,7 @@ class Settings(BaseSettings):
 
     # LLM
     ollama_base_url: str = "http://localhost:11434"
+
     ollama_model: str = "llama3.3:70b"
 
     # Document detector configs
@@ -53,12 +54,6 @@ class Settings(BaseSettings):
     # Redis
     redis_host: str = "localhost"
     redis_port: int = 6379
-
-    # AWS S3
-    s3_bucket_name: str = "atticus-documents"
-    s3_region: str = "us-east-1"
-    aws_access_key_id: str = ""
-    aws_secret_access_key: str = ""
 
     # JWT
     jwt_secret_key: str = "CHANGE-ME-IN-PRODUCTION"

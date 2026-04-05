@@ -46,7 +46,6 @@ def enqueue_ingestion_task(
     *,
     file_id: str,
     file_path: str,
-    s3_key: str | None,
     file_name: str | None,
     document_name: str | None,
     case_id: str | None,
@@ -69,7 +68,6 @@ def enqueue_ingestion_task(
             kwargs={
                 "file_id": file_id,
                 "file_path": file_path,
-                "s3_key": s3_key,
                 "file_name": file_name,
                 "document_name": document_name,
                 "case_id": case_id,

@@ -164,8 +164,8 @@ def _ensure_document(
     file_id = uuid.uuid4()
     execute_returning_one(
         """
-        INSERT INTO documents (file_id, case_id, name, version, is_latest, status, s3_key, uploaded_by)
-        VALUES (%s, %s, %s, 1, TRUE, 'processing', NULL, %s)
+        INSERT INTO documents (file_id, case_id, name, version, is_latest, status, uploaded_by)
+        VALUES (%s, %s, %s, 1, TRUE, 'processing', %s)
         RETURNING file_id
         """,
         (file_id, case_id, file_name, uploaded_by),

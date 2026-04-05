@@ -1,6 +1,4 @@
 import logging
-import os
-import tempfile
 import uuid
 from dataclasses import dataclass
 from enum import Enum
@@ -17,7 +15,6 @@ from backend.ingestion.indexers.qdrant_indexer import (
     index_chunks as index_chunks_qdrant,
 )
 from backend.ingestion.pipeline import IngestionResult, run_pipeline
-from backend.storage.s3 import download_file as s3_download_file
 from backend.models.embedder import embed_texts
 
 
@@ -84,7 +81,6 @@ def ingest_document(
     file_path: str | Path,
     *,
     file_id: uuid.UUID | None = None,
-    s3_key: str | None = None,
     file_name: str | None = None,
     document_name: str | None = None,
     case_id: uuid.UUID | None = None,
@@ -97,29 +93,6 @@ def ingest_document(
     file_path = Path(file_path)
     effective_file_id = file_id or uuid.uuid4()
     store = job_store or get_ingestion_job_store()
-    temp_download_path: Path | None = None
-
-    if s3_key:
-        safe_name = (
-            Path(file_name or Path(s3_key).name).name or f"{effective_file_id}.bin"
-        )
-        temp_download_path = (
-            Path(tempfile.gettempdir()) / f"ingest_{effective_file_id}_{safe_name}"
-        )
-        try:
-            s3_download_file(s3_key=s3_key, local_path=temp_download_path)
-            file_path = temp_download_path
-        except Exception:
-            if file_path.exists():
-                logger.warning(
-                    "S3 download failed for '%s'; falling back to local path '%s'",
-                    s3_key,
-                    file_path,
-                    exc_info=True,
-                )
-                temp_download_path = None
-            else:
-                raise
 
     try:
         existing_job = store.get_job(effective_file_id)
@@ -150,7 +123,6 @@ def ingest_document(
         metadata={
             "file_id": effective_file_id,
             "case_id": case_id,
-            "s3_key": s3_key,
             "version": version,
         },
     ) as trace:
@@ -184,7 +156,6 @@ def ingest_document(
                 file_path,
             )
             _set_document_status(effective_file_id, IngestionJobStatus.FAILED.value)
-            _cleanup_temp_file(temp_download_path)
             return IngestionJobResult(
                 file_id=effective_file_id,
                 file_path=str(file_path),
@@ -204,7 +175,6 @@ def ingest_document(
             )
             logger.exception("Ingestion job failed unexpectedly for '%s'", file_path)
             _set_document_status(effective_file_id, IngestionJobStatus.FAILED.value)
-            _cleanup_temp_file(temp_download_path)
             return IngestionJobResult(
                 file_id=effective_file_id,
                 file_path=str(file_path),
@@ -235,7 +205,6 @@ def ingest_document(
             _set_document_status(
                 pipeline_result.file_id, IngestionJobStatus.REVIEW_REQUIRED.value
             )
-            _cleanup_temp_file(temp_download_path)
             return IngestionJobResult(
                 file_id=pipeline_result.file_id,
                 file_path=str(file_path),
@@ -279,7 +248,6 @@ def ingest_document(
             _set_document_status(
                 pipeline_result.file_id, IngestionJobStatus.FAILED.value
             )
-            _cleanup_temp_file(temp_download_path)
             return IngestionJobResult(
                 file_id=pipeline_result.file_id,
                 file_path=str(file_path),
@@ -312,8 +280,6 @@ def ingest_document(
             len(pipeline_result.chunks),
         )
         _set_document_status(pipeline_result.file_id, "ready")
-
-        _cleanup_temp_file(temp_download_path)
         return IngestionJobResult(
             file_id=pipeline_result.file_id,
             file_path=str(file_path),
@@ -328,24 +294,10 @@ def ingest_document(
         )
 
 
-def _cleanup_temp_file(path: Path | None) -> None:
-    if path is None:
-        return
-    try:
-        os.remove(path)
-    except FileNotFoundError:
-        return
-    except Exception:
-        logger.warning(
-            "Failed to cleanup ingestion temp file '%s'", path, exc_info=True
-        )
-
-
 def ingest_document_task(
     *,
     file_id: str,
     file_path: str,
-    s3_key: str | None = None,
     file_name: str | None = None,
     document_name: str | None = None,
     case_id: str | None = None,
@@ -358,7 +310,6 @@ def ingest_document_task(
     result = ingest_document(
         file_path=file_path,
         file_id=uuid.UUID(file_id),
-        s3_key=s3_key,
         file_name=file_name,
         document_name=document_name or file_name,
         case_id=parsed_case_id,
