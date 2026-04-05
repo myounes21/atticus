@@ -38,7 +38,6 @@ def test_trigger_ingestion_creates_queued_job(monkeypatch, tmp_path) -> None:
             "file_id": file_id,
             "case_id": None,
             "version": 1,
-            "s3_key": "documents/case/file/test.txt",
             "name": "test.txt",
             "assigned_lawyers": [],
         },
@@ -91,7 +90,6 @@ def test_trigger_ingestion_prefers_celery_dispatch(monkeypatch, tmp_path) -> Non
             "file_id": file_id,
             "case_id": None,
             "version": 1,
-            "s3_key": "documents/case/file/test.txt",
             "name": "test.txt",
             "assigned_lawyers": [],
         },
@@ -139,7 +137,6 @@ def test_trigger_ingestion_falls_back_when_celery_fails(monkeypatch, tmp_path) -
             "file_id": file_id,
             "case_id": None,
             "version": 1,
-            "s3_key": "documents/case/file/test.txt",
             "name": "test.txt",
             "assigned_lawyers": [],
         },
@@ -206,21 +203,16 @@ def test_get_ingestion_job_404_when_missing(monkeypatch, tmp_path) -> None:
     assert "not found" in response.json()["detail"].lower()
 
 
-def test_trigger_ingestion_uses_s3_source_when_local_missing(monkeypatch, tmp_path) -> None:
+def test_trigger_ingestion_404_when_local_missing(monkeypatch, tmp_path) -> None:
     store = IngestionJobStore(db_path=tmp_path / "jobs.db")
     file_id = uuid.uuid4()
-    captured: dict[str, object] = {}
 
     monkeypatch.setattr(
         "backend.api.routes.ingestion.get_ingestion_job_store", lambda: store
     )
 
-    def _capture_enqueue(**kwargs):
-        captured.update(kwargs)
-        return True
-
     monkeypatch.setattr(
-        "backend.api.routes.ingestion.enqueue_ingestion_task", _capture_enqueue
+        "backend.api.routes.ingestion.enqueue_ingestion_task", lambda **kwargs: True
     )
     monkeypatch.setattr(
         "backend.api.routes.ingestion.fetch_optional",
@@ -228,7 +220,6 @@ def test_trigger_ingestion_uses_s3_source_when_local_missing(monkeypatch, tmp_pa
             "file_id": file_id,
             "case_id": None,
             "version": 1,
-            "s3_key": "documents/case/file/test.txt",
             "name": "test.txt",
             "assigned_lawyers": [],
         },
@@ -255,7 +246,5 @@ def test_trigger_ingestion_uses_s3_source_when_local_missing(monkeypatch, tmp_pa
     finally:
         _clear_overrides()
 
-    assert response.status_code == 202
-    assert captured["s3_key"] == "documents/case/file/test.txt"
-    assert str(captured["file_path"]).endswith(f"{file_id}_s3")
-
+    assert response.status_code == 404
+    assert "uploaded content not found" in response.json()["detail"].lower()
