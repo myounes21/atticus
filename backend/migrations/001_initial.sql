@@ -27,7 +27,6 @@ CREATE TABLE IF NOT EXISTS documents (
     version      INTEGER NOT NULL DEFAULT 1,
     is_latest    BOOLEAN NOT NULL DEFAULT TRUE,
     status       TEXT NOT NULL CHECK (status IN ('processing', 'ready', 'failed', 'review_required')) DEFAULT 'processing',
-    s3_key       TEXT,
     uploaded_by  UUID REFERENCES users(user_id),
     uploaded_at  TIMESTAMP DEFAULT NOW()
 );
