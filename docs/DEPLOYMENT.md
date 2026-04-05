@@ -26,7 +26,7 @@ From repo root:
      - `LANGFUSE_BASE_URL=https://cloud.langfuse.com`
      - `LANGFUSE_CAPTURE_CONTENT=false`
 
-  For local development, continue using `.env.example`.
+  For local development, use `.env` if you need overrides; compose defaults handle base values.
 
 ## 2) Start Application
 

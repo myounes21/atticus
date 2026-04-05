@@ -55,7 +55,6 @@ atticus/
 ## Quick Start
 
 ```bash
-cp .env.example .env
 docker compose up --build -d
 docker compose exec ollama ollama pull llama3.3:70b
 docker compose --profile demo run --rm demo-seed
@@ -110,7 +109,7 @@ docker compose --profile demo run --rm demo-seed
 
 ## Deployment
 
-- Local/dev env template: `.env.example`
+- Runtime env file: `.env` (optional; compose defaults are provided)
 - Production env template: `.env.production.example`
 - Standard app stack: `docker compose up --build -d`
 - HTTPS proxy (Caddy): `docker compose --profile prod up -d caddy`
