@@ -29,14 +29,24 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     if: >-
-      ((github.event_name == 'push') ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.target == 'staging')) &&
-      secrets.STAGING_SSH_HOST != '' &&
-      secrets.STAGING_SSH_USER != '' &&
-      secrets.STAGING_SSH_KEY != '' &&
-      secrets.STAGING_DEPLOY_PATH != ''
+      (github.event_name == 'push') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.target == 'staging')
     steps:
+      - name: Check staging secrets
+        if: >-
+          secrets.STAGING_SSH_HOST == '' ||
+          secrets.STAGING_SSH_USER == '' ||
+          secrets.STAGING_SSH_KEY == '' ||
+          secrets.STAGING_DEPLOY_PATH == ''
+        run: |
+          echo "Required staging secrets are not configured."
+          exit 1
       - name: Deploy over SSH
+        if: >-
+          secrets.STAGING_SSH_HOST != '' &&
+          secrets.STAGING_SSH_USER != '' &&
+          secrets.STAGING_SSH_KEY != '' &&
+          secrets.STAGING_DEPLOY_PATH != ''
         uses: appleboy/ssh-action@v1.2.0
         env:
           DEPLOY_PATH: ${{ secrets.STAGING_DEPLOY_PATH }}
@@ -75,13 +85,23 @@ jobs:
     environment: production
     if: >-
       github.event_name == 'workflow_dispatch' &&
-      github.event.inputs.target == 'production' &&
-      secrets.PRODUCTION_SSH_HOST != '' &&
-      secrets.PRODUCTION_SSH_USER != '' &&
-      secrets.PRODUCTION_SSH_KEY != '' &&
-      secrets.PRODUCTION_DEPLOY_PATH != ''
+      github.event.inputs.target == 'production'
     steps:
+      - name: Check production secrets
+        if: >-
+          secrets.PRODUCTION_SSH_HOST == '' ||
+          secrets.PRODUCTION_SSH_USER == '' ||
+          secrets.PRODUCTION_SSH_KEY == '' ||
+          secrets.PRODUCTION_DEPLOY_PATH == ''
+        run: |
+          echo "Required production secrets are not configured."
+          exit 1
       - name: Deploy over SSH
+        if: >-
+          secrets.PRODUCTION_SSH_HOST != '' &&
+          secrets.PRODUCTION_SSH_USER != '' &&
+          secrets.PRODUCTION_SSH_KEY != '' &&
+          secrets.PRODUCTION_DEPLOY_PATH != ''
         uses: appleboy/ssh-action@v1.2.0
         env:
           DEPLOY_PATH: ${{ secrets.PRODUCTION_DEPLOY_PATH }}
