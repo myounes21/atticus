@@ -95,9 +95,7 @@ Upload path (`/cases/{case_id}/documents/upload`) currently:
 
 1. Validates size/extension.
 2. Writes a local temp copy in `/tmp/atticus_uploads`.
-3. Attempts S3 upload first when configured (`documents/{case_id}/{file_id}/{name}`).
-4. Persists `documents.s3_key` on S3 success; otherwise temp file remains fallback source.
-5. Creates `documents` row (`processing`) and runs async ingestion task.
+3. Persists a `documents` row (`processing`) and runs async ingestion task against the local temp file.
 
 Pipeline stages:
 
