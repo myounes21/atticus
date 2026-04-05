@@ -14,7 +14,8 @@ class Settings(BaseSettings):
     # LLM
     ollama_base_url: str = "http://localhost:11434"
 
-    ollama_model: str = "llama3.3:70b"
+    # production model : llama3.3:70b
+    ollama_model: str = "phi3"
 
     # Document detector configs
     detection_snippet_length: int = 1000
