@@ -1,141 +1,115 @@
-# Atticus
+<div align="center">
+  <h1>Atticus</h1>
+  <p><strong>A private legal workspace for case-scoped document search and cited AI answers.</strong></p>
 
-Atticus is a private legal workspace for case-scoped document search and cited AI answers.
+  [![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white)](https://python.org)
+  [![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js&logoColor=white)](https://nextjs.org)
+  [![React](https://img.shields.io/badge/React-19-blue?logo=react&logoColor=white)](https://react.dev)
+  [![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+  [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](https://docker.com)
+</div>
 
-It ships as a full-stack app with role-based access, document ingestion, hybrid retrieval, and chat (including streaming).
+<br />
 
-## Highlights
+## About The Project
 
-- Two roles: `admin`, `lawyer`
-- Case-level visibility via `assigned_lawyers`
-- Upload support: `.pdf`, `.docx`, `.txt`, `.eml`
-- Async ingestion with job statuses
-- Hybrid retrieval: Qdrant + Elasticsearch + RRF + rerank
-- Chat endpoints: standard + SSE stream with citation events
-- Docker Compose workflows for local/dev and deployment
+Atticus is a comprehensive full-stack application designed specifically for legal professionals. It provides a secure, role-based workspace where lawyers can upload case files, and leverage state-of-the-art hybrid retrieval and local Large Language Models (LLMs) to interact with their documents. 
 
-## Stack
+By keeping all document ingestion, embedding, and generation in-house (or self-hosted), Atticus guarantees data privacy while providing lightning-fast, cited answers to complex legal queries.
 
-- Frontend: Next.js 15, React 19, TypeScript
-- Backend: FastAPI (Python 3.12)
-- Data: PostgreSQL
-- Search: Qdrant (dense), Elasticsearch (sparse)
-- Cache/Queue: Redis + Celery
-- LLM: local Ollama (`llama3.3:70b`)
-- Tracing: Langfuse (required, metadata-only by default)
+## Key Features
 
-## Project Structure
+- **Role-Based Access Control**: Built-in `admin` and `lawyer` roles. Case visibility is strictly scoped via `assigned_lawyers`.
+- **Robust Document Ingestion**: Supports `.pdf`, `.docx`, `.txt`, and `.eml` files with an asynchronous, robust ingestion pipeline (parsing, chunking, indexing).
+- **Advanced Hybrid Retrieval**: Combines dense vector search (Qdrant) and sparse keyword search (Elasticsearch) via Reciprocal Rank Fusion (RRF), capped off with cross-encoder reranking.
+- **Streaming AI Chat with Citations**: Server-Sent Events (SSE) stream the AI's response in real-time, injecting inline citations pointing exactly to the source documents.
+- **Seamless Deployment**: fully containerized with Docker Compose for local development, demo environments, and production deployment.
 
-```text
-atticus/
-├── backend/
-│   ├── api/              # FastAPI app, routes, middleware
-│   ├── core/             # Security, dependencies, observability, rate limiting
-│   ├── db/               # PostgreSQL, Redis, Qdrant, Elasticsearch clients
-│   ├── generation/       # LLM chat pipeline and streaming helpers
-│   ├── ingestion/        # Parsing, chunking, indexing ingestion pipeline
-│   ├── retrieval/        # Dense+sparse retrieval, reranking, fusion
-│   ├── schemas/          # Pydantic request/response models
-│   ├── scripts/          # Operational scripts (migrations/seeding tasks)
-│   └── migrations/       # SQL schema migrations
-├── frontend/
-│   ├── src/              # Next.js UI code
-│   └── public/           # Static assets
-├── tests/
-│   ├── unit/
-│   ├── evaluation/
-│   └── legal_safety/
-├── docs/                 # Deployment and operational docs
-├── deploy/               # Reverse-proxy configuration (Caddy)
-├── demo data/            # Demo files seeded into the app
-├── docker-compose.yml    # Local/dev/prod service orchestration
-└── README.md
-```
+## Technology Stack
+
+| Category | Technologies |
+| --- | --- |
+| **Frontend** | Next.js 15, React 19, TypeScript, Tailwind CSS |
+| **Backend** | FastAPI (Python 3.12), Pydantic, Celery |
+| **Databases** | PostgreSQL (Relational), Redis (Cache/Queue) |
+| **Search & Vector DB**| Qdrant (Dense), Elasticsearch (Sparse) |
+| **AI / Machine Learning** | Local Ollama (`llama3.3:70b`), `sentence-transformers` |
+| **Observability** | Langfuse |
 
 ## Quick Start
 
+### Prerequisites
+- [Docker](https://docs.docker.com/get-docker/) and Docker Compose
+- Ensure you have sufficient resources to run `llama3.3:70b` locally or update the model configuration.
+
+### Installation
+
+1. **Start the application stack**
+   ```bash
+   docker compose up --build -d
+   ```
+
+2. **Pull the LLM model**
+   ```bash
+   docker compose exec ollama ollama pull llama3.3:70b
+   ```
+
+3. **Seed demo data**
+   ```bash
+   docker compose --profile demo run --rm demo-seed
+   ```
+
+4. **Access the application**
+   Open your browser and navigate to `http://localhost:3000`.
+
+### Health Checks
+
+Verify the backend is ready:
 ```bash
-docker compose up --build -d
-docker compose exec ollama ollama pull llama3.3:70b
-docker compose --profile demo run --rm demo-seed
+curl -f http://localhost:8000/ready
 ```
-
-Open `http://localhost:3000`.
-
-Useful checks:
-
+Check running containers and logs:
 ```bash
 docker compose ps
 docker compose logs -f backend
 ```
 
-Backend readiness: `http://localhost:8000/ready`
+## Demo Experience
 
-## Demo Accounts
+Experience the platform using our seeded demo data (the *Finch Demo Matter* case). 
 
-- `demo.admin@atticus.local` / `DemoPass!123`
-- `demo.lawyer@atticus.local` / `DemoPass!123`
+**Demo Accounts:**
+- **Admin:** `demo.admin@atticus.local` | `DemoPass!123`
+- **Lawyer:** `demo.lawyer@atticus.local` | `DemoPass!123`
 
-## Demo Dataset
-
-- Seeded case: `Finch Demo Matter` (client: `Finch Legal Demo`)
-- Source directory: `demo data/`
-- Included files:
-  - `defense_brief_v1.docx`
-  - `prosecution_brief_v1.docx`
-  - `medical_report.pdf`
-  - `mayella_ewell_deposition.txt`
-  - `tom_robinson_deposition.txt`
-  - `sheriff_tate_deposition.txt`
-  - `witness_statement_bob_ewell.docx`
-  - `incident_timeline.txt`
-  - `strategy_notes.txt`
-  - `contradictions_log.txt`
-  - `strategy_discussion.eml`
-
-To reset and reseed demo content:
-
+To reset and re-seed demo content at any time:
 ```bash
 docker compose --profile demo run --rm demo-seed
 ```
 
-## Core API Surface
+## Documentation
 
-- Auth: `/auth/register`, `/auth/login`, `/auth/logout`, `/auth/me`
-- Cases: `/cases`, `/cases/{case_id}`, `/cases/lawyers`, `/cases/demo/reset`
-- Documents: `/cases/{case_id}/documents/*`
-- Ingestion: `/ingestion/jobs`, `/ingestion/jobs/{file_id}`
-- Chat: `/chat`, `/chat/stream`, `/chat/conversations/*`
+For a deep dive into the system design, APIs, and deployment, please refer to the following documentation:
 
-## Deployment
+- **[Architecture & Technical Details](docs/ARCHITECTURE.md)**: Explore the system snapshot, ingestion pipeline, hybrid retrieval logic, and database schemas.
+- **[Deployment Runbook](docs/DEPLOYMENT.md)**: Step-by-step guide for staging and production deployments, including CI/CD and HTTPS proxy setup.
 
-- Runtime env file: `.env` (optional; compose defaults are provided)
-- Production env template: `.env.production.example`
-- Standard app stack: `docker compose up --build -d`
-- HTTPS proxy (Caddy): `docker compose --profile prod up -d caddy`
-- Full runbook: `docs/DEPLOYMENT.md`
+## Testing and Validation
 
-## CI/CD
-
-- CI checks: `.github/workflows/eval_gate.yml`
-- Deploy workflow: `.github/workflows/deploy_cd.yml`
-
-## Practical Notes
-
-- Retrieval and route handlers enforce case scoping (`case_id`, `assigned_lawyers`, `is_latest`).
-- Embeddings use `sentence-transformers` (`BAAI/bge-m3`) with optional deterministic fallback (`EMBEDDING_FALLBACK_ENABLED`).
-- Production mode blocks startup if fallback embeddings are allowed (`APP_ENV=production` requires `EMBEDDING_FALLBACK_ENABLED=false`).
-- `/ready` validates embedding backend availability to catch model dependency issues before serving traffic.
-- Reranker falls back gracefully if CrossEncoder runtime deps are unavailable.
-- Some evaluation/legal-safety test files are present as placeholders.
-
-## Validation
+Validate the codebase using built-in scripts:
 
 ```bash
-cd frontend && npm run lint && npm run build
+# Frontend Lints and Build
+cd frontend
+npm run lint && npm run build
+
+# Backend Tests
+cd ../backend
 uv run pytest
 ```
 
-## More Details
+---
 
-For implementation-accurate technical notes, see `atticus_documentaion.md`.
+<div align="center">
+  <p>Built by an engineer passionate about intuitive design and scalable architecture.</p>
+</div>
