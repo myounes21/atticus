@@ -9,7 +9,7 @@ from backend.db.postgres import IngestionJobStore
 
 
 def _set_admin_override() -> None:
-    app.dependency_overrides[get_current_user] = lambda: CurrentUser(  # noqa: E731
+    app.dependency_overrides[get_current_user] = lambda: CurrentUser(
         user_id=uuid.uuid4(),
         role="admin",
     )

@@ -15,7 +15,7 @@ class CurrentUser:
     """Lightweight object attached to the request after JWT validation."""
 
     user_id: uuid.UUID
-    role: str  # "admin" | "lawyer"
+    role: str
 
 
 async def get_current_user(

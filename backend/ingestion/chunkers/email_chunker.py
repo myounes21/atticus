@@ -10,9 +10,18 @@ from backend.schemas.parsed_document import DOCUMENT_CATEGORY, EmailStructure
 class EmailChunker(BaseChunker):
 
     def chunk(self, document: ParsedDocument) -> list[Chunk]:
-        if not isinstance(document.structure, EmailStructure):
-            return []
+        # If this is a proper .eml-parsed document, use the structured path.
+        if isinstance(document.structure, EmailStructure):
+            return self._chunk_email_structure(document)
 
+        # Fallback: .txt file classified as 'email' by the LLM.
+        # TxtParser produces no EmailStructure, so we chunk the raw text directly.
+        if document.text and document.text.strip():
+            return self._chunk_plain_text(document)
+
+        return []
+
+    def _chunk_email_structure(self, document: ParsedDocument) -> list[Chunk]:
         structure = document.structure
         chunks: list[Chunk] = []
         file_type: Literal["pdf", "docx", "eml", "txt"]
@@ -51,6 +60,30 @@ class EmailChunker(BaseChunker):
                 )
                 chunks.append(chunk)
 
+        return chunks
+
+    def _chunk_plain_text(self, document: ParsedDocument) -> list[Chunk]:
+        """Plain-text fallback for .txt files classified as email by the LLM."""
+        file_type: Literal["pdf", "docx", "eml", "txt"] = cast(
+            Literal["pdf", "docx", "eml", "txt"],
+            document.metadata.file_type or "txt",
+        )
+        document_type: DOCUMENT_CATEGORY = cast(
+            DOCUMENT_CATEGORY, document.metadata.document_category or "email"
+        )
+        document_name = document.metadata.document_name or "unknown.txt"
+
+        sub_texts = self._split_if_needed(document.text.strip())
+        chunks: list[Chunk] = []
+        for sub_text in sub_texts:
+            chunk = Chunk(
+                text=sub_text,
+                chunk_index=len(chunks),
+                file_type=file_type,
+                document_type=document_type,
+                document_name=document_name,
+            )
+            chunks.append(chunk)
         return chunks
 
     def _split_if_needed(self, text: str) -> list[str]:

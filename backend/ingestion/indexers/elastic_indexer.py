@@ -85,26 +85,3 @@ def delete_by_file_id(
             }
         },
     )
-
-
-def mark_not_latest(
-    file_id: str | uuid.UUID,
-    client: Elasticsearch | None = None,
-) -> None:
-    """Set is_latest=False for all documents belonging to a file_id.
-
-    Used during document versioning.
-    """
-    client = client or _get_client()
-    client.update_by_query(
-        index=settings.elasticsearch_index_name,
-        body={
-            "query": {
-                "term": {"file_id": str(file_id)}
-            },
-            "script": {
-                "source": "ctx._source.is_latest = false",
-                "lang": "painless",
-            },
-        },
-    )

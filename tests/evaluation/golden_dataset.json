@@ -1,0 +1,2199 @@
+[
+    {
+        "question": "What is the full name of the deponent in the DEPOSITION OF MAYELLA EWELL?",
+        "ground_truth": "Mayella Ewell",
+        "expected_keywords": [
+            "Mayella Ewell",
+            "deponent",
+            "DEPOSITION"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What is the official case name cited in the document?",
+        "ground_truth": "Finch v. State",
+        "expected_keywords": [
+            "Finch v. State",
+            "case name",
+            "official case"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "On what specific date was the deposition taken?",
+        "ground_truth": "November 24",
+        "expected_keywords": [
+            "November 24",
+            "deposition date",
+            "date taken"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "Where was Mayella Ewell located on the evening of November 21st, according to her testimony?",
+        "ground_truth": "At home",
+        "expected_keywords": [
+            "at home",
+            "evening of November 21st",
+            "located"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "Did Mayella Ewell state that she invited Tom Robinson inside, and what was her exact response?",
+        "ground_truth": "No, he came in.",
+        "expected_keywords": [
+            "No, he came in",
+            "invited Tom Robinson",
+            "inside"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What did Mayella Ewell allege Tom Robinson did to her?",
+        "ground_truth": "He attacked me.",
+        "expected_keywords": [
+            "attacked me",
+            "allege",
+            "Tom Robinson"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "According to Mayella Ewell's testimony, who arrived after she screamed?",
+        "ground_truth": "My father.",
+        "expected_keywords": [
+            "My father",
+            "after she screamed",
+            "arrived"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "Had Tom Robinson been to Mayella Ewell's house before the incident, and what was her answer?",
+        "ground_truth": "Yes, to help sometimes.",
+        "expected_keywords": [
+            "Yes, to help sometimes",
+            "been to your house before",
+            "Tom Robinson"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What did Mayella Ewell state when asked which hand Tom Robinson used during the alleged attack?",
+        "ground_truth": "I do not remember.",
+        "expected_keywords": [
+            "I do not remember",
+            "which hand",
+            "alleged attack"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "Did Mayella Ewell confirm that she screamed during the incident?",
+        "ground_truth": "Yes.",
+        "expected_keywords": [
+            "Yes",
+            "scream",
+            "during the incident"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What specific physical limitation does the defendant have that supports the left vs right injury pattern defense?",
+        "ground_truth": "The defendant's left arm has been unusable since a childhood injury.",
+        "expected_keywords": [
+            "left arm unusable",
+            "childhood injury",
+            "left vs right injury pattern"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "email"
+    },
+    {
+        "question": "Was there any direct eyewitness to the alleged assault, according to the defense strategy notes?",
+        "ground_truth": "No, there was no direct witness to the alleged assault.",
+        "expected_keywords": [
+            "no direct witness",
+            "alleged assault",
+            "defense strategy notes"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "email"
+    },
+    {
+        "question": "What type of evidence did law enforcement fail to collect in this case?",
+        "ground_truth": "Law enforcement did not gather forensic evidence.",
+        "expected_keywords": [
+            "forensic evidence",
+            "law enforcement",
+            "did not gather"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "email"
+    },
+    {
+        "question": "Why does the defense strategy emphasize grounding arguments in physical facts?",
+        "ground_truth": "Because jury bias risk is high, so arguments must remain grounded in physical facts.",
+        "expected_keywords": [
+            "jury bias risk",
+            "high",
+            "physical facts"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "email"
+    },
+    {
+        "question": "Which injury pattern is central to the defense\u2019s physical argument?",
+        "ground_truth": "The left vs right injury pattern is central to the defense\u2019s physical argument.",
+        "expected_keywords": [
+            "left vs right injury pattern",
+            "defense",
+            "physical argument"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "email"
+    },
+    {
+        "question": "What longstanding medical condition does the defendant have involving the left arm?",
+        "ground_truth": "The defendant has had an unusable left arm since a childhood injury.",
+        "expected_keywords": [
+            "unusable left arm",
+            "childhood injury",
+            "longstanding medical condition"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "email"
+    },
+    {
+        "question": "According to the notes, what is the status of forensic evidence collection by authorities?",
+        "ground_truth": "Forensic evidence was not gathered by law enforcement.",
+        "expected_keywords": [
+            "forensic evidence",
+            "not gathered",
+            "law enforcement"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "email"
+    },
+    {
+        "question": "How does the defense strategy propose mitigating the risk of jury bias?",
+        "ground_truth": "By keeping the argument grounded in physical facts.",
+        "expected_keywords": [
+            "mitigating jury bias",
+            "grounded in physical facts",
+            "defense strategy"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "email"
+    },
+    {
+        "question": "What two key evidentiary weaknesses are highlighted in the defense strategy notes?",
+        "ground_truth": "The absence of a direct witness and the failure to gather forensic evidence.",
+        "expected_keywords": [
+            "no direct witness",
+            "forensic evidence",
+            "evidentiary weaknesses"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "email"
+    },
+    {
+        "question": "Is the defendant\u2019s left arm functional, and if not, what is the basis for its impairment?",
+        "ground_truth": "No, the defendant\u2019s left arm is unusable due to a childhood injury.",
+        "expected_keywords": [
+            "left arm unusable",
+            "childhood injury",
+            "functional"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "email"
+    },
+    {
+        "question": "What does the medical note indicate about the likely handedness of the assailant based on the injury pattern?",
+        "ground_truth": "The medical note suggests a likely left-handed strike pattern.",
+        "expected_keywords": [
+            "medical note",
+            "left-handed strike pattern",
+            "injury pattern"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Where are Mayella's injuries primarily located according to the Contradictions Log?",
+        "ground_truth": "The injuries are primarily on the right side of her face.",
+        "expected_keywords": [
+            "injuries",
+            "right side of face",
+            "Contradictions Log"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What physical limitation does the defendant have that contradicts the left-handed strike pattern suggested by the medical note?",
+        "ground_truth": "The defendant cannot use his left arm.",
+        "expected_keywords": [
+            "defendant",
+            "cannot use left arm",
+            "left-handed strike pattern"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What does the Contradictions Log state about Mayella's certainty regarding which hand was used in the alleged assault?",
+        "ground_truth": "Mayella is unsure which hand was used.",
+        "expected_keywords": [
+            "Mayella",
+            "unsure which hand",
+            "Contradictions Log"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Did Bob Ewell directly witness the assault, according to the Contradictions Log?",
+        "ground_truth": "No, Bob Ewell did not witness the assault directly.",
+        "expected_keywords": [
+            "Bob Ewell",
+            "did not witness",
+            "directly"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What does the Contradictions Log say about the sheriff's investigation into alternate suspects?",
+        "ground_truth": "The sheriff investigated no alternate suspect.",
+        "expected_keywords": [
+            "Sheriff",
+            "investigated no alternate suspect",
+            "Contradictions Log"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "How does the location of Mayella's injuries relate to the medical note's conclusion about the assailant's handedness?",
+        "ground_truth": "The injuries on the right side of her face align with a left-handed strike pattern per the medical note.",
+        "expected_keywords": [
+            "right side of face",
+            "left-handed strike pattern",
+            "medical note"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What contradiction exists between the medical note's left-handed strike pattern and the defendant's physical capability?",
+        "ground_truth": "The defendant cannot use his left arm, making it implausible he delivered a left-handed strike.",
+        "expected_keywords": [
+            "medical note",
+            "left-handed strike pattern",
+            "cannot use left arm"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Is there any indication in the Contradictions Log that the sheriff considered or ruled out other potential perpetrators?",
+        "ground_truth": "No\u2014the sheriff investigated no alternate suspect.",
+        "expected_keywords": [
+            "sheriff",
+            "investigated no alternate suspect",
+            "Contradictions Log"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What key evidentiary inconsistency arises from Mayella's uncertainty about which hand was used, given the medical and physical evidence?",
+        "ground_truth": "Her uncertainty conflicts with the medical note's left-handed strike pattern and the defendant's inability to use his left arm.",
+        "expected_keywords": [
+            "Mayella",
+            "unsure which hand",
+            "medical note",
+            "cannot use left arm"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What specific injuries did you observe on the victim's face during the DEPOSITION OF SHERIFF HECK TATE?",
+        "ground_truth": "Injuries on the right side of her face.",
+        "expected_keywords": [
+            "DEPOSITION OF SHERIFF HECK TATE",
+            "injuries",
+            "right side of her face"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "Did Sheriff Heck Tate collect any physical evidence in the Finch v. State case?",
+        "ground_truth": "No.",
+        "expected_keywords": [
+            "Finch v. State",
+            "physical evidence",
+            "collect"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "Was there any investigation into other suspects conducted by Sheriff Heck Tate in this matter?",
+        "ground_truth": "No.",
+        "expected_keywords": [
+            "investigate other suspects",
+            "Sheriff Heck Tate",
+            "Finch v. State"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "On what date was the DEPOSITION OF SHERIFF HECK TATE taken in Finch v. State?",
+        "ground_truth": "November 22.",
+        "expected_keywords": [
+            "DEPOSITION OF SHERIFF HECK TATE",
+            "November 22",
+            "Finch v. State"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What is the full case name associated with the DEPOSITION OF SHERIFF HECK TATE?",
+        "ground_truth": "Finch v. State.",
+        "expected_keywords": [
+            "case name",
+            "Finch v. State",
+            "DEPOSITION OF SHERIFF HECK TATE"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "According to Sheriff Heck Tate\u2019s testimony, where exactly were the victim\u2019s injuries located?",
+        "ground_truth": "On the right side of her face.",
+        "expected_keywords": [
+            "injuries",
+            "right side of her face",
+            "Sheriff Heck Tate"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "Did Sheriff Heck Tate state that he collected physical evidence during his involvement in Finch v. State?",
+        "ground_truth": "No.",
+        "expected_keywords": [
+            "collected physical evidence",
+            "Sheriff Heck Tate",
+            "Finch v. State"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "In the DEPOSITION OF SHERIFF HECK TATE, was there any indication that alternative suspects were pursued?",
+        "ground_truth": "No.",
+        "expected_keywords": [
+            "DEPOSITION OF SHERIFF HECK TATE",
+            "other suspects",
+            "pursued"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What procedural document is referenced in the text that contains Sheriff Heck Tate\u2019s sworn testimony?",
+        "ground_truth": "DEPOSITION OF SHERIFF HECK TATE.",
+        "expected_keywords": [
+            "procedural document",
+            "DEPOSITION OF SHERIFF HECK TATE",
+            "sworn testimony"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "In Finch v. State, did Sheriff Heck Tate confirm investigating other suspects beyond the named defendant?",
+        "ground_truth": "No.",
+        "expected_keywords": [
+            "Finch v. State",
+            "investigating other suspects",
+            "Sheriff Heck Tate"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "At what time was the alleged incident reported to authorities in Finch v. State?",
+        "ground_truth": "18:15",
+        "expected_keywords": [
+            "alleged incident",
+            "reported",
+            "18:15"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "When was the sheriff notified in the Finch v. State incident timeline?",
+        "ground_truth": "19:00",
+        "expected_keywords": [
+            "sheriff notified",
+            "19:00",
+            "Finch v. State"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What time did Tom Robinson appear near the Ewell residence according to the incident timeline?",
+        "ground_truth": "17:00",
+        "expected_keywords": [
+            "Tom Robinson",
+            "Ewell residence",
+            "17:00"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "At what time did the medical exam occur in the Finch v. State case?",
+        "ground_truth": "19:00",
+        "expected_keywords": [
+            "medical exam",
+            "19:00",
+            "Finch v. State"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the case name associated with the incident timeline involving Tom Robinson and the Ewell residence?",
+        "ground_truth": "Finch v. State",
+        "expected_keywords": [
+            "case name",
+            "Finch v. State",
+            "Tom Robinson"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "How many minutes elapsed between the alleged incident and the time the report was made?",
+        "ground_truth": "15 minutes",
+        "expected_keywords": [
+            "alleged incident",
+            "report made",
+            "15 minutes"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What event occurred at 18:00 in the Finch v. State incident timeline?",
+        "ground_truth": "Alleged incident",
+        "expected_keywords": [
+            "18:00",
+            "alleged incident",
+            "Finch v. State"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "At what time was the sheriff notified relative to the alleged incident in Finch v. State?",
+        "ground_truth": "30 minutes after the alleged incident",
+        "expected_keywords": [
+            "sheriff notified",
+            "alleged incident",
+            "30 minutes"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Which individual is documented as being seen near the Ewell residence at 17:00 in the incident timeline?",
+        "ground_truth": "Tom Robinson",
+        "expected_keywords": [
+            "Tom Robinson",
+            "Ewell residence",
+            "17:00"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the chronological order of the events 'Report made', 'Sheriff notified', and 'Medical exam' in the Finch v. State timeline?",
+        "ground_truth": "Report made (18:15), Sheriff notified (18:30), Medical exam (19:00)",
+        "expected_keywords": [
+            "Report made",
+            "Sheriff notified",
+            "Medical exam"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the full case name referenced in the deposition header?",
+        "ground_truth": "Finch v. State",
+        "expected_keywords": [
+            "Finch v. State",
+            "case name",
+            "deposition header"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "On what specific date was the deposition of Tom Robinson conducted?",
+        "ground_truth": "November 25",
+        "expected_keywords": [
+            "November 25",
+            "deposition date",
+            "specific date"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "According to Tom Robinson, why was he near the Ewell residence?",
+        "ground_truth": "He was passing by.",
+        "expected_keywords": [
+            "Ewell residence",
+            "passing by",
+            "near"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "Did Tom Robinson admit to entering the Ewell house, and if so, what reason did he give?",
+        "ground_truth": "Yes, he entered because she asked him to help.",
+        "expected_keywords": [
+            "enter the house",
+            "asked me to help",
+            "Ewell house"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "Who appeared inside the Ewell residence after Tom Robinson entered, according to his testimony?",
+        "ground_truth": "Her father appeared.",
+        "expected_keywords": [
+            "her father",
+            "inside",
+            "Ewell residence"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What was Tom Robinson\u2019s direct response when asked whether he assaulted her?",
+        "ground_truth": "No, sir.",
+        "expected_keywords": [
+            "assault her",
+            "No, sir",
+            "direct response"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What physical limitation did Tom Robinson state regarding his left arm?",
+        "ground_truth": "It is useless.",
+        "expected_keywords": [
+            "left arm",
+            "useless",
+            "physical limitation"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "Did Tom Robinson testify that he had ever harmed her, and what was his answer?",
+        "ground_truth": "No, he testified he had never harmed her.",
+        "expected_keywords": [
+            "harmed her",
+            "Never",
+            "testify"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What does Tom Robinson\u2019s statement 'it is useless' refer to in the context of his left arm?",
+        "ground_truth": "His inability to use his left arm.",
+        "expected_keywords": [
+            "left arm",
+            "useless",
+            "inability to use"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "In the deposition, who is the 'she' consistently referenced in Tom Robinson\u2019s answers about being asked for help and speaking to him?",
+        "ground_truth": "Mayella Ewell.",
+        "expected_keywords": [
+            "Mayella Ewell",
+            "asked me to help",
+            "speaking to him"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What specific legal claims are being asserted against XYZ Corporation in this complex litigation case?",
+        "ground_truth": "Breach of contract and negligence.",
+        "expected_keywords": [
+            "breach of contract",
+            "negligence",
+            "XYZ Corporation"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the estimated total cost range for handling this complex litigation case, according to Emily J. Miller?",
+        "ground_truth": "$200,000 to $500,000.",
+        "expected_keywords": [
+            "$200,000 to $500,000",
+            "total costs",
+            "complex litigation case"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the anticipated timeline for case completion, assuming resolution through settlement or trial?",
+        "ground_truth": "Approximately 12 to 18 months.",
+        "expected_keywords": [
+            "12 to 18 months",
+            "timeline for completion",
+            "settlement or trial"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Which two types of expert witnesses have been retained to support the damages claim in this matter?",
+        "ground_truth": "A forensic accountant and a business consultant.",
+        "expected_keywords": [
+            "forensic accountant",
+            "business consultant",
+            "expert witnesses"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What categories of damages are being sought on behalf of John Doe\u2019s business?",
+        "ground_truth": "Lost profits, damages to reputation, and any other relevant damages.",
+        "expected_keywords": [
+            "lost profits",
+            "damages to your reputation",
+            "relevant damages"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the estimated range of potential monetary recovery in this case?",
+        "ground_truth": "$1 million to $5 million.",
+        "expected_keywords": [
+            "$1 million to $5 million",
+            "potential damages",
+            "monetary recovery"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What discovery activities are specifically mentioned as necessary before filing the complaint?",
+        "ground_truth": "Deposing key witnesses and obtaining relevant documents from XYZ Corporation.",
+        "expected_keywords": [
+            "deposing key witnesses",
+            "obtaining relevant documents",
+            "XYZ Corporation"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "On what date and at what time is the scheduled in-person meeting between Emily J. Miller and John Doe?",
+        "ground_truth": "Thursday, March 16, 2023, at 2:00 PM.",
+        "expected_keywords": [
+            "Thursday, March 16, 2023",
+            "2:00 PM",
+            "in-person meeting"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What standard does the attorney use to characterize XYZ Corporation\u2019s conduct in causing harm to the client\u2019s business?",
+        "ground_truth": "Reckless.",
+        "expected_keywords": [
+            "reckless",
+            "XYZ Corporation's actions",
+            "caused significant harm"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What confidentiality designation applies to this email chain, as stated in the disclaimer?",
+        "ground_truth": "Confidential and privileged information.",
+        "expected_keywords": [
+            "confidential and privileged information",
+            "email chain",
+            "disclaimer"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the governing law specified in the Master Services Agreement?",
+        "ground_truth": "New York",
+        "expected_keywords": [
+            "governing law",
+            "New York"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "How many business days does the Client have to dispute an invoice after receipt?",
+        "ground_truth": "10 business days",
+        "expected_keywords": [
+            "Invoice dispute window",
+            "10 business days"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the late fee rate applied to undisputed overdue balances?",
+        "ground_truth": "1.0% per month",
+        "expected_keywords": [
+            "Late fees",
+            "1.0% per month"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the required cure period before termination for material breach?",
+        "ground_truth": "15-day cure period",
+        "expected_keywords": [
+            "material breach",
+            "15-day cure period"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Within how many business days must counsel deliver transfer-ready work product following termination?",
+        "ground_truth": "7 business days",
+        "expected_keywords": [
+            "Termination and transition",
+            "7 business days"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "How long do confidentiality obligations survive after termination of the agreement?",
+        "ground_truth": "3 years",
+        "expected_keywords": [
+            "Confidentiality obligations",
+            "survive termination",
+            "3 years"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What form of notice is acceptable for scope changes, provided it is acknowledged by both parties?",
+        "ground_truth": "Email notice",
+        "expected_keywords": [
+            "scope change",
+            "Email notice",
+            "acknowledged by both parties"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the effective date of the Master Services Agreement?",
+        "ground_truth": "2024-01-08",
+        "expected_keywords": [
+            "Effective date",
+            "2024-01-08"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Where must client data be stored according to the confidentiality and data handling clause?",
+        "ground_truth": "In systems restricted to assigned legal team members",
+        "expected_keywords": [
+            "Client data",
+            "stored",
+            "assigned legal team members"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the final escalation step in the dispute resolution process if unresolved within 30 days?",
+        "ground_truth": "Litigation in New York courts",
+        "expected_keywords": [
+            "Dispute resolution",
+            "litigation",
+            "New York courts"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the deadline for filing the motion to compel discovery in the Complex Litigation Case?",
+        "ground_truth": "The deadline for filing the motion is March 22, 2023.",
+        "expected_keywords": [
+            "motion to compel discovery",
+            "deadline",
+            "March 22, 2023"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Who drafted the revised version of the motion to compel discovery that narrows the scope of the discovery request?",
+        "ground_truth": "John Doe drafted the revised version of the motion.",
+        "expected_keywords": [
+            "revised version",
+            "motion to compel discovery",
+            "narrow the scope"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What are the three categories of costs included in Emily J. Lee\u2019s estimate for the discovery process?",
+        "ground_truth": "The estimate includes document review, expert witness fees, and court reporter fees.",
+        "expected_keywords": [
+            "document review",
+            "expert witness fees",
+            "court reporter fees"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the estimated cost range for the discovery process in this case?",
+        "ground_truth": "The estimated cost range is $50,000 to $75,000.",
+        "expected_keywords": [
+            "discovery process",
+            "cost range",
+            "$50,000 to $75,000"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What procedural risk does Emily J. Lee identify regarding the motion to compel discovery?",
+        "ground_truth": "The primary risk is that the opposing party may file a motion to quash or limit the scope of the discovery request.",
+        "expected_keywords": [
+            "motion to quash",
+            "limit the scope",
+            "discovery request"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "How long does Emily J. Lee estimate the discovery process will take to complete after filing the motion?",
+        "ground_truth": "She estimates the discovery process will take approximately 60 days to complete.",
+        "expected_keywords": [
+            "discovery process",
+            "60 days",
+            "complete"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What standard procedure in complex litigation does Emily J. Lee describe filing the motion to compel discovery as?",
+        "ground_truth": "She describes it as a standard procedure in complex litigation cases.",
+        "expected_keywords": [
+            "standard procedure",
+            "complex litigation",
+            "motion to compel discovery"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What two strategic benefits does Emily J. Lee cite for filing the motion to compel discovery?",
+        "ground_truth": "Obtaining crucial documents and testimony to build a stronger case and increase chances of success.",
+        "expected_keywords": [
+            "crucial documents",
+            "testimony",
+            "stronger case"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What date and time did Emily J. Lee propose for the conference call to discuss the case in more detail?",
+        "ground_truth": "She proposed Friday, March 17, 2023, at 10:00 AM.",
+        "expected_keywords": [
+            "conference call",
+            "Friday, March 17, 2023",
+            "10:00 AM"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What legal objective does the motion to compel discovery aim to achieve in the Complex Litigation Case against XYZ Corporation?",
+        "ground_truth": "It aims to obtain crucial documents and testimony from the opposing party to strengthen the client\u2019s position.",
+        "expected_keywords": [
+            "motion to compel discovery",
+            "crucial documents",
+            "testimony"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the full name and address of the deponent as stated on the record?",
+        "ground_truth": "Jennifer Lee Wilson, 1234 SW 82nd Avenue, Miami, Florida 33143.",
+        "expected_keywords": [
+            "Jennifer Lee Wilson",
+            "1234 SW 82nd Avenue",
+            "Miami, Florida 33143"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What educational degrees does the witness hold, and from which institution and in what years were they obtained?",
+        "ground_truth": "A Bachelor's degree in Business Administration from the University of Miami in 2005, and a Juris Doctor degree from the University of Miami School of Law in 2013.",
+        "expected_keywords": [
+            "Bachelor's degree in Business Administration",
+            "University of Miami",
+            "Juris Doctor degree"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What is the nature of the witness\u2019s current law practice, and what three categories of cases does she emphasize?",
+        "ground_truth": "Her practice is focused on commercial litigation, with an emphasis on contract disputes, business torts, and employment law.",
+        "expected_keywords": [
+            "commercial litigation",
+            "contract disputes",
+            "business torts",
+            "employment law"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What is the name of the plaintiff\u2019s company involved in the services agreement, and what is the defendant\u2019s corporate name as identified in the deposition?",
+        "ground_truth": "Doe Enterprises and XYZ Corporation.",
+        "expected_keywords": [
+            "Doe Enterprises",
+            "XYZ Corporation",
+            "services agreement"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What specific services were XYZ Corporation obligated to provide under the 2018 services agreement, and for what duration?",
+        "ground_truth": "Marketing and advertising services for a period of two years.",
+        "expected_keywords": [
+            "marketing and advertising services",
+            "two years",
+            "2018 services agreement"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What role did the witness play in negotiating the services agreement, and did she review and approve the final version?",
+        "ground_truth": "She represented Mr. Doe and Doe Enterprises in the negotiation and reviewed and approved the final version of the agreement.",
+        "expected_keywords": [
+            "negotiation of the agreement",
+            "reviewed and approved",
+            "final version of the agreement"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What are the two primary allegations asserted in the complaint filed by the plaintiff?",
+        "ground_truth": "That XYZ Corporation breached the services agreement and engaged in unfair and deceptive business practices.",
+        "expected_keywords": [
+            "breached the services agreement",
+            "unfair and deceptive business practices",
+            "complaint"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What is the basis of the defendant\u2019s counterclaim, and what specific contractual obligation does it allege was breached by Doe Enterprises?",
+        "ground_truth": "The counterclaim alleges that Doe Enterprises breached the services agreement by failing to pay certain fees due under the contract.",
+        "expected_keywords": [
+            "counterclaim",
+            "Doe Enterprises breached the services agreement",
+            "fees due under the contract"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What types of losses are included in the damages sought by the plaintiff, and what three categories are explicitly named?",
+        "ground_truth": "The losses include the cost of hiring another company to provide the services, lost profits, and business opportunities.",
+        "expected_keywords": [
+            "cost of hiring another company",
+            "lost profits",
+            "business opportunities"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "Which two Florida statutes does the witness opine are applicable to this case, and what legal claims do they support?",
+        "ground_truth": "The Florida Uniform Commercial Code (supports breach of contract claims) and the Florida Deceptive and Unfair Trade Practices Act (supports unfair and deceptive trade practices claims).",
+        "expected_keywords": [
+            "Florida Uniform Commercial Code",
+            "Florida Deceptive and Unfair Trade Practices Act",
+            "breach of contract claims"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What is the full name and address of the deponent as stated in the deposition?",
+        "ground_truth": "Jennifer Lee Wilson, 1234 SW 82nd Avenue, Miami, Florida 33144.",
+        "expected_keywords": [
+            "Jennifer Lee Wilson",
+            "1234 SW 82nd Avenue",
+            "Miami, Florida 33144"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "In what year did Ms. Wilson purchase her condominium unit at Oceanview Towers, and what was the purchase price?",
+        "ground_truth": "She purchased it in 2015 for $425,000.",
+        "expected_keywords": [
+            "2015",
+            "Oceanview Towers",
+            "$425,000"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What specific defects did Ms. Wilson report in her condominium unit after moving in?",
+        "ground_truth": "Water leaks and cracks in the walls.",
+        "expected_keywords": [
+            "water leaks",
+            "cracks in the walls",
+            "condominium unit"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "When and how did Ms. Wilson formally complain to ABC Corporation about the defects?",
+        "ground_truth": "She filed a formal complaint in 2018 detailing the issues and requesting repairs and compensation.",
+        "expected_keywords": [
+            "2018",
+            "formal complaint",
+            "ABC Corporation"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "How did Ms. Wilson discover that ABC Corporation had been aware of the defects but failed to disclose them?",
+        "ground_truth": "Through a public records request submitted to the City of Miami regarding the Oceanview Towers development project.",
+        "expected_keywords": [
+            "public records request",
+            "City of Miami",
+            "Oceanview Towers development project"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "Who is the CEO of ABC Corporation with whom Ms. Wilson had direct dealings, and what was the nature of those interactions?",
+        "ground_truth": "Mr. John Smith; interactions were limited to phone calls and emails regarding her complaint, with no in-person meetings.",
+        "expected_keywords": [
+            "Mr. John Smith",
+            "CEO of ABC Corporation",
+            "phone calls and emails"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What types of damages does Ms. Wilson claim to have suffered, and what is her estimated financial loss?",
+        "ground_truth": "Financial losses (repairs and diminished unit value) and emotional distress; she estimates total damages exceed $200,000.",
+        "expected_keywords": [
+            "financial losses",
+            "emotional distress",
+            "$200,000"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "Did Ms. Wilson review the seller's disclosure statement before purchasing the unit, and what did she rely on instead?",
+        "ground_truth": "No, she did not review the seller's disclosure statement; she relied on the seller's agent\u2019s representation that the unit was in good condition and had no known defects.",
+        "expected_keywords": [
+            "seller's disclosure statement",
+            "seller's agent",
+            "good condition"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What exhibit numbers correspond to the purchase agreement and the public records request in the deposition's Exhibit List?",
+        "ground_truth": "Exhibit 2 is the purchase agreement; Exhibit 8 is the public records request.",
+        "expected_keywords": [
+            "Exhibit 2",
+            "Exhibit 8",
+            "purchase agreement"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "Which exhibits contain evidence of ABC Corporation\u2019s internal awareness of defects at Oceanview Towers?",
+        "ground_truth": "Exhibits 21 (emails between Mr. John Smith and other officials) and 22 (memorandum prepared by Mr. John Smith).",
+        "expected_keywords": [
+            "Exhibit 21",
+            "Exhibit 22",
+            "Oceanview Towers"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What is the duration of the Contract Term, and what is the Effective Date?",
+        "ground_truth": "The Contract Term is three (3) years, commencing on the Effective Date of March 15, 2023.",
+        "expected_keywords": [
+            "Contract Term",
+            "Effective Date",
+            "three (3) years"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Which specific software applications are explicitly named as part of the MTS Software definition?",
+        "ground_truth": "The 'MTS Healthcare Management System' and the 'MTS Patient Portal'.",
+        "expected_keywords": [
+            "MTS Software",
+            "MTS Healthcare Management System",
+            "MTS Patient Portal"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Under Article 4, what specific federal law must both Parties comply with regarding Data handling, and what formal agreement governs PHI?",
+        "ground_truth": "The Health Insurance Portability and Accountability Act of 1996 ('HIPAA') and a Business Associate Agreement ('BAA').",
+        "expected_keywords": [
+            "Health Insurance Portability and Accountability Act of 1996",
+            "HIPAA",
+            "Business Associate Agreement"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What are the four categories of Services defined in Article 1.10, and which exhibit contains their detailed scope?",
+        "ground_truth": "Consulting, implementation, support, and customization services; detailed in Exhibit A: Statement of Work.",
+        "expected_keywords": [
+            "Services",
+            "Exhibit A",
+            "Statement of Work"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What are the exact payment terms for the Implementation services under Article 5.2(b), including amounts and timing triggers?",
+        "ground_truth": "$500,000 payable in two installments of $250,000 each, due upon completion of the implementation phase and upon completion of the testing phase.",
+        "expected_keywords": [
+            "Implementation services",
+            "implementation phase",
+            "testing phase"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Which provisions survive termination according to Article 10.3, and what is the immediate post-termination obligation regarding MTS Software use?",
+        "ground_truth": "Articles 6, 7, 8, 9, and 11 survive; HPN must immediately cease using the MTS Software and all Deliverables.",
+        "expected_keywords": [
+            "survive termination",
+            "MTS Software",
+            "Deliverables"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What limitations apply to HPN\u2019s use of the MTS Software under Article 3, and what rights does MTS expressly reserve?",
+        "ground_truth": "HPN receives a non-exclusive, non-transferable license solely for utilizing the Services; MTS reserves all right, title, and interest, including all Intellectual Property Rights.",
+        "expected_keywords": [
+            "non-exclusive",
+            "non-transferable license",
+            "Intellectual Property Rights"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What types of damages are expressly excluded under Article 11.1, and what is the cap on liability under Article 11.2?",
+        "ground_truth": "Indirect, special, incidental, or consequential damages (e.g., loss of profits, business interruption, loss of data); liability capped at the total Fees paid by HPN to MTS during the preceding twelve (12) months.",
+        "expected_keywords": [
+            "indirect damages",
+            "consequential damages",
+            "twelve (12) months"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What are the three grounds for termination under Article 10.1, and what is the cure period for a material breach?",
+        "ground_truth": "Material breach uncured within thirty (30) days, insolvency/bankruptcy, or change of control via acquisition or merger.",
+        "expected_keywords": [
+            "material breach",
+            "thirty (30) days",
+            "change of control"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What specific safeguards must MTS implement for Data under Article 4.2, and what obligations does HPN bear regarding Data accuracy and compliance?",
+        "ground_truth": "Reasonable and appropriate administrative, technical, and physical safeguards; HPN must ensure Data is accurate, complete, and compliant with applicable laws and regulations.",
+        "expected_keywords": [
+            "administrative, technical, and physical safeguards",
+            "accurate, complete",
+            "applicable laws and regulations"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What specific contract provisions does Emily Chen identify as supporting the defense's position against the plaintiff's motion for summary judgment?",
+        "ground_truth": "Sections 3.2 and 7.1.",
+        "expected_keywords": [
+            "Sections 3.2",
+            "Section 7.1",
+            "contract provisions"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What procedural motion has the plaintiff filed that the defense is opposing in this complex litigation case?",
+        "ground_truth": "A motion for summary judgment.",
+        "expected_keywords": [
+            "motion for summary judgment",
+            "plaintiff",
+            "opposing"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What type of discovery does Emily Chen propose to conduct in response to the plaintiff's motion for summary judgment?",
+        "ground_truth": "A supplemental set of interrogatories and requests for production.",
+        "expected_keywords": [
+            "supplemental interrogatories",
+            "requests for production",
+            "additional discovery"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "According to Emily Chen, what is the primary cause of the alleged damages claimed by the plaintiff?",
+        "ground_truth": "The plaintiff's failure to comply with Sections 3.2 and 7.1 of the contract.",
+        "expected_keywords": [
+            "failure to comply",
+            "Sections 3.2",
+            "Section 7.1"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the stated purpose of serving supplemental interrogatories and requests for production on the plaintiff?",
+        "ground_truth": "To gather more evidence, strengthen the defense's case, and identify potential weaknesses in the plaintiff's argument.",
+        "expected_keywords": [
+            "gather more evidence",
+            "strengthen our case",
+            "identify potential weaknesses"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What risk mitigation strategy does Emily Chen mention regarding the proposed additional discovery?",
+        "ground_truth": "Designing the supplemental interrogatories and requests for production to minimize the risk of revealing sensitive information.",
+        "expected_keywords": [
+            "minimize the risk",
+            "revealing sensitive information",
+            "supplemental interrogatories"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What document did John Smith attach to his February 27 email outlining suggested additions to the discovery plan?",
+        "ground_truth": "A document outlining additional discovery requests.",
+        "expected_keywords": [
+            "additional discovery requests",
+            "attached document",
+            "discovery plan"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is Emily Chen's assessment of the balance between risks and benefits concerning the proposed additional discovery?",
+        "ground_truth": "She believes the benefits outweigh the risks.",
+        "expected_keywords": [
+            "benefits outweigh the risks",
+            "additional discovery",
+            "risk assessment"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Which two contract sections does Emily Chen cite as establishing the plaintiff's liability for damages arising from noncompliance?",
+        "ground_truth": "Section 3.2 and Section 7.1.",
+        "expected_keywords": [
+            "Section 3.2",
+            "Section 7.1",
+            "plaintiff's liability"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the subject line of the email thread discussing the litigation update and next steps?",
+        "ground_truth": "Complex Litigation Case - Update and Next Steps.",
+        "expected_keywords": [
+            "Complex Litigation Case",
+            "Update and Next Steps",
+            "subject line"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is Jennifer L. Wilson's full name and residential address as stated under oath?",
+        "ground_truth": "Jennifer Lynn Wilson, 123 Main Street, Apartment 4, San Francisco, California 94105.",
+        "expected_keywords": [
+            "full name",
+            "residential address",
+            "under oath"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What is Jennifer L. Wilson's date of birth and social security number as provided during the deposition?",
+        "ground_truth": "February 12, 1985, and 555-12-3456.",
+        "expected_keywords": [
+            "date of birth",
+            "social security number",
+            "deposition"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What is Jennifer L. Wilson's current occupation and employer, including the employer's physical location?",
+        "ground_truth": "Marketing manager at XYZ Corporation, located at 456 Market Street, San Francisco, California 94105.",
+        "expected_keywords": [
+            "current occupation",
+            "employer",
+            "physical location"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "How long has Jennifer L. Wilson been employed at XYZ Corporation, and when did her employment begin?",
+        "ground_truth": "Approximately five years, beginning in January 2017.",
+        "expected_keywords": [
+            "employed at XYZ Corporation",
+            "January 2017",
+            "approximately five years"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What specific job duties did Jennifer L. Wilson describe for her role as marketing manager, including collaboration with which internal team?",
+        "ground_truth": "Developing and implementing marketing campaigns, managing social media accounts, and collaborating with the sales team to generate new business leads.",
+        "expected_keywords": [
+            "job duties",
+            "marketing manager",
+            "sales team"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What concerns did Jennifer L. Wilson report to both her supervisor and the human resources department regarding her role at XYZ Corporation?",
+        "ground_truth": "Feeling overwhelmed with workload, lack of adequate support from her supervisor, and insufficient resources\u2014including training and equipment\u2014to perform her job duties effectively.",
+        "expected_keywords": [
+            "concerns reported",
+            "supervisor",
+            "human resources department"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What specific incident did Jennifer L. Wilson cite as evidence that her supervisor was dismissive of her concerns about workload and resources?",
+        "ground_truth": "Her supervisor told her she was too busy to meet and instructed her to send concerns via email instead.",
+        "expected_keywords": [
+            "specific incident",
+            "supervisor",
+            "dismissive"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What company policies and manuals did Jennifer L. Wilson state she was familiar with regarding product safety and quality control?",
+        "ground_truth": "The company's quality control manual and its procedures for reporting and investigating adverse reactions.",
+        "expected_keywords": [
+            "quality control manual",
+            "product safety",
+            "adverse reactions"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What deviations from company policy regarding document retention did Jennifer L. Wilson identify, and to whom did she report them?",
+        "ground_truth": "Instances where the company failed to retain documents for the required period of time; she reported these to her supervisor and the executive management team.",
+        "expected_keywords": [
+            "document retention",
+            "deviations",
+            "executive management team"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What actions or recommendations did Jennifer L. Wilson make to address deficiencies in product safety protocols and document retention practices?",
+        "ground_truth": "She recommended conducting additional testing and quality control before product launches, developing a crisis communications plan, and conducting a thorough review of document retention policies to ensure compliance.",
+        "expected_keywords": [
+            "additional testing",
+            "crisis communications plan",
+            "document retention policies"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What is the full name and residential address of the deponent James R. Wilson as stated on the record?",
+        "ground_truth": "James Robert Wilson, 1234 SW 8th Street, Apt. 3B, Miami, FL 33135.",
+        "expected_keywords": [
+            "James Robert Wilson",
+            "1234 SW 8th Street",
+            "Apt. 3B"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What is the name and location of the employer where James R. Wilson has worked for approximately 5 years and 2 months as of February 2023?",
+        "ground_truth": "XYZ Corporation, located at 4567 NW 36th Street, Miami, FL 33166.",
+        "expected_keywords": [
+            "XYZ Corporation",
+            "4567 NW 36th Street",
+            "Miami, FL 33166"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "When did James R. Wilson begin his employment at XYZ Corporation, and what professional designation did he obtain in 2016?",
+        "ground_truth": "He began employment on December 15, 2017, and obtained his Chartered Financial Analyst (CFA) designation in 2016.",
+        "expected_keywords": [
+            "December 15, 2017",
+            "Chartered Financial Analyst",
+            "CFA designation"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What educational institution and degree did James R. Wilson earn in May 2012, and with what honors?",
+        "ground_truth": "He earned a Bachelor of Business Administration degree in finance from the University of Miami, graduating magna cum laude in May 2012.",
+        "expected_keywords": [
+            "University of Miami",
+            "Bachelor of Business Administration",
+            "magna cum laude"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What prior employer did James R. Wilson work for between June 2012 and December 2014, and in what capacity?",
+        "ground_truth": "He worked as a junior financial analyst at ABC Financial Services.",
+        "expected_keywords": [
+            "ABC Financial Services",
+            "junior financial analyst",
+            "June 2012 to December 2014"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What specific financial documents and analyses did James R. Wilson prepare related to the proposed merger, including timeframes and scope?",
+        "ground_truth": "He prepared a comprehensive financial analysis including review of both companies\u2019 financial statements, analysis of synergies and cost savings, discussion of risks and challenges, and a 5-year financial model; first completed before January 20, 2022, and updated on February 1, 2022.",
+        "expected_keywords": [
+            "comprehensive financial analysis",
+            "5-year financial model",
+            "February 1, 2022"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "On what date did James R. Wilson present his merger analysis to the executive committee, and what was the board of directors\u2019 action regarding the merger on February 10, 2022?",
+        "ground_truth": "He presented to the executive committee on January 20, 2022, and the board of directors voted to approve the merger, subject to certain conditions, on February 10, 2022.",
+        "expected_keywords": [
+            "January 20, 2022",
+            "February 10, 2022",
+            "board of directors vote"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What error did James R. Wilson discover on March 15, 2022, and what was the consequence of the delayed correction of that error?",
+        "ground_truth": "He discovered incorrect financial data affecting earnings per share; the corrected report was not released to the public until several hours after the original erroneous report had already been released.",
+        "expected_keywords": [
+            "March 15, 2022",
+            "earnings per share",
+            "original erroneous report"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What were the two primary causes identified by the company\u2019s investigation into the financial reporting error, and what corrective measures were implemented?",
+        "ground_truth": "The investigation found the error was caused by a combination of human error and system failures; measures included additional employee training and enhancements to the financial reporting system.",
+        "expected_keywords": [
+            "human error",
+            "system failures",
+            "financial reporting system"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What professional organizations was James R. Wilson affiliated with during his university studies, and what honor society was he a member of?",
+        "ground_truth": "He was a member of the University of Miami's Finance Club and the Beta Gamma Sigma honor society.",
+        "expected_keywords": [
+            "Finance Club",
+            "Beta Gamma Sigma",
+            "University of Miami"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What is the full name and address of the deponent as stated on the record?",
+        "ground_truth": "James Edward Wilson, 1234 SW 8th Street, Miami, Florida 33130.",
+        "expected_keywords": [
+            "James Edward Wilson",
+            "1234 SW 8th Street",
+            "Miami, Florida 33130"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What educational institution did James Wilson attend after high school, and what degree did he earn there?",
+        "ground_truth": "Miami Dade College, where he earned an Associate's degree in business administration.",
+        "expected_keywords": [
+            "Miami Dade College",
+            "Associate's degree",
+            "business administration"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What was the name of James Wilson\u2019s consulting business, and during what years was it operational?",
+        "ground_truth": "Wilson Consulting, operated from 2005 until 2018.",
+        "expected_keywords": [
+            "Wilson Consulting",
+            "2005",
+            "2018"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What non-profit organization does James Wilson currently work for, and what is its primary mission?",
+        "ground_truth": "Miami Community Development Corporation, which provides economic development services to low-income communities in the Miami area.",
+        "expected_keywords": [
+            "Miami Community Development Corporation",
+            "economic development services",
+            "low-income communities"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "Who approached James Wilson in 2019 regarding the real estate development deal that is central to this lawsuit?",
+        "ground_truth": "The defendant, John Smith.",
+        "expected_keywords": [
+            "defendant",
+            "John Smith",
+            "real estate development deal"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What specific role did James Wilson play in the real estate development project involving John Smith?",
+        "ground_truth": "He provided consulting services related to business planning, marketing aspects, identifying potential investors, and securing funding.",
+        "expected_keywords": [
+            "business planning",
+            "marketing aspects",
+            "securing funding"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What key event occurred on January 10, 2020, according to James Wilson\u2019s testimony, and who were the individuals involved in the witnessed argument?",
+        "ground_truth": "An argument occurred during a meeting at Mr. Smith's office between John Smith and Jane Doe about project funding and financial transparency.",
+        "expected_keywords": [
+            "January 10, 2020",
+            "John Smith",
+            "Jane Doe"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What prompted James Wilson to begin investigating the project in June 2020, and who provided the initial information?",
+        "ground_truth": "A call from one of John Smith\u2019s former employees informed him the project was in serious trouble and that Smith had been misrepresenting progress to investors.",
+        "expected_keywords": [
+            "June 2020",
+            "former employees",
+            "misrepresenting progress"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What two major findings did James Wilson report discovering during his investigation into the project\u2019s finances?",
+        "ground_truth": "That John Smith had made false representations to investors about the project\u2019s progress and viability, and had used investor funds for personal expenses while the project was deeply in debt.",
+        "expected_keywords": [
+            "false representations",
+            "investor funds",
+            "deeply in debt"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What is the name and professional designation of the court reporter who certified the deposition transcript?",
+        "ground_truth": "Barbara Jones, RPR.",
+        "expected_keywords": [
+            "Barbara Jones",
+            "RPR",
+            "court reporter"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "deposition"
+    },
+    {
+        "question": "What is the precise Effective Date of this Agreement, and where is it defined?",
+        "ground_truth": "The Effective Date is March 15, 2023, as defined in Section 1.1 under the definition 'Effective Date'.",
+        "expected_keywords": [
+            "Effective Date",
+            "March 15, 2023",
+            "Section 1.1"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What type of license does Cygnus grant to Astrum for the CEMS software, and where is that license characterized?",
+        "ground_truth": "Cygnus grants a non-exclusive, non-transferable license for Astrum's internal business purposes, as stated in Section 2.1.",
+        "expected_keywords": [
+            "non-exclusive",
+            "non-transferable license",
+            "Section 2.1"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What are the three specific fees Astrum must pay under Section 4.1, and what are their respective payment triggers?",
+        "ground_truth": "Astrum must pay: (1) a one-time license fee of $100,000 upon execution; (2) a monthly maintenance fee of $5,000 on the first day of each month; and (3) $2,000 per day for on-site training or support services.",
+        "expected_keywords": [
+            "one-time license fee",
+            "monthly maintenance fee",
+            "on-site training or support services"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the initial License Term, and how does automatic renewal operate under Section 10.2?",
+        "ground_truth": "The initial License Term is three years, and it automatically renews for successive one-year periods unless either party gives written notice of termination at least thirty days prior to the end of the then-current term.",
+        "expected_keywords": [
+            "License Term",
+            "three years",
+            "automatic renewal"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What specific obligations does Astrum have regarding Data under Section 7, and which three requirements are explicitly listed?",
+        "ground_truth": "Astrum must: (1) comply with applicable laws and regulations regarding Data; (2) ensure Data is accurate, complete, and up-to-date; and (3) implement and maintain reasonable security measures to protect Data against unauthorized access, disclosure, or loss.",
+        "expected_keywords": [
+            "Data",
+            "accurate, complete, and up-to-date",
+            "reasonable security measures"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Under Section 5.1, who retains all Intellectual Property Rights in the CEMS software, and what specific elements are included?",
+        "ground_truth": "Cygnus retains all Intellectual Property Rights in and to the CEMS software, including all updates, modifications, and enhancements.",
+        "expected_keywords": [
+            "Intellectual Property Rights",
+            "CEMS software",
+            "updates, modifications, and enhancements"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What are the three permitted uses of the CEMS software expressly authorized in Section 2.2?",
+        "ground_truth": "Astrum may: (1) install and operate the CEMS software on its computer systems; (2) use it to process, store, and transmit Data; and (3) make a reasonable number of copies solely for backup and archival purposes.",
+        "expected_keywords": [
+            "install and operate",
+            "process, store, and transmit Data",
+            "backup and archival purposes"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What are the three express prohibitions on Astrum\u2019s use of the CEMS software under Section 2.3?",
+        "ground_truth": "Astrum may not: (1) sell, lease, or sublicense the CEMS software to any third party; (2) use it for any purpose other than internal business purposes; or (3) modify, reverse engineer, or decompile the CEMS software.",
+        "expected_keywords": [
+            "sell, lease, or sublicense",
+            "internal business purposes",
+            "modify, reverse engineer, or decompile"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What governing law and dispute resolution mechanism apply per Section 12, and where is arbitration to be conducted?",
+        "ground_truth": "This Agreement is governed by New York law, disputes are resolved through binding arbitration under the American Arbitration Association rules, and arbitration shall be conducted in New York City.",
+        "expected_keywords": [
+            "governing law",
+            "binding arbitration",
+            "New York City"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What happens to Astrum\u2019s rights and obligations upon termination under Section 10.4, and what are the three mandatory post-termination actions?",
+        "ground_truth": "Upon termination, Astrum must: (1) immediately cease all use of the CEMS software; (2) return all copies to Cygnus; and (3) pay all outstanding fees and charges.",
+        "expected_keywords": [
+            "cease all use",
+            "return all copies",
+            "pay all outstanding fees and charges"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What contractual provision does Emily Chen cite as central to the defense against the plaintiff's breach of contract claim?",
+        "ground_truth": "The contract states that the delivery time is estimated and not guaranteed.",
+        "expected_keywords": [
+            "delivery time",
+            "estimated and not guaranteed",
+            "contract"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "According to Emily Chen, what specific conduct by the plaintiff contributed to the delay in delivery?",
+        "ground_truth": "The plaintiff failed to provide the necessary documentation in a timely manner.",
+        "expected_keywords": [
+            "failed to provide",
+            "necessary documentation",
+            "timely manner"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What two dispute resolution alternatives does John Doe explicitly propose to resolve the case without trial?",
+        "ground_truth": "Settling the case out of court and mediation session.",
+        "expected_keywords": [
+            "settling the case out of court",
+            "mediation session",
+            "neutral third-party mediator"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What confidentiality concern does Emily Chen specifically raise regarding the proposed mediation session?",
+        "ground_truth": "She emphasizes the importance of confidentiality during mediation to prevent disclosure of sensitive information to the public.",
+        "expected_keywords": [
+            "confidentiality during the mediation session",
+            "sensitive information",
+            "disclosed to the public"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What type of negligence does the plaintiff allege against John Doe's company, and how does Emily Chen characterize the plaintiff's own conduct?",
+        "ground_truth": "The plaintiff alleges gross negligence; Emily Chen counters that the plaintiff's own negligence contributed to the delay.",
+        "expected_keywords": [
+            "grossly negligent",
+            "plaintiff's own negligence",
+            "contributed to the delay"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What document did Emily Chen attach to her first email for John Doe's review?",
+        "ground_truth": "A draft of the response to the plaintiff's complaint.",
+        "expected_keywords": [
+            "draft of our response",
+            "plaintiff's complaint",
+            "attached"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What two factors does Emily Chen identify as legally significant in evaluating settlement leverage?",
+        "ground_truth": "The contractual clause stating delivery time is estimated and not guaranteed, and the plaintiff's own negligence contributing to the delay.",
+        "expected_keywords": [
+            "delivery time is estimated and not guaranteed",
+            "plaintiff's own negligence",
+            "settlement negotiations"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What specific analysis does John Doe request Emily Chen prepare before the call regarding litigation strategy?",
+        "ground_truth": "A detailed analysis of the potential costs and benefits of settling the case out of court versus proceeding with litigation.",
+        "expected_keywords": [
+            "detailed analysis",
+            "costs and benefits",
+            "settling the case out of court",
+            "proceeding with litigation"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Who does Emily Chen propose contacting to explore mediation, and what action does she commit to taking?",
+        "ground_truth": "She proposes reaching out to the plaintiff's counsel and will propose a mediation session.",
+        "expected_keywords": [
+            "plaintiff's counsel",
+            "propose a mediation session",
+            "reach out"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What legal standard or principle does Emily Chen rely on when asserting the strength of the defense, beyond factual arguments?",
+        "ground_truth": "She references reviewing the contract and the relevant case law to support the defense.",
+        "expected_keywords": [
+            "relevant case law",
+            "reviewing the contract",
+            "strong defense"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the Effective Date of the Service Contract?",
+        "ground_truth": "February 10, 2023",
+        "expected_keywords": [
+            "Effective Date"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Which party is defined as the 'Vendor' in the Agreement, and what is its full legal name?",
+        "ground_truth": "CyberTech Solutions, Inc., a Delaware corporation",
+        "expected_keywords": [
+            "Vendor",
+            "CyberTech Solutions, Inc.",
+            "Delaware corporation"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What specific software product is explicitly named in Article 1.8 as part of the 'Software' definition?",
+        "ground_truth": "CyberTech Enterprise Resource Planning",
+        "expected_keywords": [
+            "Software",
+            "CyberTech Enterprise Resource Planning"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Under Article 5.1.1, what is the annual amount and payment timing for the software licensing fees?",
+        "ground_truth": "$100,000 per year, payable in advance on the anniversary of the Effective Date",
+        "expected_keywords": [
+            "software licensing fees",
+            "$100,000",
+            "in advance"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "According to Article 6.3, what type of license does CyberTech grant to Green Earth for the Software?",
+        "ground_truth": "A non-exclusive, non-transferable license for Green Earth's internal business purposes",
+        "expected_keywords": [
+            "non-exclusive",
+            "non-transferable license",
+            "internal business purposes"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Which Articles are expressly stated in Article 12.4 to survive termination of the Agreement?",
+        "ground_truth": "Articles 6 (Intellectual Property Rights), 7 (Confidentiality), 9 (Indemnification), 10 (Liability), and 11 (Data Privacy)",
+        "expected_keywords": [
+            "survive termination",
+            "Article 6",
+            "Article 7",
+            "Article 9",
+            "Article 10",
+            "Article 11"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the maximum duration of the Term under Article 12.1, and when does it commence?",
+        "ground_truth": "Three years, commencing on the Effective Date (February 10, 2023)",
+        "expected_keywords": [
+            "Term",
+            "three years",
+            "Effective Date"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Per Exhibit A, what is the deadline for Milestone 1 \u2014 Delivery of the Software?",
+        "ground_truth": "February 17, 2023",
+        "expected_keywords": [
+            "Milestone 1",
+            "Delivery of the Software",
+            "February 17, 2023"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What governing law applies to this Agreement according to Article 15.1?",
+        "ground_truth": "The laws of the State of New York",
+        "expected_keywords": [
+            "governing law",
+            "State of New York",
+            "Article 15.1"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Under Article 11.1, which two specific data protection laws are explicitly cited as applicable?",
+        "ground_truth": "General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA)",
+        "expected_keywords": [
+            "GDPR",
+            "California Consumer Privacy Act",
+            "CCPA"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the duration of the Term under Section 1.1, and does it include any automatic renewal provisions?",
+        "ground_truth": "The Term is twenty-four (24) months commencing on the Effective Date and does not include automatic renewal provisions.",
+        "expected_keywords": [
+            "Term",
+            "twenty-four (24) months",
+            "Effective Date"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Under Section 1.3, what happens if a Deliverable fails to meet the Acceptance Criteria?",
+        "ground_truth": "Nebula may reject the Deliverable.",
+        "expected_keywords": [
+            "Deliverable",
+            "Acceptance Criteria",
+            "reject"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "How many Business Days does Nebula have to review and test each Deliverable before it is deemed accepted under Section 1.4?",
+        "ground_truth": "Ten (10) Business Days.",
+        "expected_keywords": [
+            "Business Days",
+            "Deliverable",
+            "deemed accepted"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "According to Section 3.1, who retains all right, title, and interest in the Intellectual Property Rights in the Deliverables?",
+        "ground_truth": "Cygnus retains all right, title, and interest in and to the Intellectual Property Rights in the Deliverables.",
+        "expected_keywords": [
+            "Intellectual Property Rights",
+            "Deliverables",
+            "Cygnus retains"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What type of license does Cygnus grant Nebula for the Deliverables under Section 3.2, and what are its key limitations?",
+        "ground_truth": "A non-exclusive, non-transferable license for Nebula's internal business purposes only.",
+        "expected_keywords": [
+            "non-exclusive",
+            "non-transferable license",
+            "internal business purposes"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Under Section 6.1, what two categories of claims trigger Cygnus\u2019s indemnification obligation to Nebula?",
+        "ground_truth": "Breach by Cygnus of its obligations under this Agreement, or negligence or willful misconduct by Cygnus in the performance of the Professional Services.",
+        "expected_keywords": [
+            "breach",
+            "negligence",
+            "willful misconduct"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "What is the maximum amount of Cygnus\u2019s liability to Nebula under Section 7.2, and where is that cap defined?",
+        "ground_truth": "Cygnus's liability is capped at the total fees paid by Nebula to Cygnus under this Agreement.",
+        "expected_keywords": [
+            "liability",
+            "cap",
+            "total fees paid"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Under Section 8.1, how many days does the breaching party have to cure a material breach after receiving written notice?",
+        "ground_truth": "Thirty (30) days.",
+        "expected_keywords": [
+            "cure",
+            "material breach",
+            "thirty (30) days"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Which two data privacy laws are expressly referenced in Section 10.1 as applicable to the parties\u2019 handling of personal data?",
+        "ground_truth": "The General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA).",
+        "expected_keywords": [
+            "General Data Protection Regulation",
+            "California Consumer Privacy Act",
+            "GDPR"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    },
+    {
+        "question": "Where are the specific fee amounts for Design and development, Testing and quality assurance, Implementation and deployment, and Training and support listed, and what is the total sum?",
+        "ground_truth": "Exhibit E lists the fees: $100,000, $20,000, $30,000, and $10,000, totaling $160,000.",
+        "expected_keywords": [
+            "Exhibit E",
+            "Design and development",
+            "Testing and quality assurance"
+        ],
+        "case_id": "99074b44-e2d8-497f-bb06-9be6b87e171c",
+        "document_type": "contract"
+    }
+]

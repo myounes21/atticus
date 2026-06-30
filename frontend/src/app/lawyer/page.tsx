@@ -24,7 +24,6 @@ export default function LawyerPage() {
           setSelectedCaseId((prev) => prev ?? rows[0]?.case_id ?? null);
         }
       } catch {
-        // Ignore; we fall back to empty selection.
       }
     })();
 

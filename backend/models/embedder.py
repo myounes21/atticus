@@ -1,5 +1,4 @@
 import hashlib
-import importlib
 import logging
 import math
 from functools import lru_cache
@@ -47,41 +46,46 @@ def _deterministic_fallback_embed(
     return vectors
 
 
+import os
+import requests
+import json
+
 @lru_cache(maxsize=1)
 def _load_sentence_transformer() -> Any:
-    try:
-        module = importlib.import_module("sentence_transformers")
-        SentenceTransformer = getattr(module, "SentenceTransformer")
-
-        model = SentenceTransformer(
-            settings.embedder_model,
-            cache_folder=settings.embedding_model_cache_dir or None,
-            device=settings.embedding_device,
-        )
-        logger.info("Loaded embedder model '%s'", settings.embedder_model)
-        return model
-    except Exception as exc:
-        raise EmbeddingBackendError(
-            f"Could not load embedder model '{settings.embedder_model}'"
-        ) from exc
-
+    # We aren't loading a model locally anymore, just ensuring the key exists
+    cohere_key = os.getenv("COHERE_API_KEY")
+    if not cohere_key:
+        raise EmbeddingBackendError("COHERE_API_KEY not found in environment")
+    logger.info("Loaded Cohere API as embedder model")
+    return True
 
 def _embed_with_model(texts: list[str]) -> list[list[float]]:
-    model = _load_sentence_transformer()
-    raw_embeddings = model.encode(
-        texts,
-        batch_size=settings.embedding_batch_size,
-        normalize_embeddings=settings.embedding_normalize,
-        show_progress_bar=False,
-        convert_to_numpy=False,
-        convert_to_tensor=False,
-    )
-    return [[float(value) for value in row] for row in raw_embeddings]
-
-
-def reset_embedder_cache() -> None:
-    """Clear cached model instance (useful in tests)."""
-    _load_sentence_transformer.cache_clear()
+    cohere_key = os.getenv("COHERE_API_KEY")
+    url = "https://api.cohere.com/v1/embed"
+    headers = {
+        "Authorization": f"Bearer {cohere_key}",
+        "Content-Type": "application/json",
+        "accept": "application/json"
+    }
+    
+    all_embeddings = []
+    batch_size = 96
+    
+    for i in range(0, len(texts), batch_size):
+        batch = texts[i:i+batch_size]
+        payload = {
+            "texts": batch,
+            "model": "embed-english-v3.0",
+            "input_type": "search_document"
+        }
+        resp = requests.post(url, headers=headers, json=payload)
+        if resp.status_code != 200:
+            raise EmbeddingBackendError(f"Cohere API Error: {resp.text}")
+            
+        data = resp.json()
+        all_embeddings.extend(data["embeddings"])
+        
+    return all_embeddings
 
 
 def assert_embedding_backend_ready() -> None:

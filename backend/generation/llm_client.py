@@ -1,6 +1,8 @@
 import logging
 from typing import Iterator
 
+from langchain_groq import ChatGroq
+from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from ollama import Client
 
 from config import settings
@@ -19,22 +21,19 @@ def generate(
     max_tokens: int = 2048,
 ) -> str:
     """Synchronous LLM call.  Returns the full answer as a string."""
-    client = _get_client()
-    model = model or settings.ollama_model
-
-    response = client.chat(
-        model=model,
-        messages=messages,
-        options={"temperature": temperature, "num_predict": max_tokens},
-    )
-
-    answer = response.get("message", {}).get("content", "")
-    logger.info(
-        "LLM response: model=%s tokens=%s",
-        model,
-        response.get("eval_count", "?"),
-    )
-    return answer
+    groq_gen = ChatGroq(model_name="llama-3.1-8b-instant", temperature=temperature, max_tokens=max_tokens)
+    
+    lc_messages = []
+    for m in messages:
+        if m["role"] == "system":
+            lc_messages.append(SystemMessage(content=m["content"]))
+        elif m["role"] == "user":
+            lc_messages.append(HumanMessage(content=m["content"]))
+        else:
+            lc_messages.append(AIMessage(content=m["content"]))
+            
+    response = groq_gen.invoke(lc_messages)
+    return response.content
 
 
 def generate_stream(

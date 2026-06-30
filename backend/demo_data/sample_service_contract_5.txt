@@ -1,0 +1,251 @@
+This SERVICE CONTRACT ("Agreement") is entered into as of February 22, 2023 ("Effective Date"), by and between CYGNUS TECHNOLOGIES, INC., a Delaware corporation with its principal place of business at 123 Main Street, Suite 400, New York, NY 10001 ("Cygnus" or "Vendor"), and NEBULA CORPORATION, a California corporation with its principal place of business at 456 Elm Street, Suite 200, San Francisco, CA 94105 ("Nebula" or "Client").
+
+WHEREAS, Cygnus is a provider of software development services and Nebula wishes to engage Cygnus to provide certain software development services; and
+
+WHEREAS, the parties wish to set forth the terms and conditions under which Cygnus will provide such services to Nebula.
+
+NOW, THEREFORE, in consideration of the mutual covenants and promises contained herein, and for other good and valuable consideration, the receipt and sufficiency of which are hereby acknowledged, the parties agree as follows:
+
+1.1 Definitions
+
+For the purposes of this Agreement, the following definitions shall apply:
+
+"Acceptance Criteria" means the criteria set forth in Exhibit A, which the Deliverables must meet in order to be deemed accepted by Nebula.
+
+"Business Day" means any day, excluding Saturday, Sunday, and any federal holiday in the United States.
+
+"Confidential Information" means any and all information, whether written or oral, that is disclosed by one party to the other party, and which is marked as confidential or which a reasonable person would understand to be confidential, including but not limited to trade secrets, business plans, and technical data.
+
+"Deliverables" means the software development services and related materials to be provided by Cygnus to Nebula, as set forth in Exhibit B.
+
+"Designated Contact" means the individual designated by each party as its primary contact for purposes of this Agreement, as set forth in Section 14.1.
+
+"Dispute" means any dispute, claim, or controversy arising out of or relating to this Agreement, including but not limited to any alleged breach of this Agreement.
+
+"Intellectual Property Rights" means all patents, copyrights, trademarks, trade secrets, and other intellectual property rights, whether registered or unregistered.
+
+"Professional Services" means the software development services to be provided by Cygnus to Nebula, as set forth in Exhibit C.
+
+"Project Schedule" means the schedule set forth in Exhibit D, which outlines the timeline for the completion of the Deliverables.
+
+"Term" means the period commencing on the Effective Date and continuing for a period of twenty-four (24) months, unless terminated earlier in accordance with Section 12.
+
+1.2 Scope of Work
+
+Cygnus shall provide the Professional Services to Nebula, as set forth in Exhibit C, in accordance with the terms and conditions of this Agreement. The scope of work includes the design, development, testing, and implementation of the software, as well as any related documentation and training.
+
+1.3 Deliverables
+
+Cygnus shall deliver the Deliverables to Nebula, as set forth in Exhibit B, in accordance with the Project Schedule. The Deliverables shall meet the Acceptance Criteria, and Nebula shall have the right to reject any Deliverable that does not meet the Acceptance Criteria.
+
+1.4 Acceptance
+
+Upon delivery of each Deliverable, Nebula shall have a period of ten (10) Business Days to review and test the Deliverable, and to notify Cygnus of any defects or deficiencies. If Nebula fails to notify Cygnus of any defects or deficiencies within such ten (10) Business Day period, the Deliverable shall be deemed accepted.
+
+2. Compensation
+
+2.1 Fees
+
+Nebula shall pay Cygnus the fees set forth in Exhibit E, which fees shall be paid in accordance with the payment schedule set forth in Exhibit F.
+
+2.2 Expenses
+
+Nebula shall reimburse Cygnus for all reasonable expenses incurred by Cygnus in connection with the performance of the Professional Services, including but not limited to travel expenses, lodging expenses, and meal expenses.
+
+2.3 Taxes
+
+Nebula shall be responsible for all taxes, levies, and assessments imposed on the fees and expenses paid to Cygnus, except for taxes imposed on Cygnus's income.
+
+3. Intellectual Property Rights
+
+3.1 Ownership
+
+Cygnus retains all right, title, and interest in and to the Intellectual Property Rights in the Deliverables, and Nebula shall not acquire any rights in the Deliverables, except as expressly set forth in this Agreement.
+
+3.2 License
+
+Cygnus grants to Nebula a non-exclusive, non-transferable license to use the Deliverables, solely for Nebula's internal business purposes.
+
+3.3 Restrictions
+
+Nebula shall not, and shall not permit any third party to, reverse engineer, decompile, or disassemble the Deliverables, or attempt to derive the source code of the Deliverables.
+
+4. Confidentiality
+
+4.1 Obligations
+
+Each party shall maintain the confidentiality of the Confidential Information of the other party, and shall not disclose such Confidential Information to any third party, except as permitted by this Agreement.
+
+4.2 Exceptions
+
+The obligations of confidentiality shall not apply to any information that is (i) publicly available, (ii) already in the possession of the receiving party, (iii) obtained from a third party who has the right to disclose such information, or (iv) required to be disclosed by law.
+
+5. Warranties
+
+5.1 General
+
+Cygnus warrants that the Deliverables shall be free from defects in material and workmanship, and shall conform to the specifications set forth in Exhibit B.
+
+5.2 Disclaimer
+
+EXCEPT AS EXPRESSLY SET FORTH IN THIS AGREEMENT, CYGNUS DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+6. Indemnification
+
+6.1 By Cygnus
+
+Cygnus shall indemnify, defend, and hold harmless Nebula, its officers, directors, employees, and agents, from and against any and all claims, damages, losses, and expenses (including but not limited to reasonable attorneys' fees) arising out of or relating to (i) any breach by Cygnus of its obligations under this Agreement, or (ii) any negligence or willful misconduct by Cygnus in the performance of the Professional Services.
+
+6.2 By Nebula
+
+Nebula shall indemnify, defend, and hold harmless Cygnus, its officers, directors, employees, and agents, from and against any and all claims, damages, losses, and expenses (including but not limited to reasonable attorneys' fees) arising out of or relating to (i) any breach by Nebula of its obligations under this Agreement, or (ii) any negligence or willful misconduct by Nebula in the use of the Deliverables.
+
+7. Liability
+
+7.1 Limitation
+
+IN NO EVENT SHALL CYGNUS BE LIABLE TO NEBULA FOR ANY INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING BUT NOT LIMITED TO DAMAGES FOR LOSS OF PROFITS, BUSINESS INTERRUPTION, OR LOSS OF DATA, EVEN IF CYGNUS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+7.2 Cap
+
+IN NO EVENT SHALL CYGNUS'S LIABILITY TO NEBULA EXCEED THE TOTAL FEES PAID BY NEBULA TO CYGNUS UNDER THIS AGREEMENT.
+
+8. Termination
+
+8.1 By Either Party
+
+Either party may terminate this Agreement upon written notice to the other party, if the other party breaches any of its obligations under this Agreement and fails to cure such breach within thirty (30) days after receipt of written notice of such breach.
+
+8.2 By Cygnus
+
+Cygnus may terminate this Agreement upon written notice to Nebula, if Nebula fails to pay any fees or expenses when due, and such failure continues for a period of ten (10) Business Days after receipt of written notice of such failure.
+
+8.3 Effect of Termination
+
+Upon termination of this Agreement, Nebula shall immediately cease all use of the Deliverables, and Cygnus shall cease all performance of the Professional Services. The termination of this Agreement shall not affect any rights or obligations of the parties that accrued prior to the effective date of termination.
+
+9. Force Majeure
+
+9.1 Definition
+
+"Force Majeure" means any event or circumstance that is beyond the reasonable control of a party, including but not limited to acts of God, war, terrorism, fire, flood, earthquake, and strike.
+
+9.2 Effect
+
+If a party is affected by a Force Majeure event, it shall notify the other party of the occurrence of such event, and shall use reasonable efforts to mitigate the effects of such event. The affected party shall be excused from performance of its obligations under this Agreement to the extent that such performance is prevented by the Force Majeure event.
+
+10. Data Privacy
+
+10.1 Obligations
+
+Each party shall comply with all applicable laws and regulations relating to the collection, use, and disclosure of personal data, including but not limited to the General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA).
+
+10.2 Security
+
+Each party shall implement and maintain reasonable security measures to protect personal data from unauthorized access, use, or disclosure.
+
+11. Governing Law
+
+This Agreement shall be governed by and construed in accordance with the laws of the State of New York, without giving effect to any principles of conflicts of law.
+
+12. Dispute Resolution
+
+12.1 Negotiation
+
+The parties shall attempt to resolve any Dispute through good faith negotiation.
+
+12.2 Arbitration
+
+If the parties are unable to resolve a Dispute through negotiation, the Dispute shall be resolved through binding arbitration in accordance with the rules of the American Arbitration Association.
+
+13. Entire Agreement
+
+This Agreement constitutes the entire agreement between the parties, and supersedes all prior or contemporaneous agreements or understandings, whether written or oral.
+
+14. Notices
+
+14.1 Designated Contact
+
+Any notice or other communication required or permitted to be given under this Agreement shall be in writing, and shall be delivered to the Designated Contact of the other party.
+
+14.2 Address
+
+The address for notices to Cygnus shall be 123 Main Street, Suite 400, New York, NY 10001, and the address for notices to Nebula shall be 456 Elm Street, Suite 200, San Francisco, CA 94105.
+
+15. Amendment
+
+This Agreement may not be amended or modified except in writing signed by both parties.
+
+Exhibit A: Acceptance Criteria
+
+The Deliverables shall meet the following acceptance criteria:
+
+* The software shall be fully functional and operate in accordance with the specifications set forth in Exhibit B.
+* The software shall be free from defects in material and workmanship.
+* The software shall conform to the requirements set forth in Exhibit C.
+
+Exhibit B: Deliverables
+
+The Deliverables shall include the following:
+
+* A fully functional software application, as described in Exhibit C.
+* A user manual and documentation, as described in Exhibit D.
+* Training and support, as described in Exhibit E.
+
+Exhibit C: Professional Services
+
+The Professional Services shall include the following:
+
+* Design and development of the software application.
+* Testing and quality assurance.
+* Implementation and deployment of the software application.
+* Training and support.
+
+Exhibit D: Project Schedule
+
+The Project Schedule shall be as follows:
+
+* Week 1-4: Design and development of the software application.
+* Week 5-8: Testing and quality assurance.
+* Week 9-12: Implementation and deployment of the software application.
+* Week 13-16: Training and support.
+
+Exhibit E: Fees
+
+The fees for the Professional Services shall be as follows:
+
+* Design and development: $100,000.
+* Testing and quality assurance: $20,000.
+* Implementation and deployment: $30,000.
+* Training and support: $10,000.
+
+Exhibit F: Payment Schedule
+
+The payment schedule shall be as follows:
+
+* 30% of the total fees shall be paid upon execution of this Agreement.
+* 30% of the total fees shall be paid upon completion of the design and development phase.
+* 20% of the total fees shall be paid upon completion of the testing and quality assurance phase.
+* 20% of the total fees shall be paid upon completion of the implementation and deployment phase.
+
+By signing below, the parties acknowledge that they have read, understand, and agree to be bound by the terms and conditions of this Agreement.
+
+CYGNUS TECHNOLOGIES, INC.
+
+By: ______________________________
+
+Name: John Smith
+
+Title: CEO
+
+Date: February 22, 2023
+
+NEBULA CORPORATION
+
+By: ______________________________
+
+Name: Jane Doe
+
+Title: CTO
+
+Date: February 22, 2023

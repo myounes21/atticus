@@ -1,0 +1,331 @@
+SERVICE CONTRACT
+
+This Service Contract ("Agreement") is made and entered into on this 15th day of March, 2023 ("Effective Date"), by and between:
+
+SYNERGY CORPORATION, a Delaware corporation with its principal place of business at 123 Main Street, Anytown, CA 12345 ("Synergy" or "Vendor");
+
+and
+
+OMNI INNOVATIONS, INC., a California corporation with its principal place of business at 456 Elm Street, Othertown, CA 67890 ("Omni" or "Client");
+
+WHEREAS, Synergy is a provider of software development and consulting services; and
+
+WHEREAS, Omni wishes to engage Synergy to provide certain software development and consulting services, as more fully described herein;
+
+NOW, THEREFORE, in consideration of the mutual covenants and promises contained herein, and for other good and valuable consideration, the receipt and sufficiency of which are hereby acknowledged, the parties agree as follows:
+
+ARTICLE 1: DEFINITIONS
+
+1.1 "Acceptance Criteria" means the criteria set forth in Exhibit A, attached hereto, which the Deliverables must meet in order to be accepted by Omni.
+
+1.2 "Business Day" means any day, excluding Saturdays, Sundays, and any federal or state holidays.
+
+1.3 "Change Order" means a written document that outlines changes to the scope of work, timeline, or fees, and is signed by both parties.
+
+1.4 "Confidential Information" means any and all information, whether written or oral, that is disclosed by one party to the other, and is marked or designated as confidential, or would reasonably be considered confidential.
+
+1.5 "Deliverables" means the software, reports, and other materials to be delivered by Synergy to Omni, as more fully described in Exhibit B, attached hereto.
+
+1.6 "Fees" means the fees payable by Omni to Synergy, as set forth in Article 5.
+
+1.7 "Intellectual Property Rights" means all patents, trademarks, copyrights, trade secrets, and other intellectual property rights, whether registered or unregistered.
+
+1.8 "Project" means the software development and consulting project, as more fully described in Exhibit C, attached hereto.
+
+1.9 "Project Manager" means the individual appointed by Synergy to manage the Project, and who shall serve as the primary point of contact between the parties.
+
+1.10 "Services" means the software development and consulting services to be provided by Synergy to Omni, as more fully described in Exhibit D, attached hereto.
+
+1.11 "Term" means the period of time commencing on the Effective Date and ending on the completion of the Project, as more fully described in Article 12.
+
+1.12 "Termination" means the termination of this Agreement, as more fully described in Article 12.
+
+ARTICLE 2: SCOPE OF WORK
+
+2.1 Synergy shall provide the Services, as more fully described in Exhibit D, attached hereto.
+
+2.2 The scope of work shall include, but not be limited to, the following:
+
+(a) Software development: Synergy shall develop the software, as more fully described in Exhibit B, attached hereto.
+
+(b) Consulting: Synergy shall provide consulting services, as more fully described in Exhibit E, attached hereto.
+
+2.3 The scope of work shall not include, but not be limited to, the following:
+
+(a) Maintenance and support: Synergy shall not be responsible for maintaining or supporting the software, unless otherwise agreed to in a separate agreement.
+
+(b) Training: Synergy shall not be responsible for training Omni's employees, unless otherwise agreed to in a separate agreement.
+
+ARTICLE 3: PROJECT MANAGEMENT
+
+3.1 Synergy shall appoint a Project Manager, who shall serve as the primary point of contact between the parties.
+
+3.2 The Project Manager shall be responsible for:
+
+(a) Coordinating the Services;
+
+(b) Managing the timeline and budget;
+
+(c) Ensuring that the Deliverables meet the Acceptance Criteria;
+
+(d) Communicating with Omni's project manager;
+
+(e) Identifying and mitigating risks.
+
+3.3 Omni shall appoint a project manager, who shall serve as the primary point of contact between the parties.
+
+3.4 The project managers shall meet regularly to discuss the Project's progress, and shall provide each other with written reports, as more fully described in Exhibit F, attached hereto.
+
+ARTICLE 4: DELIVERABLES
+
+4.1 Synergy shall deliver the Deliverables, as more fully described in Exhibit B, attached hereto.
+
+4.2 The Deliverables shall meet the Acceptance Criteria, as more fully described in Exhibit A, attached hereto.
+
+4.3 Omni shall have the right to reject any Deliverable that does not meet the Acceptance Criteria, and Synergy shall revise and resubmit the Deliverable.
+
+ARTICLE 5: FEES AND PAYMENT TERMS
+
+5.1 The Fees shall be as follows:
+
+(a) Software development: $250,000;
+
+(b) Consulting: $100,000;
+
+(c) Project management: $50,000.
+
+5.2 The Fees shall be payable as follows:
+
+(a) 30% of the Fees shall be due upon execution of this Agreement;
+
+(b) 40% of the Fees shall be due upon completion of the software development phase;
+
+(c) 30% of the Fees shall be due upon completion of the Project.
+
+5.3 Omni shall pay the Fees within 30 days of receipt of an invoice from Synergy.
+
+5.4 Any late payment shall accrue interest at a rate of 1.5% per month, or the maximum rate permitted by law, whichever is less.
+
+ARTICLE 6: INTELLECTUAL PROPERTY RIGHTS
+
+6.1 Synergy retains all Intellectual Property Rights in and to the Deliverables.
+
+6.2 Omni shall have a non-exclusive, royalty-free license to use the Deliverables for its internal business purposes.
+
+6.3 Synergy shall not be responsible for any infringement of Intellectual Property Rights caused by Omni's use of the Deliverables.
+
+ARTICLE 7: CONFIDENTIALITY
+
+7.1 The parties agree to maintain the confidentiality of all Confidential Information.
+
+7.2 The parties shall not disclose Confidential Information to any third party, except as required by law or with the prior written consent of the other party.
+
+7.3 The parties shall take reasonable precautions to protect the Confidential Information, including, but not limited to, storing the Confidential Information in a secure location and restricting access to the Confidential Information.
+
+ARTICLE 8: REPRESENTATIONS AND WARRANTIES
+
+8.1 Synergy represents and warrants that:
+
+(a) It has the necessary expertise and resources to provide the Services;
+
+(b) The Deliverables shall meet the Acceptance Criteria;
+
+(c) It shall comply with all applicable laws and regulations.
+
+8.2 Omni represents and warrants that:
+
+(a) It has the necessary authority to enter into this Agreement;
+
+(b) It shall provide Synergy with all necessary information and assistance to complete the Project;
+
+(c) It shall comply with all applicable laws and regulations.
+
+ARTICLE 9: INDEMNIFICATION
+
+9.1 Synergy shall indemnify, defend, and hold harmless Omni, its officers, directors, employees, and agents, from and against any and all claims, demands, losses, damages, and expenses, including, but not limited to, reasonable attorneys' fees, arising out of or related to:
+
+(a) Any breach of this Agreement by Synergy;
+
+(b) Any negligence or willful misconduct by Synergy;
+
+(c) Any infringement of Intellectual Property Rights caused by Synergy's use of the Deliverables.
+
+9.2 Omni shall indemnify, defend, and hold harmless Synergy, its officers, directors, employees, and agents, from and against any and all claims, demands, losses, damages, and expenses, including, but not limited to, reasonable attorneys' fees, arising out of or related to:
+
+(a) Any breach of this Agreement by Omni;
+
+(b) Any negligence or willful misconduct by Omni;
+
+(c) Any infringement of Intellectual Property Rights caused by Omni's use of the Deliverables.
+
+ARTICLE 10: LIABILITY
+
+10.1 In no event shall Synergy be liable for any consequential, indirect, special, or punitive damages, including, but not limited to, lost profits or business opportunities, arising out of or related to this Agreement.
+
+10.2 Synergy's total liability for any damages, losses, or expenses arising out of or related to this Agreement shall not exceed the total amount of Fees paid by Omni.
+
+10.3 Omni shall be liable for any damages, losses, or expenses arising out of or related to its breach of this Agreement.
+
+ARTICLE 11: DATA PRIVACY
+
+11.1 The parties agree to comply with all applicable data protection laws and regulations, including, but not limited to, the General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA).
+
+11.2 Synergy shall implement and maintain reasonable security measures to protect any personal data provided by Omni.
+
+11.3 Omni shall provide Synergy with all necessary information and assistance to comply with any data protection laws and regulations.
+
+ARTICLE 12: TERM AND TERMINATION
+
+12.1 The Term of this Agreement shall commence on the Effective Date and shall continue until the completion of the Project, unless terminated earlier in accordance with this Article 12.
+
+12.2 Either party may terminate this Agreement upon 30 days' written notice to the other party.
+
+12.3 Upon termination, Synergy shall:
+
+(a) Deliver all Deliverables to Omni;
+
+(b) Return all Confidential Information to Omni;
+
+(c) Destroy any remaining Confidential Information.
+
+12.4 Upon termination, Omni shall:
+
+(a) Pay all outstanding Fees to Synergy;
+
+(b) Return all Deliverables to Synergy;
+
+(c) Destroy any remaining Deliverables.
+
+ARTICLE 13: FORCE MAJEURE
+
+13.1 If either party is unable to perform its obligations under this Agreement due to any cause beyond its reasonable control, including, but not limited to, natural disasters, war, terrorism, or labor disputes, the affected party shall notify the other party in writing and shall be excused from performing its obligations to the extent necessary.
+
+13.2 The affected party shall use reasonable efforts to mitigate the effects of the force majeure event and to resume performance of its obligations as soon as possible.
+
+ARTICLE 14: DISPUTE RESOLUTION
+
+14.1 Any disputes arising out of or related to this Agreement shall be resolved through binding arbitration, in accordance with the rules of the American Arbitration Association.
+
+14.2 The arbitration shall be conducted by a single arbitrator, who shall be appointed by mutual agreement of the parties.
+
+14.3 The arbitration shall be conducted in the English language, and the place of arbitration shall be Anytown, CA.
+
+14.4 The parties agree to waive their right to a trial by jury and to appeal the arbitration award.
+
+ARTICLE 15: GOVERNING LAW
+
+15.1 This Agreement shall be governed by and construed in accordance with the laws of the State of California, without giving effect to any principles of conflicts of law.
+
+15.2 The parties agree to submit to the jurisdiction of the courts of the State of California, and to waive any objections to such jurisdiction.
+
+ARTICLE 16: ENTIRE AGREEMENT
+
+16.1 This Agreement constitutes the entire agreement between the parties and supersedes all prior or contemporaneous agreements or understandings, whether written or oral.
+
+16.2 This Agreement may not be amended or modified except in writing signed by both parties.
+
+IN WITNESS WHEREOF, the parties have executed this Agreement as of the date first above written.
+
+SYNERGY CORPORATION
+
+By: ______________________________
+
+Name: John Smith
+
+Title: CEO
+
+Date: March 15, 2023
+
+OMNI INNOVATIONS, INC.
+
+By: ______________________________
+
+Name: Jane Doe
+
+Title: President
+
+Date: March 15, 2023
+
+EXHIBIT A: ACCEPTANCE CRITERIA
+
+The Acceptance Criteria for the Deliverables shall be as follows:
+
+1. The software shall be fully functional and shall meet all requirements specified in the Project plan.
+
+2. The software shall be free from any material defects or errors.
+
+3. The software shall be compatible with all specified hardware and software platforms.
+
+4. The software shall meet all applicable security and data protection requirements.
+
+EXHIBIT B: DELIVERABLES
+
+The Deliverables shall include, but not be limited to, the following:
+
+1. Software code;
+
+2. Documentation;
+
+3. Testing and quality assurance reports;
+
+4. Training materials;
+
+5. Support and maintenance guides.
+
+EXHIBIT C: PROJECT PLAN
+
+The Project plan shall include, but not be limited to, the following:
+
+1. Project timeline;
+
+2. Project budget;
+
+3. Project scope;
+
+4. Project milestones;
+
+5. Project deliverables.
+
+EXHIBIT D: SERVICES
+
+The Services shall include, but not be limited to, the following:
+
+1. Software development;
+
+2. Consulting;
+
+3. Project management;
+
+4. Testing and quality assurance;
+
+5. Training and support.
+
+EXHIBIT E: CONSULTING SERVICES
+
+The consulting services shall include, but not be limited to, the following:
+
+1. Business analysis;
+
+2. Technical consulting;
+
+3. Project planning;
+
+4. Risk management;
+
+5. Quality assurance.
+
+EXHIBIT F: PROJECT STATUS REPORTS
+
+The project status reports shall include, but not be limited to, the following:
+
+1. Project progress;
+
+2. Project schedule;
+
+3. Project budget;
+
+4. Project risks;
+
+5. Project issues.
+
+By executing this Agreement, the parties acknowledge that they have read, understand, and agree to be bound by the terms and conditions of this Agreement.

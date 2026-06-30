@@ -101,11 +101,6 @@ def _normalize_detector_output(result: str | None) -> str:
     return _normalize_llm_result(result)
 
 
-def _classify_with_llm(content: str) -> str:
-    """Backward-compatible alias used by older tests/callers."""
-    return _get_llm_response(content).normalized_label
-
-
 def _unknown_result(
     source: str = "llm",
     raw_label: str | None = None,

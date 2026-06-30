@@ -108,6 +108,27 @@ cd ../backend
 uv run pytest
 ```
 
+### Benchmarking and Evaluation
+
+To generate real metrics for pipeline latency and quality, run the following evaluation scripts in order:
+
+1. **Run Ablation Study** (Measures Hit Rate@3 across 4 retrieval architectures):
+   ```bash
+   export $(grep -v '^#' .env | xargs) && uv run python tests/evaluation/test_retrieval_ablation.py
+   ```
+2. **Run RAGAS Quality Evaluation** (Evaluates Context Precision/Recall, Faithfulness, Relevancy):
+   ```bash
+   export $(grep -v '^#' .env | xargs) && uv run python tests/evaluation/test_ragas.py
+   ```
+3. **Load Testing - Cache Hit/Miss** (Measures latency delta with Locust):
+   ```bash
+   export $(grep -v '^#' .env | xargs) && uv run locust -f tests/load/locustfile.py
+   ```
+4. **Ingestion Throughput** (Calculates chunks/sec and pages/min):
+   ```bash
+   export $(grep -v '^#' .env | xargs) && uv run python tests/load/test_ingestion_throughput.py
+   ```
+
 ---
 
 <div align="center">

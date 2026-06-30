@@ -1,0 +1,252 @@
+SERVICE CONTRACT
+
+This Service Contract ("Agreement") is entered into on February 10, 2023 ("Effective Date") by and between CyberTech Solutions, Inc., a Delaware corporation with its principal place of business at 123 Main Street, Suite 400, New York, NY 10001 ("CyberTech" or "Vendor"), and Green Earth Landscaping, LLC, a California limited liability company with its principal place of business at 456 Elm Street, Suite 200, Los Angeles, CA 90017 ("Green Earth" or "Client").
+
+WHEREAS, CyberTech is a provider of software solutions and consulting services; and
+
+WHEREAS, Green Earth desires to engage CyberTech to provide certain software licensing and consulting services;
+
+NOW, THEREFORE, in consideration of the mutual covenants and promises contained herein, the parties agree as follows:
+
+ARTICLE 1: DEFINITIONS
+
+For the purposes of this Agreement, the following terms shall have the meanings set forth below:
+
+1.1 "Affiliate" means any entity that, directly or indirectly, controls, is controlled by, or is under common control with a party.
+
+1.2 "Business Day" means any day, excluding Saturday, Sunday, and any federal holiday.
+
+1.3 "Confidential Information" means any and all information, whether written or oral, that is disclosed by one party to the other party, including but not limited to trade secrets, business plans, customer lists, and software code.
+
+1.4 "Deliverables" means the tangible and intangible materials, including but not limited to software, reports, and documents, that CyberTech is required to deliver to Green Earth under this Agreement.
+
+1.5 "Fees" means the amounts payable by Green Earth to CyberTech for the Services, as set forth in Article 5.
+
+1.6 "Intellectual Property Rights" means all patents, trademarks, copyrights, trade secrets, and other proprietary rights.
+
+1.7 "Services" means the software licensing and consulting services that CyberTech is required to provide to Green Earth under this Agreement.
+
+1.8 "Software" means the software solutions provided by CyberTech, including but not limited to the "CyberTech Enterprise Resource Planning" software.
+
+1.9 "Term" means the period of time during which the Services are to be provided, as set forth in Article 12.
+
+ARTICLE 2: SERVICES
+
+2.1 CyberTech shall provide the Services to Green Earth, including but not limited to:
+
+2.1.1 Software licensing, including the provision of the Software and any updates, upgrades, or maintenance releases;
+
+2.1.2 Consulting services, including but not limited to implementation, training, and support;
+
+2.1.3 Customization services, including but not limited to configuration and integration;
+
+2.1.4 Project management services, including but not limited to coordination and oversight.
+
+2.2 CyberTech shall provide the Services in accordance with the scope of work, timeline, and milestones set forth in Exhibit A.
+
+2.3 CyberTech shall assign a project manager to oversee the provision of the Services, who shall be the primary point of contact for Green Earth.
+
+ARTICLE 3: DELIVERABLES
+
+3.1 CyberTech shall deliver the Deliverables to Green Earth, including but not limited to:
+
+3.1.1 The Software, including any updates, upgrades, or maintenance releases;
+
+3.1.2 Documentation, including but not limited to user manuals and technical guides;
+
+3.1.3 Reports, including but not limited to project status reports and progress reports.
+
+3.2 CyberTech shall deliver the Deliverables in accordance with the timeline and milestones set forth in Exhibit A.
+
+ARTICLE 4: ACCEPTANCE
+
+4.1 Green Earth shall have the right to accept or reject the Deliverables, in whole or in part.
+
+4.2 If Green Earth rejects any Deliverable, CyberTech shall promptly revise and resubmit the Deliverable.
+
+4.3 If Green Earth accepts any Deliverable, CyberTech shall be deemed to have fulfilled its obligations with respect to that Deliverable.
+
+ARTICLE 5: FEES AND PAYMENT TERMS
+
+5.1 The Fees for the Services shall be as follows:
+
+5.1.1 Software licensing fees: $100,000 per year, payable in advance on the anniversary of the Effective Date;
+
+5.1.2 Consulting services fees: $250 per hour, payable in arrears on a monthly basis;
+
+5.1.3 Customization services fees: $500 per hour, payable in arrears on a monthly basis;
+
+5.1.4 Project management services fees: $1,000 per month, payable in arrears on a monthly basis.
+
+5.2 Green Earth shall pay the Fees within thirty (30) days of receipt of an invoice from CyberTech.
+
+5.3 Any late payment shall accrue interest at a rate of one and one-half percent (1.5%) per month, or the maximum rate permitted by law, whichever is less.
+
+ARTICLE 6: INTELLECTUAL PROPERTY RIGHTS
+
+6.1 CyberTech retains all Intellectual Property Rights in and to the Software and any other materials provided by CyberTech under this Agreement.
+
+6.2 Green Earth shall not, without the prior written consent of CyberTech, reproduce, distribute, or display the Software or any other materials provided by CyberTech under this Agreement.
+
+6.3 CyberTech grants to Green Earth a non-exclusive, non-transferable license to use the Software and any other materials provided by CyberTech under this Agreement, solely for Green Earth's internal business purposes.
+
+ARTICLE 7: CONFIDENTIALITY
+
+7.1 The parties agree to maintain the confidentiality of all Confidential Information.
+
+7.2 The parties shall not, without the prior written consent of the other party, disclose any Confidential Information to any third party.
+
+7.3 The parties shall take all reasonable precautions to protect the Confidential Information, including but not limited to using reasonable security measures to prevent unauthorized access.
+
+ARTICLE 8: REPRESENTATIONS AND WARRANTIES
+
+8.1 CyberTech represents and warrants that:
+
+8.1.1 The Software and any other materials provided by CyberTech under this Agreement do not infringe any Intellectual Property Rights of any third party;
+
+8.1.2 The Software and any other materials provided by CyberTech under this Agreement are free from defects in material and workmanship;
+
+8.1.3 CyberTech has the right to grant the license set forth in Article 6.3.
+
+8.2 Green Earth represents and warrants that:
+
+8.2.1 Green Earth has the right to enter into this Agreement;
+
+8.2.2 Green Earth shall comply with all applicable laws and regulations in its use of the Software and any other materials provided by CyberTech under this Agreement.
+
+ARTICLE 9: INDEMNIFICATION
+
+9.1 CyberTech shall indemnify, defend, and hold harmless Green Earth, its officers, directors, employees, and agents from and against any and all claims, demands, losses, damages, and expenses (including but not limited to reasonable attorneys' fees) arising out of or related to:
+
+9.1.1 Any breach by CyberTech of its obligations under this Agreement;
+
+9.1.2 Any infringement by the Software or any other materials provided by CyberTech under this Agreement of any Intellectual Property Rights of any third party;
+
+9.1.3 Any damage to property or injury to person caused by the negligence or willful misconduct of CyberTech.
+
+9.2 Green Earth shall indemnify, defend, and hold harmless CyberTech, its officers, directors, employees, and agents from and against any and all claims, demands, losses, damages, and expenses (including but not limited to reasonable attorneys' fees) arising out of or related to:
+
+9.2.1 Any breach by Green Earth of its obligations under this Agreement;
+
+9.2.2 Any use by Green Earth of the Software or any other materials provided by CyberTech under this Agreement in a manner that is not authorized by this Agreement;
+
+9.2.3 Any damage to property or injury to person caused by the negligence or willful misconduct of Green Earth.
+
+ARTICLE 10: LIABILITY
+
+10.1 In no event shall CyberTech be liable for any consequential, indirect, special, or punitive damages, including but not limited to lost profits or lost data, arising out of or related to this Agreement.
+
+10.2 In no event shall CyberTech's total liability under this Agreement exceed the total amount of Fees paid by Green Earth under this Agreement.
+
+10.3 The parties acknowledge that the limitations of liability set forth in this Article 10 are reasonable and are an essential part of this Agreement.
+
+ARTICLE 11: DATA PRIVACY
+
+11.1 The parties agree to comply with all applicable data protection laws and regulations, including but not limited to the General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA).
+
+11.2 CyberTech shall maintain the confidentiality and security of any personal data provided by Green Earth under this Agreement.
+
+11.3 CyberTech shall not, without the prior written consent of Green Earth, disclose any personal data provided by Green Earth under this Agreement to any third party.
+
+ARTICLE 12: TERM AND TERMINATION
+
+12.1 The Term of this Agreement shall commence on the Effective Date and shall continue for a period of three (3) years, unless terminated earlier in accordance with this Article 12.
+
+12.2 Either party may terminate this Agreement upon written notice to the other party if the other party breaches any of its obligations under this Agreement and fails to cure such breach within thirty (30) days of receipt of written notice.
+
+12.3 Upon termination of this Agreement, CyberTech shall promptly return to Green Earth all Confidential Information and personal data provided by Green Earth under this Agreement.
+
+12.4 The following Articles shall survive termination of this Agreement: Article 6 (Intellectual Property Rights), Article 7 (Confidentiality), Article 9 (Indemnification), Article 10 (Liability), and Article 11 (Data Privacy).
+
+ARTICLE 13: FORCE MAJEURE
+
+13.1 If either party is unable to perform its obligations under this Agreement due to any cause beyond its reasonable control, including but not limited to natural disasters, war, terrorism, or labor disputes, such party shall promptly notify the other party in writing.
+
+13.2 The affected party shall use its reasonable best efforts to mitigate the effects of the force majeure event and to resume performance of its obligations as soon as reasonably possible.
+
+13.3 If the force majeure event continues for a period of more than sixty (60) days, either party may terminate this Agreement upon written notice to the other party.
+
+ARTICLE 14: DISPUTE RESOLUTION
+
+14.1 Any dispute arising out of or related to this Agreement shall be resolved through binding arbitration in accordance with the rules of the American Arbitration Association.
+
+14.2 The arbitration shall be conducted by a single arbitrator, who shall be selected by the parties.
+
+14.3 The arbitration shall be conducted in the English language and shall take place in New York, New York.
+
+ARTICLE 15: GOVERNING LAW
+
+15.1 This Agreement shall be governed by and construed in accordance with the laws of the State of New York, without giving effect to any principles of conflicts of law.
+
+15.2 The parties agree to submit to the jurisdiction of the courts of the State of New York and the federal courts of the United States of America.
+
+ARTICLE 16: ENTIRE AGREEMENT
+
+16.1 This Agreement constitutes the entire agreement between the parties and supersedes all prior or contemporaneous agreements or understandings, whether written or oral.
+
+16.2 This Agreement may not be amended or modified except in writing signed by both parties.
+
+IN WITNESS WHEREOF, the parties have executed this Agreement as of the date first above written.
+
+CYBERTECH SOLUTIONS, INC.
+
+By: ______________________________
+
+Name: John Smith
+
+Title: Chief Executive Officer
+
+Date: February 10, 2023
+
+GREEN EARTH LANDSCAPING, LLC
+
+By: ______________________________
+
+Name: Jane Doe
+
+Title: President
+
+Date: February 10, 2023
+
+EXHIBIT A: SCOPE OF WORK, TIMELINE, AND MILESTONES
+
+The scope of work, timeline, and milestones for the Services are as follows:
+
+* Week 1-2: CyberTech shall deliver the Software and provide initial training and support to Green Earth.
+* Week 3-4: CyberTech shall provide customization services, including configuration and integration.
+* Week 5-6: CyberTech shall provide project management services, including coordination and oversight.
+* Week 7-12: CyberTech shall provide ongoing support and maintenance services, including updates, upgrades, and troubleshooting.
+
+The timeline and milestones are as follows:
+
+* February 10, 2023: Effective Date
+* February 17, 2023: CyberTech shall deliver the Software
+* February 24, 2023: CyberTech shall provide initial training and support
+* March 3, 2023: CyberTech shall commence customization services
+* March 10, 2023: CyberTech shall commence project management services
+* March 17, 2023: CyberTech shall commence ongoing support and maintenance services
+
+The milestones are as follows:
+
+* Milestone 1: Delivery of the Software (February 17, 2023)
+* Milestone 2: Completion of customization services (March 3, 2023)
+* Milestone 3: Completion of project management services (March 10, 2023)
+* Milestone 4: Completion of ongoing support and maintenance services (March 17, 2023)
+
+EXHIBIT B: SOFTWARE LICENSE AGREEMENT
+
+The Software license agreement is as follows:
+
+* The Software is licensed to Green Earth for a period of three (3) years from the Effective Date.
+* The Software may be used by Green Earth solely for its internal business purposes.
+* The Software may not be reproduced, distributed, or displayed without the prior written consent of CyberTech.
+* The Software is provided "as is" and "as available" without any warranties, express or implied.
+
+EXHIBIT C: CONSULTING SERVICES AGREEMENT
+
+The consulting services agreement is as follows:
+
+* CyberTech shall provide consulting services, including implementation, training, and support.
+* The consulting services shall be provided by CyberTech's personnel, who shall have the necessary skills and expertise.
+* The consulting services shall be provided at the rates set forth in Article 5.
+* The consulting services shall be subject to the terms and conditions of this Agreement.

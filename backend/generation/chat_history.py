@@ -51,7 +51,7 @@ def get_history(
         if hydrated:
             _memory_store[conversation_id] = hydrated
             history = hydrated
-    return history[-n * 2:]  # n turns = n questions + n answers
+    return history[-n * 2:]
 
 
 def append_turn(

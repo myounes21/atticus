@@ -1,0 +1,22 @@
+{
+  "Dense-only": {
+    "hits": 88,
+    "total": 200,
+    "hit_rate_at_3": 44.0
+  },
+  "Sparse-only": {
+    "hits": 108,
+    "total": 200,
+    "hit_rate_at_3": 54.0
+  },
+  "Hybrid+RRF": {
+    "hits": 102,
+    "total": 200,
+    "hit_rate_at_3": 51.0
+  },
+  "Hybrid+RRF+Rerank": {
+    "hits": 114,
+    "total": 200,
+    "hit_rate_at_3": 56.99999999999999
+  }
+}

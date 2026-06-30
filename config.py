@@ -10,22 +10,12 @@ ENV_PATH = Path(__file__).resolve().parent / ".env"
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=ENV_PATH, extra="ignore")
-
-    # LLM
     ollama_base_url: str = "http://localhost:11434"
-
-    # production model : llama3.3:70b
     ollama_model: str = "phi3"
-
-    # Document detector configs
     detection_snippet_length: int = 1000
-
-    # Chunking configs
     CHUNK_SIZE_MIN: ClassVar[int] = 300
     CHUNK_SIZE_MAX: ClassVar[int] = 500
     CHUNK_OVERLAP: ClassVar[int] = 50
-
-    # Embedder
     embedding_backend: Literal["sentence_transformers", "fallback"] = (
         "sentence_transformers"
     )
@@ -37,41 +27,25 @@ class Settings(BaseSettings):
     embedding_model_cache_dir: str = ""
     embedding_fallback_enabled: bool = True
     embedding_warmup_on_startup: bool = False
-
-    # Reranker (HuggingFace only)
     huggingface_reranker_model: str = "BAAI/bge-reranker-base"
-
-    # Qdrant
     qdrant_host: str = "localhost"
     qdrant_port: int = 6333
     qdrant_collection_name: str = "chunks"
-
-    # Elasticsearch
     elasticsearch_host: str = "localhost"
     elasticsearch_port: int = 9200
     elasticsearch_password: str = ""
     elasticsearch_index_name: str = "chunks"
-
-    # Redis
     redis_host: str = "localhost"
     redis_port: int = 6379
-
-    # JWT
     jwt_secret_key: str = "CHANGE-ME-IN-PRODUCTION"
     jwt_algorithm: str = "HS256"
-    jwt_expire_minutes: int = 60  # 1 hour
+    jwt_expire_minutes: int = 60
     jwt_issuer: str = "atticus-api"
     jwt_audience: str = "atticus-clients"
-
-    # MVP auth mode
     demo_auth: bool = False
     demo_auth_default_role: Literal["lawyer"] = "lawyer"
     enable_self_register: bool = False
-
-    # PostgreSQL
     database_url: str = "sqlite:///atticus.db"
-
-    # Input and upload safety
     upload_max_mb: int = 20
     upload_allowed_extensions: list[str] = Field(
         default_factory=lambda: [".pdf", ".docx", ".txt", ".eml"]
@@ -79,26 +53,18 @@ class Settings(BaseSettings):
     max_chat_query_chars: int = 2500
     max_case_name_chars: int = 140
     max_client_name_chars: int = 140
-
-    # Abuse protection
     rate_limit_login_requests: int = 8
     rate_limit_login_window_seconds: int = 60
     rate_limit_chat_requests: int = 30
     rate_limit_chat_window_seconds: int = 60
     rate_limit_upload_requests: int = 12
     rate_limit_upload_window_seconds: int = 300
-
-    # Semantic cache
     cache_ttl_seconds: int = 3600
     cache_similarity_threshold: float = 0.95
-
-    # Langfuse observability (required)
     langfuse_public_key: str = "dev-langfuse-public-key"
     langfuse_secret_key: str = "dev-langfuse-secret-key"
     langfuse_base_url: str = "https://cloud.langfuse.com"
     langfuse_capture_content: bool = False
-
-    # Retrieval pipeline
     retrieval_top_k: int = 12
     rrf_top_k: int = 10
     rerank_top_k: int = 3

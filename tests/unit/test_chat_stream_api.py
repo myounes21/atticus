@@ -8,7 +8,7 @@ from backend.core.dependencies import CurrentUser, get_current_user
 
 
 def _set_lawyer_override(user_id: uuid.UUID) -> None:
-    app.dependency_overrides[get_current_user] = lambda: CurrentUser(  # noqa: E731
+    app.dependency_overrides[get_current_user] = lambda: CurrentUser(
         user_id=user_id,
         role="lawyer",
     )
@@ -96,7 +96,6 @@ def test_chat_stream_emits_error_event_on_generator_failure(monkeypatch) -> None
 
     def _broken_stream(messages):
         raise RuntimeError("llm unavailable")
-        yield  # pragma: no cover
 
     monkeypatch.setattr("backend.api.routes.chat.generate_stream", _broken_stream)
 

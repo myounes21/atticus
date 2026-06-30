@@ -9,7 +9,7 @@ from backend.core.dependencies import CurrentUser, get_current_user
 
 
 def _set_user_override(user_id: uuid.UUID, role: str = "lawyer") -> None:
-    app.dependency_overrides[get_current_user] = lambda: CurrentUser(  # noqa: E731
+    app.dependency_overrides[get_current_user] = lambda: CurrentUser(
         user_id=user_id,
         role=role,
     )

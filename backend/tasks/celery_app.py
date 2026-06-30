@@ -1,11 +1,14 @@
+import logging
 from functools import lru_cache
 from typing import Any, cast
 
 from config import settings
 
+logger = logging.getLogger(__name__)
+
 try:
     from celery import Celery as _Celery
-except ImportError:  # pragma: no cover - optional dependency fallback
+except ImportError:
     _Celery = None
 
 
@@ -78,4 +81,8 @@ def enqueue_ingestion_task(
         )
         return True
     except Exception:
+        logger.exception(
+            "Failed to enqueue ingestion task for file_id=%s via Celery; will fall back to BackgroundTasks",
+            file_id,
+        )
         return False

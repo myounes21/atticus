@@ -2,6 +2,8 @@ services:
 
   qdrant:
     image: qdrant/qdrant:v1.17.1
+    ports:
+      - "6335:6333"
     volumes:
       - qdrant_data:/qdrant/storage
     healthcheck:
@@ -24,6 +26,8 @@ services:
       - xpack.security.enabled=${ELASTIC_XPACK_SECURITY_ENABLED:-false}
       - ELASTIC_PASSWORD=${ELASTICSEARCH_PASSWORD:-}
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9205:9200"
     volumes:
       - es_data:/usr/share/elasticsearch/data
     healthcheck:
@@ -45,6 +49,8 @@ services:
 
   redis:
     image: redis:7-alpine
+    ports:
+      - "6375:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -109,6 +115,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-atticus}
       POSTGRES_USER: ${POSTGRES_USER:-atticus}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-atticus_dev}
+    ports:
+      - "5435:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./backend/migrations/001_initial.sql:/docker-entrypoint-initdb.d/001_initial.sql

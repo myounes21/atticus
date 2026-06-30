@@ -81,29 +81,3 @@ def delete_by_file_id(
             ]
         ),
     )
-
-
-def mark_not_latest(
-    file_id: str | uuid.UUID,
-    client: QdrantClient | None = None,
-) -> None:
-    """Set is_latest=False for all points belonging to a file_id.
-
-    Used during document versioning: old version's chunks are kept but
-    excluded from default search.
-    """
-    from qdrant_client.models import Filter, FieldCondition, MatchValue
-
-    client = client or _get_client()
-    client.set_payload(
-        collection_name=settings.qdrant_collection_name,
-        payload={"is_latest": False},
-        points=Filter(
-            must=[
-                FieldCondition(
-                    key="file_id",
-                    match=MatchValue(value=str(file_id)),
-                )
-            ]
-        ),
-    )
